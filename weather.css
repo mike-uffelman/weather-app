@@ -9,6 +9,7 @@ body {
     width: 100%;
     height: 100vh;
     font-size: 1.2rem;
+    background: gray;
 }
 
 
@@ -17,6 +18,8 @@ body {
     width: 100% !important;
     position: relative !important;
     z-index: -1 !important;   
+    
+
 }
 
 #map {
@@ -24,6 +27,7 @@ body {
     width: 100% !important;
     position: fixed !important;
     z-index: -1 !important;
+    
 }
 
 form {
@@ -48,9 +52,11 @@ input[type=text]:focus {
     
 }
 
+/* remove ability to click the path instead of svg */
 path {
     pointer-events: none;
 }
+
 
 /* .city-weather-box {
     background: rgba(166, 175, 241, 0.65);
@@ -60,3 +66,8 @@ path {
 
 
 } */
+
+ /* #history.h3:hover {
+     color: magenta;
+     cursor: pointer;
+ } */
