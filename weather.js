@@ -124,7 +124,9 @@ class UI {
                         <div class='d-flex flex-column card-body text-muted p-1 '>
                             <div class='d-flex flex-row justify-content-between'>
                                 <h3 id='city-display' class='card-title city-display m-0'>${data.name}, ${data.sys.country}</h3>
-                                <svg class='align-self-end' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M11.75 4.5a.75.75 0 01.75.75V11h5.75a.75.75 0 010 1.5H12.5v5.75a.75.75 0 01-1.5 0V12.5H5.25a.75.75 0 010-1.5H11V5.25a.75.75 0 01.75-.75z"></path></svg>
+                                <a href='#' class='justify-self-end add-favorite text-decoration-none'>
+                                    <svg class='align-self-end' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M11.75 4.5a.75.75 0 01.75.75V11h5.75a.75.75 0 010 1.5H12.5v5.75a.75.75 0 01-1.5 0V12.5H5.25a.75.75 0 010-1.5H11V5.25a.75.75 0 01.75-.75z"></path></svg>
+                                </a>
                             </div>
                             <p id='temp-display'class='card-text my-0'>${data.main.temp}° F, feels like ${data.main.feels_like}° F</p>
                             <p id='weather-desc' class='card-text my-0'>${data.weather[0].description}</p>
@@ -153,7 +155,16 @@ class UI {
     }
 
 
+    static displayHelp() {
+        const banner = document.createElement('div');
+        banner.style.height = '2rem';
+        banner.innerText = 'test text';
+        banner.style.backgroundColor = 'blue';
+        banner.style.color = 'white';
 
+        const main = document.querySelector('main');
+        main.append(banner);
+    }
    
     //how to display favorites saved to LS
     static displayFavorites() {
@@ -180,8 +191,8 @@ class UI {
                         </div>
                         <div class='col-10'>
                             <div class='d-flex flex-row justify-content-between card-body text-muted p-1 '>
-                                <h3 id='city-favorite' class='card-title city-display'>${place.data.name}, ${place.data.sys.country}</h3> 
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M4.5 12.75a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H5.25a.75.75 0 01-.75-.75z"></path></svg>           
+                                <h3 id='city-favorite' class='card-title city-display'><a href='#' class='text-decoration-none'>${place.data.name}, ${place.data.sys.country}</a></h3> 
+                                <a href='#' class='remove-favorite text-decoration-none'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M4.5 12.75a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H5.25a.75.75 0 01-.75-.75z"></path></svg></a>           
                             </div>
                             <p class='d-none'>${place.data.id}</p>
                         </div>
@@ -227,7 +238,7 @@ document.querySelector('form').addEventListener('submit', (e) => {
 
 //event on click of plus sign to add location to LS
 document.querySelector('section').addEventListener('click', (e) => {
-    if(e.target.nodeName === 'svg') {    
+    if(e.target.classList.contains('add-favorite') && e.target.nodeName === 'A') {   
         //using end of string so that it doesn't add elements searched prior to current search in this browser session
         //add current location to LS
         Storage.addLocation(store[store.length-1]);
@@ -240,26 +251,23 @@ document.querySelector('section').addEventListener('click', (e) => {
 
 //remove favorite event - should call to local storage and a UI remove
 document.querySelector('#history').addEventListener('click', (e) => {
-    if(e.target.nodeName === 'svg') {
-                
-        console.log(e.target.parentNode.parentNode);
+    if(e.target.classList.contains('remove-favorite') && e.target.nodeName === 'A') {
+        // console.log(e.target.parentElement.nextSibling.nextSibling.innerText);
 
+        //remove favorite from UI, e.target chain up to the top node
+        UI.removeFavoriteUI(e.target.parentElement.parentElement.parentElement.parentNode);
+
+        //remove from local storage - using cityID for the unique ID
         let id = Number(e.target.parentElement.nextSibling.nextSibling.innerText);
-        UI.removeFavoriteUI(e.target.parentElement.parentElement.parentElement.parentElement);
-        
-        
-
-
-        
         Storage.removeLocation(id);
     }
 
     
-    if(e.target.nodeName === 'H3') {
+    if(e.target.nodeName === 'A') {
         let loc = Storage.getLocation();
         // console.log(loc);
-        let eid = Number(e.target.parentElement.nextSibling.nextSibling.innerText);
-        
+        let eid = Number(e.target.parentElement.parentNode.nextSibling.nextSibling.innerText);
+        console.log(e.target.parentElement.parentNode.nextSibling.nextSibling.innerText)
         // console.log(id);
         // console.log(loc.data.id);
         loc.forEach(function(place) {
@@ -281,6 +289,7 @@ document.querySelector('#history').addEventListener('click', (e) => {
 //random map location on load
 window.onload = function () {
 
+    
     const lat = Math.random() * (90 - (-90)) + (-90)
     const lon = Math.random() * (180 - (-180)) + (-180)
     // const zoom = 11;
