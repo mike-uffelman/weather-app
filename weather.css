@@ -58,6 +58,9 @@ svg, path {
     pointer-events: none;
 }
 
+p {
+    color: black
+}
 
 /* .city-weather-box {
     background: rgba(166, 175, 241, 0.65);

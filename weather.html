@@ -16,42 +16,43 @@
     
     </head>
   
-    <body>
+    <body class=''>
         <!--<h1>myWeather</h1>-->
         
-        <main class='container-flow'>
-             
-            <div id='mapid'></div>
-            
-            <form action='/somewhere' class='d-flex flex-column justify-content-center align-items-evenly' id='form'>
-                <input type='text' id='city-input' name='city'  class='form-control' placeholder='enter city'>
-                <button class='btn btn-secondary '>Get Weather!</button>
-            </form>
-        
-            <section id='current-weather-box' class=' city-weather-box mx-2'>
-                <!-- <div id='city-box' class=''> -->
-                    <!-- <div class='card rounded bg-light'>
-                        <div class='row g-0 rounded'>
-                            <div class='col-2 d-flex flex-column justify-content-center bg-secondary'>
-                                <img id='icon' src='' class='img'>
-                                
-                            </div>
-                            <div class='col-10'>
-                                <div class='d-flex flex-column card-body text-muted p-1 '>
-                                    <div class='d-flex flex-row justify-content-between'>
-                                        <h3 id='city-display' class='card-title city-display m-0'>testasdf</h3>
-                                        <svg class='align-self-end' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M11.75 4.5a.75.75 0 01.75.75V11h5.75a.75.75 0 010 1.5H12.5v5.75a.75.75 0 01-1.5 0V12.5H5.25a.75.75 0 010-1.5H11V5.25a.75.75 0 01.75-.75z"></path></svg>
+        <main class='row'>
+            <section id='map-weather' class='col-12 col-md-8'>
+                
+                <div id='mapid' class=''></div>
+                <form action='/somewhere' class='position-absolute top-50 start-50 translate-middle d-flex flex-column justify-content-center  align-items-evenly' id='form'>
+                    <input type='text' id='city-input' name='city'  class='form-control' placeholder='enter city'>
+                    <button class='btn btn-secondary text-warning'>Get Weather!</button>
+                </form>
+                
+                <section id='current-weather-box' class='col-10 col-sm-6 city-weather-box position-absolute bottom-0 start-0'>
+                    <!-- <div id='city-box' class=''> -->
+                        <!-- <div class='card rounded bg-light'>
+                            <div class='row g-0 rounded'>
+                                <div class='col-2 d-flex flex-column justify-content-center bg-secondary'>
+                                    <img id='icon' src='' class='img'>
+                                    
+                                </div>
+                                <div class='col-10'>
+                                    <div class='d-flex flex-column card-body text-muted p-1 '>
+                                        <div class='d-flex flex-row justify-content-between'>
+                                            <h3 id='city-display' class='card-title city-display m-0'>testasdf</h3>
+                                            <svg class='align-self-end' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M11.75 4.5a.75.75 0 01.75.75V11h5.75a.75.75 0 010 1.5H12.5v5.75a.75.75 0 01-1.5 0V12.5H5.25a.75.75 0 010-1.5H11V5.25a.75.75 0 01.75-.75z"></path></svg>
+                                        </div>
+                                        <p id='temp-display'class='card-text my-0'>test</p>
+                                        <p id='weather-desc' class='card-text my-0'>test</p>
+                                        <p id='sun-set-rise' class='card-text my-0'>test</p>
                                     </div>
-                                    <p id='temp-display'class='card-text my-0'>test</p>
-                                    <p id='weather-desc' class='card-text my-0'>test</p>
-                                    <p id='sun-set-rise' class='card-text my-0'>test</p>
                                 </div>
                             </div>
-                        </div>
-                    </div> -->
-                <!-- </div> -->
+                        </div> -->
+                    <!-- </div> -->
+                </section>
             </section>
-            <section id='history' class='container'>
+            <section id='history' class='col-md-4 position-absolute bottom-0 end-0'>
                 <!-- <div class='card rounded bg-light'>
                     <div class='row g-0 rounded'>
                         <div class='col-2 d-flex flex-column justify-content-center bg-secondary'>
