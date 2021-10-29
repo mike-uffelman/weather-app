@@ -7,14 +7,19 @@
 
 body {
     width: 100%;
-    height: 100vh;
+    /* height: 100vh; */
     font-size: 1.2rem;
     background: gray;
 }
 
+main {
+    position: relative;
+    z-index: 1;
+    /* background: rgba(66, 50, 50, 0.212) */
+}
 
 #mapid {
-    height: 100vh !important;
+    /* height: 100vh !important; */
     width: 100% !important;
     position: relative !important;
     z-index: -1 !important;   
@@ -27,16 +32,46 @@ body {
     width: 100% !important;
     position: fixed !important;
     z-index: -1 !important;
-    
 }
+
+/* --- scroll snap --- */
+.swipeView {
+    display: grid;
+    grid-template-columns: repeat(3, 100%);
+    will-change: transform;
+    align-content: center;
+    overflow-x: auto;
+    scroll-snap-coordinate: 0 0;
+    scroll-snap-points-x: repeat(100%);
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+.scroll-align {
+    scroll-snap-align: start;
+}
+
+/* --- scroll snap --- */
+
+
+section {
+    height: 90vh;
+    scroll-snap-align: center;
+    margin-bottom: 0.5rem;
+}
+
+
 
 form {
     position: absolute;
-    top: 100px;
+    /* top: 100px; */
     z-index: 1;
+    
 }
 
-
+/* #city-input {
+    width: 100%;
+} */
 
 
 input[type=text]:focus {
@@ -44,18 +79,27 @@ input[type=text]:focus {
 }
 
 .city-weather-box {
-    position: absolute;
+    /* position: absolute;
     top: 70%;
     right: 10px;
-    left: 10px;
+    left: 10px; */
     z-index: 1;
     
 }
 
 /* remove ability to click the path instead of svg */
 
+.add-fav {
+    fill: #198754;
+}
+
+.remove-fav {
+    fill: #dc3545;
+}
+
 svg, path {
     pointer-events: none;
+  
 }
 
 p {
@@ -71,7 +115,4 @@ p {
 
 } */
 
- /* #history.h3:hover {
-     color: magenta;
-     cursor: pointer;
- } */
+ 

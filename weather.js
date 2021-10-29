@@ -1,4 +1,4 @@
-
+'use strict';
 //the Location class is a constructor to build the location object for storage
 class Location {
     constructor(data) {
@@ -9,7 +9,7 @@ class Location {
 //windowLoad so the random map loaction is called once upon window laod
 let windowLoad = true;
 //firstWeatherCall to only build the current weather div once, any searches after only update the existing div
-let firstWeatherCall = true;
+// let firstWeatherCall = true;
 //defining a global array called store, to store the current data, basically temp storage a destroyed every window load
 const store = [];
 //api key for the getweather()
@@ -28,7 +28,7 @@ class Storage {
         // const clone = new Object(JSON.parse(JSON.stringify(cityObj)));
         // console.log(clone);
         store.push(cityObj);
-        console.log(store);
+        // console.log(store);
         
         
     }
@@ -51,7 +51,7 @@ class Storage {
     //so we set a variable to retrieve the data from localstorage and push the new data to the end of the LS array
     //then we re-add the variable with the new data back to the LS using setitem and stringify
     static addLocation(location) {
-        let loc = Storage.getLocation();
+        let loc = this.getLocation();
         loc.push(location);
         localStorage.setItem('loc', JSON.stringify(loc));
     }
@@ -61,7 +61,7 @@ class Storage {
     //so we retrieve the current LS data, then iterate through it to find the matching id, when found we splice(delete) the matching index, then put the data back in LS with setitem and stringify
     static removeLocation(id) {
         //retrieve local storage
-        let loc = Storage.getLocation();
+        let loc = this.getLocation();
         console.log(loc);
         
         //iterate through LS elements looking for a match by id, then remove the match
@@ -89,7 +89,11 @@ class Request {
             console.log(res.data);
             const data = res.data;
             
-            const sunrise = new Date(data.sys.sunrise * 1000).toLocaleTimeString();
+            const { name, coord, id } = data;
+            console.log(name, coord, id);
+            console.log(coord.lat, coord.lon);
+
+            const sunrise = new Date(data.sys.sunrise).toLocaleTimeString();
             const sunset = new Date(data.sys.sunset * 1000).toLocaleTimeString();
             
             //display weather in DOM          
@@ -101,7 +105,7 @@ class Request {
 
             // const cityObj = new Location(data);
             // Storage.addLocation(data);
-            return data;
+            // return data;
         }
         
         catch(err) {
@@ -132,26 +136,28 @@ class Request {
 
 //display in browser------------------------------------------------------------------------
 class UI {
+
+    static firstWeatherCall = true;
     //upon receipt of the api data we pass to the displayCurrent() which displays the desired weather data in the browser by creating a new element appending within the DOM
     //in order to prevent duplicate elements from consecutive searches we set a flag variable to firstWeatherCall true so it will add once, else it will simply update the existing html displayed
     
     static displayCurrent(data, sunrise, sunset) {
-        if(firstWeatherCall === true) {
+        if(this.firstWeatherCall === true) {
             const section = document.querySelector('#current-weather-box');
             const div = document.createElement('div');
-            div.classList.add('card', 'rounded', 'bg-light');
+            div.classList.add('card', 'bg-light', 'mx-2', 'mb-1', 'rounded-3', 'fs-6');
             div.innerHTML = `
-                <div class='row g-0 rounded'>
-                    <div class='col-2 d-flex flex-column justify-content-center bg-secondary'>
+                <div class='row g-0'>
+                    <div class='col-2 d-flex flex-column justify-content-center bg-secondary rounded-start'>
                         <img id='icon' src='http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png' class='img'>
                         
                     </div>
                     <div class='col-10'>
                         <div class='d-flex flex-column card-body text-muted p-1 '>
                             <div class='d-flex flex-row justify-content-between'>
-                                <h3 id='city-display' class='card-title city-display m-0'>${data.name}, ${data.sys.country}</h3>
+                                <h2 id='city-display' class='card-title city-display m-0'>${data.name}, ${data.sys.country}</h2>
                                 <a href='#' class='justify-self-end add-favorite text-decoration-none'>
-                                    <svg class='align-self-end' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M11.75 4.5a.75.75 0 01.75.75V11h5.75a.75.75 0 010 1.5H12.5v5.75a.75.75 0 01-1.5 0V12.5H5.25a.75.75 0 010-1.5H11V5.25a.75.75 0 01.75-.75z"></path></svg>
+                                    <svg class='align-self-end add-fav' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M11.75 4.5a.75.75 0 01.75.75V11h5.75a.75.75 0 010 1.5H12.5v5.75a.75.75 0 01-1.5 0V12.5H5.25a.75.75 0 010-1.5H11V5.25a.75.75 0 01.75-.75z"></path></svg>
                                 </a>
                             </div>
                             <p id='temp-display'class='card-text my-0'>${data.main.temp}° F, feels like ${data.main.feels_like}° F</p>
@@ -162,8 +168,29 @@ class UI {
                     </div>
                 </div>
             `
+            //with bootstrap classes
+            // <div class='row g-0 rounded'>
+            //         <div class='col-2 d-flex flex-column justify-content-center bg-secondary'>
+            //             <img id='icon' src='http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png' class='img'>
+                        
+            //         </div>
+            //         <div class='col-10'>
+            //             <div class='d-flex flex-column card-body text-muted p-1 '>
+            //                 <div class='d-flex flex-row justify-content-between'>
+            //                     <h2 id='city-display' class='card-title city-display m-0'>${data.name}, ${data.sys.country}</h2>
+            //                     <a href='#' class='justify-self-end add-favorite text-decoration-none'>
+            //                         <svg class='align-self-end' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M11.75 4.5a.75.75 0 01.75.75V11h5.75a.75.75 0 010 1.5H12.5v5.75a.75.75 0 01-1.5 0V12.5H5.25a.75.75 0 010-1.5H11V5.25a.75.75 0 01.75-.75z"></path></svg>
+            //                     </a>
+            //                 </div>
+            //                 <p id='temp-display'class='card-text my-0'>${data.main.temp}° F, feels like ${data.main.feels_like}° F</p>
+            //                 <p id='weather-desc' class='card-text my-0'>${data.weather[0].description}</p>
+            //                 <p id='sun-set-rise' class='card-text my-0'>Sunrise ${sunrise} | Sunset ${sunset}</p>
+            //                 <p id='city-ID' class='d-none'>${data.id}</p>
+            //             </div>
+            //         </div>
+            //     </div>
             section.append(div);
-            firstWeatherCall = false;
+            this.firstWeatherCall = false;
         } else {
             document.querySelector('#icon').src = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;        
             document.querySelector('#city-display').innerText = `${data.name}, ${data.sys.country}`;
@@ -181,6 +208,14 @@ class UI {
         //call map function to display map
         //lastly we call on the buildMap() to display the bg img of the city
         MapLocation.buildMap(data.coord.lat, data.coord.lon);
+    }
+
+    static _displayCurrentWeatherBox (e) {
+        e.preventDefault();
+        const city = form.elements.city.value;
+        Request.getWeather(city);
+        currentWeather.classList.remove('d-none');
+        currentWeather.classList.add('d-flex');
     }
 
 
@@ -201,9 +236,9 @@ class UI {
         let loc = Storage.getLocation();
         
         if(windowLoad) {
-            loc.forEach(place => UI.buildFavoriteDivs(place))
+            loc.forEach(place => this.buildFavoriteDivs(place))
         } else {
-            UI.buildFavoriteDivs(store[store.length-1])
+            this.buildFavoriteDivs(store[store.length-1])
         };
         
         
@@ -215,22 +250,34 @@ class UI {
         const history = document.querySelector('#history');    
             
             const div = document.createElement('div');
-            div.classList.add('card', 'rounded', 'bg-light', 'my-1','mx-3');          
+            div.classList.add('card', 'rounded', 'bg-light', 'mb-1','mx-3');          
                 div.innerHTML = `
                     <div class='row g-0 rounded'>
                         <div class='col-2 d-flex flex-column justify-content-center bg-secondary'>
                             <img id='icon' src='https://picsum.photos/100/100' class='img'>
                         </div>
-                        <div class='col-10'>
-                            <div class='d-flex flex-row justify-content-between card-body text-muted p-1 bg-transparent'>
-                                <h3 id='city-favorite' class='card-title city-display'><a href='#' class='text-decoration-none text-muted'>${place.data.name}, ${place.data.sys.country}</a></h3> 
-                                <a href='#' class='remove-favorite text-decoration-none'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M4.5 12.75a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H5.25a.75.75 0 01-.75-.75z"></path></svg></a>           
+                        <div class='col-10 align-self-center'>
+                            <div class='d-flex flex-row justify-content-between align-self-center card-body text-muted p-1 bg-transparent'>
+                                <h2 id='city-favorite' class='card-title city-display align-self-center'><a href='#current-weather-box' class='text-decoration-none text-muted align-self-center'>${place.data.name}, ${place.data.sys.country}</a></h2> 
+                                <a href='#' class='remove-favorite text-decoration-none'><svg class='remove-fav' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M4.5 12.75a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H5.25a.75.75 0 01-.75-.75z"></path></svg></a>           
                             </div>
                             <p class='d-none'>${place.data.id}</p>
                         </div>
                     </div>
                 `
-            
+                //with bootstrap classes
+                // <div class='row g-0 rounded'>
+                //         <div class='col-2 d-flex flex-column justify-content-center bg-secondary'>
+                //             <img id='icon' src='https://picsum.photos/100/100' class='img'>
+                //         </div>
+                //         <div class='col-10'>
+                //             <div class='d-flex flex-row justify-content-between card-body text-muted p-1 bg-transparent'>
+                //                 <h2 id='city-favorite' class='card-title city-display'><a href='#' class='text-decoration-none text-muted'>${place.data.name}, ${place.data.sys.country}</a></h2> 
+                //                 <a href='#' class='remove-favorite text-decoration-none'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M4.5 12.75a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H5.25a.75.75 0 01-.75-.75z"></path></svg></a>           
+                //             </div>
+                //             <p class='d-none'>${place.data.id}</p>
+                //         </div>
+                //     </div>
             history.append(div);
     }      
     
@@ -242,6 +289,9 @@ class UI {
 }
 // map functions ---------------------------------------------------------------------------
 class MapLocation {
+    
+    
+
     //buildMap fixes the map re-render issue
     //to rerender the map we add select the required leaflet div and set the inner html again
     //then we use the leaflet syntax to create a new map and pass in the current lat/lon and zoom parameters, we also have to include attribution for the tiler host which provides the actual map
@@ -252,9 +302,12 @@ class MapLocation {
     static buildMap(lat, lon, zoom = 9) {     
         document.getElementById('mapid').innerHTML = "<div id='map'></div>";
         
+        
+
         let map = new L.Map('map', {zoomControl: false});
         //these map. add ons can be chained, but shown as is for clarity
         map.setView(new L.LatLng(lat, lon), 3);
+        console.dir(this);
         map.flyTo(new L.LatLng(lat, lon), zoom);
         
         //for the tiler
@@ -269,6 +322,8 @@ class MapLocation {
         map.addLayer(osmLayer);
         // let validatorsLayer = new OsmJs.Weather.LeafletLayer({lang: en});
         // map.addLayer(validatorsLayer);
+
+        
     }
 }
 
@@ -276,78 +331,166 @@ class MapLocation {
 //user enters a city name (specifies with state and/or country, if desired/necessary)
 //prevent default browser action (not posting anything)
 //pass the city name to getWeather();
-document.querySelector('form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const city = document.querySelector('form').elements.city.value;
-    Request.getWeather(city);
-    document.querySelector('form').classList.remove('top-50', 'translate-middle');
-    document.querySelector('form').classList.add('top-0', 'translate-middle-x');
-})
+// document.querySelector('form').addEventListener('submit', (e) => {
+//     e.preventDefault();
+//     const city = document.querySelector('form').elements.city.value;
+//     Request.getWeather(city);
+//     document.querySelector('#current-weather-box').classList.remove('d-none');
+//     document.querySelector('#current-weather-box').classList.add('d-flex');
+//     //document.querySelector('form').classList.remove('top-50', 'start-50', 'flex-column');
+//     //document.querySelector('form').classList.add('bottom-25', 'start-0', 'flex-row');
+
+// })
 
 //event on click of plus sign to add location to LS
 //in the current weather section - when the user clicks the plus sign to add a favorite we call the addLocation() and pass in the last index of the temporary storage array called store
-document.querySelector('section').addEventListener('click', (e) => {
-    if(e.target.classList.contains('add-favorite') && e.target.nodeName === 'A') {
-           
-        //using end of string so that it doesn't add elements searched prior to current search in this browser session
-        //add current location to LS
-        Storage.addLocation(store[store.length-1]);
-        //add current location search to favorites on UI
-        UI.displayFavorites();
-        // console.log(e.target.previousSibling.previousSibling.innerText)
-    }   
-})
+// document.querySelector('#current-weather-box').addEventListener('click', (e) => {
+//     if(e.target.classList.contains('add-favorite') && e.target.nodeName === 'A') {
+        
+
+
+//         console.log(e.target);
+//         //using end of string so that it doesn't add elements searched prior to current search in this browser session
+//         //add current location to LS
+//         Storage.addLocation(store[store.length-1]);
+//         //add current location search to favorites on UI
+//         UI.displayFavorites();
+//         // console.log(e.target.previousSibling.previousSibling.innerText)
+//     }   
+// })
 
 
 //remove favorite event - should call to local storage and a UI remove
 //in the favorites section - when a user clicks the minus(-) svg we trace the click up to the element and pass the e.target into the removeFavoriteUI() function to remove it from the UI, then we find the cityID visibly hidden in the div and pass that city ID into the removeLocation() function that iterates through the LS object to find the matching index item and removes it
 
 
-document.querySelector('#history').addEventListener('click', (e) => {
-    if(e.target.classList.contains('remove-favorite') && e.target.nodeName === 'A') {
-        // console.log(e.target.parentElement.nextSibling.nextSibling.innerText);
+// document.querySelector('#history').addEventListener('click', (e) => {
+//     if(e.target.classList.contains('remove-favorite') && e.target.nodeName === 'A') {
+//         // console.log(e.target.parentElement.nextSibling.nextSibling.innerText);
 
-        //remove favorite from UI, e.target chain up to the top node
-        UI.removeFavoriteUI(e.target.parentElement.parentElement.parentElement.parentNode);
+//         //remove favorite from UI, e.target chain up to the top node
+//         UI.removeFavoriteUI(e.target.parentElement.parentElement.parentElement.parentNode);
 
-        //remove from local storage - using cityID for the unique ID
-        let id = Number(e.target.parentElement.nextSibling.nextSibling.innerText);
-        Storage.removeLocation(id);
-    }
+//         //remove from local storage - using cityID for the unique ID
+//         let id = Number(e.target.parentElement.nextSibling.nextSibling.innerText);
+//         Storage.removeLocation(id);
+//     }
 
-    //if the e.target is the city name we use the cityID again to iterate through the LS to find the lat/lon to re-load the favorite as the current weather    
-    if(e.target.nodeName === 'A') {
-        let loc = Storage.getLocation();
-        // console.log(loc);
-        let eid = Number(e.target.parentElement.parentNode.nextSibling.nextSibling.innerText);
-        console.log(e.target.parentElement.parentNode.nextSibling.nextSibling.innerText)
-        // console.log(id);
-        // console.log(loc.data.id);
-        loc.forEach(function(place) {
-            if(place.data.id === eid) {
-                // console.log(place.data.coord.lon, place.data.coord.lat)
-                Request.refreshWeather(place.data.coord.lon, place.data.coord.lat)
-            }
-        })
+//     //if the e.target is the city name we use the cityID again to iterate through the LS to find the lat/lon to re-load the favorite as the current weather    
+//     if(e.target.nodeName === 'A') {
+//         //document.getElementById('current-weather-box').classList.remove('scroll-align');
+//         let loc = Storage.getLocation();
+//         // console.log(loc);
+//         let eid = Number(e.target.parentElement.parentNode.nextSibling.nextSibling.innerText);
+//         console.log(e.target.parentElement.parentNode.nextSibling.nextSibling.innerText)
+//         // console.log(id);
+//         // console.log(loc.data.id);
+//         loc.forEach(function(place) {
+//             if(place.data.id === eid) {
+//                 // console.log(place.data.coord.lon, place.data.coord.lat)
+//                 Request.refreshWeather(place.data.coord.lon, place.data.coord.lat)
+//             }
+//         })
 
-        window.scrollTo(0,0);
+//         document.querySelector('#current-weather-box').classList.remove('d-none');
+//         document.querySelector('#current-weather-box').classList.add('d-flex');
         
-    }
+//     }
 
 
 
-})
+// })
 
 
 //random map location on load
-window.onload = function () {
+// window.onload = function () {
+//     const lat = Math.random() * (90 - (-90)) + (-90)
+//     const lon = Math.random() * (180 - (-180)) + (-180)
+//     // const zoom = 11;
+//     MapLocation.buildMap(lat, lon, 3);
+
+//     UI.displayFavorites();
+//     windowLoad = false;
+// }
+
+const form = document.querySelector('form');
+const history = document.querySelector('#history');
+const currentWeather = document.querySelector('#current-weather-box');
+
+class App {
+    
 
     
-    const lat = Math.random() * (90 - (-90)) + (-90)
-    const lon = Math.random() * (180 - (-180)) + (-180)
-    // const zoom = 11;
-    MapLocation.buildMap(lat, lon, 3);
+    constructor() {
+        const lat = Math.random() * (90 - (-90)) + (-90)
+        const lon = Math.random() * (180 - (-180)) + (-180)
+        // const zoom = 11;
+        MapLocation.buildMap(lat, lon, 3);
+    
+        UI.displayFavorites();
+        windowLoad = false;
+    
+        form.addEventListener('submit', UI._displayCurrentWeatherBox.bind(this));
 
-    UI.displayFavorites();
-    windowLoad = false;
+        currentWeather.addEventListener('click', this._currentWeatherActions.bind(this));
+
+        history.addEventListener('click', this._historyActions.bind(this));
+        
+        
+        
+
+
+
+    }
+
+    
+
+    _currentWeatherActions(e) {
+        if(e.target.classList.contains('add-favorite') && e.target.nodeName === 'A') {
+            console.log(e.target);
+            //using end of string so that it doesn't add elements searched prior to current search in this browser session
+            //add current location to LS
+            Storage.addLocation(store[store.length-1]);
+            //add current location search to favorites on UI
+            UI.displayFavorites();
+            // console.log(e.target.previousSibling.previousSibling.innerText)
+        }
+    }
+
+    _historyActions (e) {
+        if(e.target.classList.contains('remove-favorite') && e.target.nodeName === 'A') {
+    
+            //remove favorite from UI, e.target chain up to the top node
+            UI.removeFavoriteUI(e.target.parentElement.parentElement.parentElement.parentNode);
+    
+            //remove from local storage - using cityID for the unique ID
+            let id = Number(e.target.parentElement.nextSibling.nextSibling.innerText);
+            Storage.removeLocation(id);
+        }
+    
+        //if the e.target is the city name we use the cityID again to iterate through the LS to find the lat/lon to re-load the favorite as the current weather    
+        if(e.target.nodeName === 'A') {
+            //document.getElementById('current-weather-box').classList.remove('scroll-align');
+            let loc = Storage.getLocation();
+            // console.log(loc);
+            let eid = Number(e.target.parentElement.parentNode.nextSibling.nextSibling.innerText);
+            console.log(e.target.parentElement.parentNode.nextSibling.nextSibling.innerText)
+            // console.log(id);
+            // console.log(loc.data.id);
+            loc.forEach(function(place) {
+                if(place.data.id === eid) {
+                    // console.log(place.data.coord.lon, place.data.coord.lat)
+                    Request.refreshWeather(place.data.coord.lon, place.data.coord.lat)
+                }
+            })
+    
+            currentWeather.classList.remove('d-none');
+            currentWeather.classList.add('d-flex');
+            
+        }
+    }
+   
 }
+
+
+const app = new App();
