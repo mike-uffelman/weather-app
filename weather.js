@@ -1,4 +1,5 @@
 'use strict';
+
 //the Location class is a constructor to build the location object for storage
 class Location {
     constructor(data) {
@@ -36,6 +37,9 @@ class Storage {
     //this is for retrieving locally stored locations to edit storage and for display
     //to use local storage we have three functions - getLocation, addLocation, and removeLocation
     //getLocation() basically retrieves the current data from the localstorage, we define a variable and say if the local storage item we desire is null, then we create an empty array, otherwise(i.e. returns data) we return the parsed data to the variable for access/manipulation
+
+    //TODO change from if else------------------------------------------------------------
+
     static getLocation() {
         let loc;
         if(localStorage.getItem('loc') === null) {
@@ -85,6 +89,8 @@ class Request {
     //should we receive a failed response our catch(err) will notify and console log the error message
     static async getWeather(city) {
         try {
+            if(!city) return;
+            
             const res = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&lang=en&appid=${APIkey}`)
             console.log(res.data);
             const data = res.data;
@@ -422,6 +428,7 @@ class App {
 
     
     constructor() {
+
         const lat = Math.random() * (90 - (-90)) + (-90)
         const lon = Math.random() * (180 - (-180)) + (-180)
         // const zoom = 11;

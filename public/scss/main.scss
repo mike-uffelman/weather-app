@@ -1,0 +1,97 @@
+$theme-colors: (
+    "success": rgb(25, 136, 180)
+);
+
+
+
+@import "../../node_modules/bootstrap/scss/functions";
+
+
+
+
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/root";
+
+@import "../../node_modules/bootstrap/scss/utilities";
+@import "../../node_modules/bootstrap/scss/reboot";
+@import "../../node_modules/bootstrap/scss/type";
+@import "../../node_modules/bootstrap/scss/images";
+@import "../../node_modules/bootstrap/scss/containers";
+@import "../../node_modules/bootstrap/scss/grid";
+@import "../../node_modules/bootstrap/scss/helpers";
+
+@import "../../node_modules/bootstrap/scss/utilities/api";
+
+
+@import 'base';
+
+
+/* --- scroll snap --- */
+
+
+section {
+    height: 90vh;
+    scroll-snap-align: center;
+    margin-bottom: 0.5rem;
+}
+
+
+
+form {
+    position: absolute;
+    /* top: 100px; */
+    z-index: 1;
+
+    
+    
+}
+
+/* #city-input {
+    width: 100%;
+} */
+
+
+input[type=text]:focus {
+    background: rgb(250, 241, 157);
+}
+
+.city-weather-box {
+    /* position: absolute;
+    top: 70%;
+    right: 10px;
+    left: 10px; */
+    z-index: 1;
+    
+}
+
+/* remove ability to click the path instead of svg */
+
+.add-fav {
+    fill: #198754;
+}
+
+.remove-fav {
+    fill: #dc3545;
+}
+
+svg, path {
+    pointer-events: none;
+  
+}
+
+p {
+    color: black
+}
+
+/* .city-weather-box {
+    background: rgba(166, 175, 241, 0.65);
+
+    border-radius: 5px;
+    
+
+
+} */
+
+// $btn-success: magenta;
+

@@ -1,0 +1,24 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "description": "User Stories:",
+  "main": "weather.js",
+  "scripts": {
+    "watch:sass": "sass public/scss/main.scss public/css/style.css -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mike-uffelman/weather-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mike-uffelman/weather-app/issues"
+  },
+  "homepage": "https://github.com/mike-uffelman/weather-app#readme",
+  "dependencies": {
+    "bootstrap": "^5.1.3"
+  },
+  "devDependencies": {}
+}
