@@ -1,3 +1,4 @@
+//----- typography -----
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
 
 $--reddish: rgba(239, 71, 111, 1);
@@ -13,43 +14,12 @@ $bp-large: 62.5em; // 1000/16
 $bp-medium: 50em; //800/16
 $bp-small: 37.5em; // 600/16
 
+//----- reset -----
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
-html {
-    font-size: 62.5%;
-}
 
-body {
-    font-family: 'Open Sans', sans-serif;
-    width: 100%;
-    height: 100vh;
-    // font-size: 1.2rem;
-    background: transparent;
-
-    // @media screen and (min-width: $bp-small) {
-    //     width: 50%;
-    // }
-}
-
-main {
-    position: relative;
-    z-index: 1;
-    /* background: rgba(66, 50, 50, 0.212) */
-}
-
-section {
-    height: 100vh;
-    width: 100%;
-    scroll-snap-align: center;
-    margin-bottom: 0.5rem;
-    background-color: transparent;
-}
-
-svg, path {
-    pointer-events: stroke;
-  
-}
+//----- 

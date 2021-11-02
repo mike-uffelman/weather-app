@@ -325,13 +325,17 @@ class MapLocation {
         //for the tiler
         let osmURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         let osmAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        let osmLayer = new L.tileLayer(osmURL, {attribution: osmAttribution,});
-        
+        let osmLayer = new L.tileLayer(osmURL, {attribution: osmAttribution,}
+        );
+        // let weatherMapURL = `https://tile.openweathermap.org/{z}/{x}/{y}.png?appid=63c966c95ff05cfed696cec21d7ff716`
+
+        // let weatherMap = new L.tileLayer(weatherMapURL)
         
         
         // map.addControl(new L.control({zoomControl: false}));
         // map.flyToBounds(L.LatLng(lat, lon));
         map.addLayer(osmLayer);
+        // map.addLayer(weatherMap);
         // let validatorsLayer = new OsmJs.Weather.LeafletLayer({lang: en});
         // map.addLayer(validatorsLayer);
 
@@ -434,7 +438,7 @@ class App {
 
     
     constructor() {
-        
+
         console.log(window.scrollbars);
 
         const lat = Math.random() * (90 - (-90)) + (-90)
