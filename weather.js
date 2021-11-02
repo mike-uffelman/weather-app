@@ -90,7 +90,7 @@ class Request {
     static async getWeather(city) {
         try {
             if(!city) return;
-            
+
             const res = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&lang=en&appid=${APIkey}`)
             console.log(res.data);
             const data = res.data;
@@ -253,21 +253,27 @@ class UI {
 
     //this is the function to build a dynamic element to add our selected favorites to be displayed in the browser
     static buildFavoriteDivs(place) {
-        const history = document.querySelector('#history');    
+        const favorites = document.querySelector('#favorites');    
             
             const div = document.createElement('div');
-            div.classList.add('card', 'rounded', 'bg-light', 'mb-1','mx-3');          
+            div.classList.add('favorites');          
                 div.innerHTML = `
-                    <div class='row g-0 rounded'>
-                        <div class='col-2 d-flex flex-column justify-content-center bg-secondary'>
+                    <div class=''>
+                        <div class=''>
                             <img id='icon' src='https://picsum.photos/100/100' class='img'>
                         </div>
-                        <div class='col-10 align-self-center'>
-                            <div class='d-flex flex-row justify-content-between align-self-center card-body text-muted p-1 bg-transparent'>
-                                <h2 id='city-favorite' class='card-title city-display align-self-center'><a href='#current-weather-box' class='text-decoration-none text-muted align-self-center'>${place.data.name}, ${place.data.sys.country}</a></h2> 
-                                <a href='#' class='remove-favorite text-decoration-none'><svg class='remove-fav' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M4.5 12.75a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H5.25a.75.75 0 01-.75-.75z"></path></svg></a>           
+                        <div class=''>
+                            <div class=''>
+                                <h2 id='city-favorite' class='city-display'>
+                                    <a href='#current-weather-box' class='text-decoration-none text-muted align-self-center'>${place.data.name}, ${place.data.sys.country}</a>
+                                </h2> 
+                                <a href='#' class='remove-favorite text-decoration-none'>
+                                    <svg class='remove-fav' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                        <path fill-rule="evenodd" d="M4.5 12.75a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H5.25a.75.75 0 01-.75-.75z"></path>
+                                    </svg>
+                                </a>           
                             </div>
-                            <p class='d-none'>${place.data.id}</p>
+                            <p class=''>${place.data.id}</p>
                         </div>
                     </div>
                 `
@@ -284,7 +290,7 @@ class UI {
                 //             <p class='d-none'>${place.data.id}</p>
                 //         </div>
                 //     </div>
-            history.append(div);
+            favorites.append(div);
     }      
     
     //remove UI favorite item, e is defined in the calling event
@@ -420,7 +426,7 @@ class MapLocation {
 // }
 
 const form = document.querySelector('form');
-const history = document.querySelector('#history');
+const favorites = document.querySelector('#favorites');
 const currentWeather = document.querySelector('#current-weather-box');
 
 class App {
@@ -428,6 +434,8 @@ class App {
 
     
     constructor() {
+        
+        console.log(window.scrollbars);
 
         const lat = Math.random() * (90 - (-90)) + (-90)
         const lon = Math.random() * (180 - (-180)) + (-180)
@@ -441,7 +449,7 @@ class App {
 
         currentWeather.addEventListener('click', this._currentWeatherActions.bind(this));
 
-        history.addEventListener('click', this._historyActions.bind(this));
+        favorites.addEventListener('click', this._favoritesActions.bind(this));
         
         
         
@@ -464,7 +472,7 @@ class App {
         }
     }
 
-    _historyActions (e) {
+    _favoritesActions (e) {
         if(e.target.classList.contains('remove-favorite') && e.target.nodeName === 'A') {
     
             //remove favorite from UI, e.target chain up to the top node
