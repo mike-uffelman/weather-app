@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap");
+/* SCSS Gradient */
 * {
   padding: 0;
   margin: 0;
@@ -7,7 +8,7 @@
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #073b4c transparent;
+  scrollbar-color: #073b4c;
 }
 
 *::-webkit-scrollbar {
@@ -27,23 +28,13 @@ html {
 
 body {
   font-family: "Open Sans", sans-serif;
-  width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background: transparent;
 }
 
 main {
   position: relative;
   z-index: 1;
-  /* background: rgba(66, 50, 50, 0.212) */
-}
-
-section {
-  height: 90vh;
-  width: 100%;
-  scroll-snap-align: center;
-  margin-bottom: 0.5rem;
-  background-color: transparent;
 }
 
 svg, path {
@@ -52,6 +43,7 @@ svg, path {
 
 /* --- scroll snap --- */
 .swipeView {
+  height: 99vh;
   display: grid;
   grid-template-columns: repeat(3, 100%);
   will-change: transform;
@@ -62,47 +54,42 @@ svg, path {
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   background-color: transparent;
-}
-
-#mapid {
-  /* height: 100vh !important; */
-  position: relative;
-  z-index: -1;
-}
-
-#map {
-  height: 100vh;
   width: 100%;
-  position: fixed;
-  z-index: -1;
+  overflow-y: hidden;
 }
 
-.currentCityCard {
-  display: flex;
+.weatherPage {
+  display: none;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
   height: 100%;
-  width: 100%;
   /* position: absolute;
   top: 70%;
   right: 10px;
   left: 10px; */
 }
 
-.search {
+section {
+  scroll-snap-align: center;
+  background-color: transparent;
+}
+
+.searchPage {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 100%;
 }
-.search__header {
-  color: #118ab2;
+.searchPage__header {
+  color: black;
   font-size: 4rem;
   margin-bottom: 5rem;
   text-align: center;
+  text-shadow: 0 0 1rem #118ab2;
 }
-.search__form {
+.searchPage__form {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -110,7 +97,7 @@ svg, path {
   padding: 1rem;
   font-size: 1.6rem;
 }
-.search__form--input {
+.searchPage__form--input {
   border-radius: 1rem;
   border: none;
   padding: 1rem 2rem;
@@ -119,17 +106,29 @@ svg, path {
   box-shadow: 0 0.5rem 1rem black;
   font-weight: 600;
 }
-.search__form input[type=text]:focus {
+.searchPage__form input[type=text]:focus {
   background-color: #f7f0b5;
   transform: scale(1.1);
   transition: all ease 300ms;
 }
-.search__form--btn {
+.searchPage__form--btn {
   border: none;
+}
+.searchPage__searchMap {
+  text-decoration: none;
+  color: #073b4c;
+  background-color: rgba(0, 0, 0, 0.25);
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+}
+.searchPage__searchMap:hover {
+  background-color: #06d6a0;
+  color: black;
 }
 
 .btn {
-  padding: 1rem 2rem;
+  padding: 1.2rem 2rem;
   border-radius: 1rem;
   color: #f9f9f9;
   font-size: 2rem;
@@ -137,69 +136,340 @@ svg, path {
   box-shadow: 0 0.5rem 1rem black;
 }
 
-.card {
+.weatherCard {
   position: relative;
-  background-color: #f9f9f9;
-  height: 100%;
-  width: 100%;
+  max-height: 95vh;
+  max-width: 45rem;
+  margin: 2rem;
   display: flex;
-  justify-self: flex-end;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 1rem;
+  flex-direction: column;
+  flex: 1;
   border-radius: 1rem;
   box-shadow: 0 0 1rem black;
 }
-.card__img {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-.card__img--img {
-  height: 100%;
-  width: 100%;
-  border-top-left-radius: 1rem;
-  border-bottom-left-radius: 1rem;
-  object-fit: contain;
-  border: 1px solid red;
-}
-.card__img--description {
-  position: absolute;
-  bottom: 0;
-  display: flex;
-  align-self: center;
-  font-size: 1.5rem;
-  padding: 1rem;
-}
-.card__body {
-  margin-left: 1rem;
-  width: 100%;
+.weatherCard__body {
+  padding: 1rem 2rem;
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  border: 1px solid red;
+  flex: 1;
+  background-color: transparent;
+  overflow: scroll;
 }
-.card__body--details {
-  font-size: 1.3rem;
+
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #073b4c;
+  font-size: 1.6rem;
+  height: 40rem;
+  color: #8eb8cd;
+  position: relative;
+  flex: 1 0 100%;
+  padding-bottom: 1rem;
 }
-.card__body--details:not(:last-child) {
-  margin-bottom: 0.5rem;
+.header__container {
+  margin: 2rem;
 }
-.card__header {
+.header__box {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  font-size: 1.6rem;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #118ab2;
+  position: relative;
+  z-index: 1;
 }
-.card__add-fav {
-  fill: #198754;
+.header__box:hover, .header__box:hover h3, .header__box:hover path {
+  cursor: pointer;
+  color: #06d6a0;
+  fill: #06d6a0;
+}
+.header__heading {
+  font-size: 3rem;
+  color: #8eb8cd;
+}
+.header--add-fav {
+  fill: #118ab2;
+}
+.header__details {
+  position: absolute;
+  top: 5rem;
+  right: 12rem;
+  font-weight: bold;
+  font-size: 3rem;
+  margin: 0 0 1rem 1rem;
+  color: #ffd166;
+  text-shadow: 0 0 1rem black;
+}
+.header__details:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+.header__icon {
+  position: absolute;
+  z-index: 0;
+  top: 0.5rem;
+  right: 3rem;
+  height: auto;
+  width: 100%;
+  object-fit: cover;
+}
+.header__icon--img {
+  transform: scale(2);
+  position: absolute;
+  top: 0;
+  right: 0;
+  filter: opacity(0.75) contrast(200%);
+}
+.header__icon--description {
+  position: absolute;
+  top: 7.5rem;
+  right: 1rem;
+  display: flex;
+  color: #ffd166;
+  font-weight: 800;
+  text-shadow: 0 0 4px black;
+  align-self: flex-end;
+  font-size: 1.25rem;
+}
+
+.map {
+  position: relative;
+  height: 15rem;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.map__border {
+  position: relative;
+  z-index: 9;
+  height: 100%;
+  width: 4rem;
+  background-color: #073b4c;
+  overflow: hidden;
+}
+.map__window {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  overflow: hidden;
+  flex: 1 1 90%;
+  background-color: transparent;
+  box-shadow: 0 0 2rem black;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.forecast {
+  padding: 2rem;
+  background-color: #073b4c;
+}
+.forecast__header {
+  background-color: rgba(249, 249, 249, 0.25);
+  color: #8eb8cd;
+  text-shadow: 0 0 10px black;
+  padding: 0.25rem 0.25rem 0.25rem 1rem;
+  letter-spacing: 0.15rem;
+  text-transform: uppercase;
+}
+
+.hourly {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex: 1;
+  margin-bottom: 1rem;
+}
+.hourly__detail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.15);
+  color: #8eb8cd;
+}
+.hourly__detail--time {
+  margin-top: 0.5rem;
+  font-weight: 800;
+  font-size: 1.25rem;
+}
+.hourly__detail--temp {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  color: #ffd166;
+  font-weight: 800;
+}
+.hourly__detail--icon {
+  margin: -0.5rem;
+  height: 100%;
+  width: 100%;
+  filter: opacity(0.75) contrast(2);
+}
+
+.daily__detail {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 1fr;
+  background-color: rgba(0, 0, 0, 0.15);
+  padding: 0 0.5rem;
+  font-size: 1.25rem;
+  color: #8eb8cd;
+}
+.daily__detail:first-child {
+  margin-top: 0.5rem;
+}
+.daily__detail--weekday {
+  grid-column: 1/6;
+  text-transform: uppercase;
+  display: flex;
+  font-size: 1rem;
+  flex-direction: row;
+}
+.daily__detail--icon {
+  height: 3rem;
+  filter: opacity(0.75) contrast(2);
+}
+.daily__detail--day {
+  font-weight: 600;
+  padding-left: 0.5rem;
+  align-self: center;
+  letter-spacing: 0.1rem;
+}
+.daily__detail--precip {
+  grid-column: 9/12;
+  justify-self: start;
+  align-self: center;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+.daily__detail--precip img {
+  height: 1.5rem;
+}
+.daily__detail--temp {
+  grid-column: -1;
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+}
+
+.temp__bars {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 4rem;
+  height: 100%;
+  padding: 0 0.5rem;
+  position: relative;
+  border: 1px solid magenta;
+}
+.temp__bars--low {
+  height: 0.5rem;
+  width: 0%;
+  background-image: #eb4747;
+}
+.temp__bars--high {
+  position: relative;
+  height: 0.5rem;
+  width: 0%;
+  background-color: #eb4747;
+  transition: all ease 1000ms;
+}
+
+.component-box {
+  background-color: #073b4c;
+}
+
+.favorites {
+  width: 100%;
+  padding: 5rem;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+.favorites__card {
+  width: 90%;
+  background-color: rgba(249, 249, 249, 0.75);
+  border-radius: 1rem;
+  overflow: hidden;
+  margin: 0.25rem 1rem;
+  display: flex;
+  flex-direction: row;
+  transition: all ease 200ms;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.75);
+}
+.favorites__card:hover {
+  background-color: #06d6a0;
+  transition: all ease 200ms;
+}
+.favorites__card--img {
+  height: 100%;
+  object-fit: cover;
+}
+.favorites__card--detail {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  height: 100%;
+}
+.favorites__card--detail-header {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  margin-right: 1rem;
+}
+.favorites__card--detail-header a {
+  padding: 0.5rem 0;
+  align-self: center;
+  width: 100%;
+  text-decoration: none;
+  color: #073b4c;
+}
+.favorites__card--detail--remove-favorite {
+  margin-left: auto;
+}
+.favorites__card--locationID {
+  display: none;
+}
+
+#mapid {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  z-index: -1;
+  opacity: 0;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: -1;
+}
+
+.map-marker svg {
+  transform: scale(0.2);
 }
 
 .remove-fav {
-  fill: #dc3545;
+  background-color: rgba(239, 71, 111, 0.5);
+  border-radius: 50%;
+  fill: #ffffff;
+}
+.remove-fav:hover {
+  background-color: #ef476f;
+}
+
+.leaflet-tile-loaded {
+  background-blend-mode: darken;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -1,6 +1,6 @@
 * {
     scrollbar-width: thin;
-    scrollbar-color: $--dark-blue transparent;
+    scrollbar-color: $--dark-blue ;
 }
 
 *::-webkit-scrollbar {
@@ -21,8 +21,8 @@ html {
 
 body {
     font-family: 'Open Sans', sans-serif;
-    width: 100%;
-    height: 100vh;
+    // width: 100%;
+    min-height: 100vh;
     // font-size: 1.2rem;
     background: transparent;
 
@@ -34,16 +34,12 @@ body {
 main {
     position: relative;
     z-index: 1;
-    /* background: rgba(66, 50, 50, 0.212) */
+    // min-height: 100vh;
+    // background: rgba(66, 50, 50, 0.212);
+    
 }
 
-section {
-    height: 90vh;
-    width: 100%;
-    scroll-snap-align: center;
-    margin-bottom: 0.5rem;
-    background-color: transparent;
-}
+
 
 svg, path {
     pointer-events: stroke;
@@ -52,18 +48,25 @@ svg, path {
 
 /* --- scroll snap --- */
 .swipeView {
+    height: 99vh;
+    
+    // position: absolute;
+    // z-index: 1;
     display: grid;
     grid-template-columns: repeat(3, 100%);
     will-change: transform;
     align-content: center;
     overflow-x: auto;
+    
     scroll-snap-coordinate: 0 0;
     scroll-snap-points-x: repeat(100%);
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     background-color: transparent;
-
-
+    width: 100%;
+    overflow-y: hidden;
+    // backdrop-filter: blur(5px);
+    
     
 }
 
@@ -71,39 +74,35 @@ svg, path {
 //     scroll-snap-align: start;
 // }
 
-#mapid {
-    /* height: 100vh !important; */
-    // width: 100% ;
-    position: relative ;
-    z-index: -1 ;   
-    
-
-}
-
-#map {
-    height: 100vh;
-    width: 100% ;
-    position: fixed ;
-    z-index: -1 ;
-    
-    
-}
 
 
-.currentCityCard {
-    display: flex;
+
+.weatherPage {
+
+    display: none;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
     height: 100%;
-    width: 100%;
+    // width: 100%;
+    // border: 1px solid red;
     /* position: absolute;
     top: 70%;
     right: 10px;
     left: 10px; */
     // z-index: 1;
+
     
 }
 
-.favorites {
+// .favorites {
 
+// }
+
+section {
+    // min-height: 100%;
+    // width: 100%;
+    scroll-snap-align: center;
+    // margin-bottom: 0.5rem;
+    background-color: transparent;
+    
 }

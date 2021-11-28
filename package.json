@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/mike-uffelman/weather-app#readme",
   "dependencies": {
-    "bootstrap": "^5.1.3"
+    "bootstrap": "^5.1.3",
+    "dotenv": "^10.0.0"
   },
   "devDependencies": {}
 }
