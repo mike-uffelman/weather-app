@@ -63,8 +63,8 @@
 
     &__searchMap {
         text-decoration: none;
-        color: $--dark-blue;
-        background-color: $--black-lightest;
+        color: $--mustard;
+        background-color: $--black-lighter;
         // text-shadow: 0 0 .5rem black;
         font-size: 1.5rem;
         padding: .5rem 1rem;
@@ -93,8 +93,8 @@
     position: relative;
     // background-color: transparent;
     max-height: 95vh;
-    max-width: 45rem;
-    margin: 2rem;
+    max-width: 30rem;
+    // margin: 2rem;
     display: flex;
     flex-direction: column;
     flex: 1;    
@@ -106,15 +106,25 @@
         // background-color: $--white;
     }
 
+    // @media only screen and (min-width: $bp-small) {
+    //     margin: 0;
+    //     max-width: 90%;
+    // }
 
-    
+
+    @media only screen and (min-width: $bp-smallest) {
+        margin: 0;
+        // max-width: 0;
+        min-width: 32em;
+    }
+
 
     
 
     &__body {
         // grid-area: body;
         // margin: auto;
-        padding: 1rem 2rem;
+        // padding: 1rem 2rem;
         // width: 100%;
         min-height: 100%;
         display: flex;
@@ -352,7 +362,7 @@
         // border-radius: 1rem;
         background-color: $--black-lightest2;
         padding: 0 .5rem;
-        font-size: 1.25rem;
+        font-size: 1rem;
         color: $--dark-blue-alt;
 
         &:first-child {
@@ -364,7 +374,6 @@
             text-transform: uppercase;
             
             display: flex;
-            font-size: 1rem;
             flex-direction: row;
         }
 
@@ -376,7 +385,7 @@
         &--day {
             // align-self: flex-start;
             font-weight: 600;
-            padding-left: .5rem;
+            // padding-left: .5rem;
             align-self: center;
             letter-spacing: .1rem;
         }
@@ -448,7 +457,7 @@
     height: 100%;
     padding: 0 .5rem;
     position: relative;
-    border: 1px solid magenta;
+    // border: 1px solid magenta;
     // font-size: .5rem;
 
     &--low {
@@ -475,19 +484,33 @@
 
 .favorites {
     width: 100%;
-    padding: 5rem;
+    max-height: 90vh;
+    padding: 1rem;
     overflow-y: scroll;
-    // overflow-x: hidden;
+    overflow-x: hidden;
+    display: grid;
+    grid-template-columns: 1fr;
+
     display: flex;
+    flex: 0 1;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
     //TODO add media query for favorites size
 
+    &__header {
+        background-color: $--dark-blue;
+        color: $--white;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        width: 100%;
+        text-align: center;
+        padding: 1rem 0;
+    }
 
     &__card {
-        width: 90%;
+        width: 100%;
         // border: 1px solid red;
         background-color: $--white-light;
         // padding: 1rem;

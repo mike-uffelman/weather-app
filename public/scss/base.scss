@@ -49,7 +49,8 @@ $gradient-top: linear-gradient(90deg, #f94144ff, #f3722cff, #f8961eff, #f9844aff
 $bp-largest: 75em; // 1200/16
 $bp-large: 62.5em; // 1000/16
 $bp-medium: 50em; //800/16
-$bp-small: 37.5em; // 600/16
+$bp-small: 25em; // 400/16
+$bp-smallest: 20em; //320/16 
 
 //----- reset -----
 * {

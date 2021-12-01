@@ -129,6 +129,8 @@ class Request {
             console.error('error!', err.message);
         }
     }
+
+    //* model logic ===================================================================
     static async getForecast(lat, lon) {
         try {
             if(!lat || !lon) return;
@@ -188,21 +190,33 @@ class Request {
 
 //display in browser------------------------------------------------------------------------
 class UI {
+    #currentWeather = document.querySelector('#current-weather-box');
+    
 
-    static firstWeatherCall = true; //? need 'static', should this be private?
+    //TODO ===== instead of conditional firstWeatherCall, we can just completely remove the weather card and recreate it, no need to update the content after building it
+
+    #data;
+    #firstWeatherCall = true; //? need 'static', should this be private?
+    constructor() {
+        this.#data = data;
+        this.#currentWeather.innerHTML = '';
+    }
+
+
     //upon receipt of the api data we pass to the displayCurrent() which displays the desired weather data in the browser by creating a new element appending within the DOM
     //in order to prevent duplicate elements from consecutive searches we set a flag variable to firstWeatherCall true so it will add once, else it will simply update the existing html displayed
-    
-    static displayCurrent(location) {
+    //* view=====================================================================================
+    static async displayCurrent(location) {
+        this.#currentWeather.innerHTML = '';
         let weeklyForecastHTML = '';
         let hourlyForecastHTML = '';
         const { current, daily, hourly } = location.data
 
 
 
-        const arr1 = [1, 4, 7, 10, 13];      
+        const timeIndex = [1, 4, 7, 10, 13];      
 
-        arr1.map((i) => hourly[i])        
+        timeIndex.map((i) => hourly[i])        
         .forEach(hour => {
             const hourlyTime = new Date((hour.dt * 1000)).toLocaleTimeString('en-US', {hour: 'numeric'});
             const hourlyTemp = hour.temp.toFixed(0);
@@ -257,9 +271,9 @@ class UI {
 
         
 
-        if(this.firstWeatherCall) {
+        // if(this.#firstWeatherCall) {
             
-            currentWeather.style.display = 'flex';
+            
 
             let html = `
             
@@ -308,34 +322,34 @@ class UI {
             // console.log(pseudoAfter)
             // pseudoAfter.style.width = `${val}%`;
             
-            currentWeather.insertAdjacentHTML('afterbegin', html);
-            currentWeather.scrollIntoView({behavior: 'smooth'})
-
-            this.firstWeatherCall = false;
+            this.#currentWeather.insertAdjacentHTML('afterbegin', html);
+            this.#currentWeather.scrollIntoView({behavior: 'smooth'})
+            this.#firstWeatherCall = false;
+            this.#currentWeather.style.display = 'flex';
 
             //display temperature bar
             
             
 
-        } else {
+        // } else {
 
-            document.querySelectorAll('.daily__detail').forEach(el => el.remove());
-            document.querySelectorAll('.hourly__detail').forEach(el => el.remove());
+        //     document.querySelectorAll('.daily__detail').forEach(el => el.remove());
+        //     document.querySelectorAll('.hourly__detail').forEach(el => el.remove());
 
-            document.querySelector('#icon').src = `http://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png`;        
-            document.querySelector('#city-display').innerText = 
-                `${location.data.name}, ${!location.data.state ? '' : location.data.state}${!location.data.state ? '' : ' '} ${location.data.country === 'US' ? '' : location.data.country}`;
-            document.querySelector('#temp-display').innerText = `${current.temp.toFixed(0)}°F`;
-            document.querySelector('#weather-desc').innerText = `${current.weather[0].description}`;
-            // document.querySelector('#sun-set-rise').innerText = `Sunrise | Sunset `;
-            // currentWeather.scrollIntoView({behavior: 'smooth'})
+        //     document.querySelector('#icon').src = `http://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png`;        
+        //     document.querySelector('#city-display').innerText = 
+        //         `${location.data.name}, ${!location.data.state ? '' : location.data.state}${!location.data.state ? '' : ' '} ${location.data.country === 'US' ? '' : location.data.country}`;
+        //     document.querySelector('#temp-display').innerText = `${current.temp.toFixed(0)}°F`;
+        //     document.querySelector('#weather-desc').innerText = `${current.weather[0].description}`;
+        //     // document.querySelector('#sun-set-rise').innerText = `Sunrise | Sunset `;
+        //     // currentWeather.scrollIntoView({behavior: 'smooth'})
 
-            document.querySelector('.daily').insertAdjacentHTML('afterbegin', weeklyForecastHTML);
-            document.querySelector('.hourly').insertAdjacentHTML('afterbegin', hourlyForecastHTML);
+        //     document.querySelector('.daily').insertAdjacentHTML('afterbegin', weeklyForecastHTML);
+        //     document.querySelector('.hourly').insertAdjacentHTML('afterbegin', hourlyForecastHTML);
             
             
 
-        }
+        // }
 
         setTimeout(() => {
             document.querySelectorAll('.temp__bars--low').forEach(bar => {
@@ -363,14 +377,15 @@ class UI {
         // MapLocation.buildMap(data.coord.lat, data.coord.lon);
     }
 
-    static _displayCurrentWeatherBox (e) {
+    //* more like a controller========================================================
+    static displayCurrentWeatherBox (e) {
         e.preventDefault();
         const city = form.elements.city.value;
         Request.getCity(city);
-        currentWeather.addEventListener('click', this._currentWeatherActions.bind(this));
+        this.#currentWeather.addEventListener('click', this._currentWeatherActions.bind(this));
 
     }
-
+    //*=================================================================================
 
     // static displayHelp() {
     //     const banner = document.createElement('div');
@@ -403,8 +418,6 @@ class UI {
             div.classList.add('favorites__card');          
                 div.innerHTML = `
                     
-                        
-                        
                         <div class='favorites__card--detail'>
                             <h2 id='city-favorite' class='favorites__card--detail-header '>
                                 <a href='#current-weather-box' class='call-favorite'>${place.data.name}, ${!place.data.state ? '' : place.data.state}${!place.data.state ? '' : ', '} ${place.data.country}</a>
@@ -422,7 +435,7 @@ class UI {
                     
                     
                 `;
-            favorites.insertAdjacentElement('afterbegin', div);
+            favorites.insertAdjacentElement('beforeend', div);
     }      
     
     //remove UI favorite item, e is defined in the calling event
@@ -579,7 +592,6 @@ class MapLocation {
 
 const form = document.querySelector('form');
 const favorites = document.querySelector('#favorites');
-const currentWeather = document.querySelector('#current-weather-box');
 const map = document.querySelector('#mapid');
 const locID = document.querySelector('.favorites__card--locationID');
 
@@ -608,7 +620,7 @@ class App {
         windowLoad = false;
     
         //search form event listener
-        form.addEventListener('submit', UI._displayCurrentWeatherBox.bind(this));
+        form.addEventListener('submit', UI. displayCurrentWeatherBox.bind(this));
 
         // currentWeather event listener for add to favorites
 
@@ -686,7 +698,7 @@ class App {
             let loc = Storage.getLocation();
             let eid = Number(e.target.nextElementSibling.innerText);
             console.log(eid);
-            currentWeather.scrollIntoView({behavior: 'smooth'})
+            // currentWeather.scrollIntoView({behavior: 'smooth'})
 
             loc.forEach(function(place) {
                 if(place.data.id === eid) {

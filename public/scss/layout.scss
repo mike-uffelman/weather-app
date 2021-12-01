@@ -48,7 +48,7 @@ svg, path {
 
 /* --- scroll snap --- */
 .swipeView {
-    height: 99vh;
+    height: 100vh;
     
     // position: absolute;
     // z-index: 1;
@@ -64,10 +64,12 @@ svg, path {
     -webkit-overflow-scrolling: touch;
     background-color: transparent;
     width: 100%;
-    overflow-y: hidden;
+    // overflow-y: hidden;
     // backdrop-filter: blur(5px);
     
-    
+    @media only screen and (min-width: $bp-smallest) {
+        height: 100vh;
+    }
 }
 
 // .scroll-align {
@@ -83,7 +85,7 @@ svg, path {
     justify-content: center;
     align-items: center;
     height: 100%;
-    // width: 100%;
+    width: auto;
     // border: 1px solid red;
     /* position: absolute;
     top: 70%;
@@ -92,6 +94,8 @@ svg, path {
     // z-index: 1;
 
     
+    
+
 }
 
 // .favorites {
