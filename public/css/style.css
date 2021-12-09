@@ -170,10 +170,9 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #073b4c;
+  background-color: #96b7c2;
   font-size: 1.6rem;
   height: 40rem;
-  color: #8eb8cd;
   position: relative;
   flex: 1 0 100%;
   padding-bottom: 1rem;
@@ -192,13 +191,15 @@ section {
   cursor: pointer;
   color: #06d6a0;
   fill: #06d6a0;
+  text-shadow: 0 0 1rem black;
 }
 .header__heading {
   font-size: 3rem;
-  color: #8eb8cd;
+  color: #073b4c;
+  text-shadow: 0 0 1rem white;
 }
 .header--add-fav {
-  fill: #118ab2;
+  fill: #073b4c;
 }
 .header__details {
   position: absolute;
@@ -207,8 +208,8 @@ section {
   font-weight: bold;
   font-size: 3rem;
   margin: 0 0 1rem 1rem;
-  color: #ffd166;
-  text-shadow: 0 0 1rem black;
+  color: #073b4c;
+  text-shadow: 0 0 1rem white;
 }
 .header__details:not(:last-child) {
   margin-bottom: 0.5rem;
@@ -227,16 +228,16 @@ section {
   position: absolute;
   top: 0;
   right: 0;
-  filter: opacity(0.75) contrast(200%);
+  filter: drop-shadow(0.5rem 0.5rem 0.5rem rgba(0, 0, 0, 0.75)) contrast(2);
 }
 .header__icon--description {
   position: absolute;
   top: 7.5rem;
   right: 1rem;
   display: flex;
-  color: #ffd166;
+  color: white;
   font-weight: 800;
-  text-shadow: 0 0 4px black;
+  text-shadow: 0 0 0.5rem black;
   align-self: flex-end;
   font-size: 1.25rem;
 }
@@ -252,8 +253,8 @@ section {
   position: relative;
   z-index: 9;
   height: 100%;
-  width: 4rem;
-  background-color: #073b4c;
+  width: 2rem;
+  background-color: #96b7c2;
   overflow: hidden;
 }
 .map__window {
@@ -265,18 +266,19 @@ section {
   background-color: transparent;
   box-shadow: 0 0 2rem black;
   overflow: hidden;
-  border-radius: 1rem;
 }
 
 .forecast {
   padding: 2rem;
-  background-color: #073b4c;
+  background-color: #96b7c2;
 }
 .forecast__header {
-  background-color: rgba(249, 249, 249, 0.25);
-  color: #8eb8cd;
-  text-shadow: 0 0 10px black;
+  background-color: rgba(0, 0, 0, 0.25);
+  color: #f9f9f9;
+  text-shadow: 0 0 0.5rem black;
   padding: 0.25rem 0.25rem 0.25rem 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 400;
   letter-spacing: 0.15rem;
   text-transform: uppercase;
 }
@@ -294,8 +296,8 @@ section {
   justify-content: center;
   align-items: center;
   flex: 1;
-  background-color: rgba(0, 0, 0, 0.15);
-  color: #8eb8cd;
+  background-color: rgba(249, 249, 249, 0.75);
+  color: black;
 }
 .hourly__detail--time {
   margin-top: 0.5rem;
@@ -305,24 +307,24 @@ section {
 .hourly__detail--temp {
   margin-top: 0.5rem;
   font-size: 1.2rem;
-  color: #ffd166;
+  color: #073b4c;
   font-weight: 800;
 }
 .hourly__detail--icon {
-  margin: -0.5rem;
+  padding: -0.5rem;
   height: 100%;
   width: 100%;
-  filter: opacity(0.75) contrast(2);
+  filter: drop-shadow(0.5rem 0.5rem 0.5rem black) contrast(2);
 }
 
 .daily__detail {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: 1fr;
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: rgba(0, 0, 0, 0.25);
   padding: 0 0.5rem;
   font-size: 1rem;
-  color: #8eb8cd;
+  color: #073b4c;
 }
 .daily__detail:first-child {
   margin-top: 0.5rem;
@@ -338,9 +340,9 @@ section {
   filter: opacity(0.75) contrast(2);
 }
 .daily__detail--day {
-  font-weight: 600;
   align-self: center;
   letter-spacing: 0.1rem;
+  font-weight: bold;
 }
 .daily__detail--precip {
   grid-column: 9/12;
@@ -351,6 +353,9 @@ section {
   flex-direction: row;
   flex-wrap: nowrap;
 }
+.daily__detail--precip p .text {
+  font-weight: bold;
+}
 .daily__detail--precip img {
   height: 1.5rem;
 }
@@ -359,6 +364,7 @@ section {
   display: flex;
   flex-direction: row;
   align-self: center;
+  font-weight: bold;
 }
 
 .temp__bars {
