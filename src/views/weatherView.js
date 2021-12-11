@@ -16,7 +16,7 @@ class WeatherView {
         this._data = data;
         // console.log('store data: ', this._data);
         
-        // console.log(`Welcome to ${this._data}`)
+        console.log(`Welcome to ${this._data}`)
         //add a clear() function
         this._clear();
         const markup = this._displayCurrent(this._data);

@@ -122,7 +122,7 @@ const controlAppStart = async function() {
 
         //* get forecast for current location if navigator.
         await model.getForecast(geoLoc.coords);
-        // console.log('DATA STORE: ', model.store)
+        console.log('DATA STORE: ', model.store)
 
         weatherView.render(model.store)
 
