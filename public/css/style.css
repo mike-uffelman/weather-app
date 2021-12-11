@@ -149,7 +149,8 @@ section {
   flex-direction: column;
   flex: 1;
   border-radius: 1rem;
-  box-shadow: 0 0 1rem black;
+  box-shadow: 0 0 2rem black;
+  overflow: hidden;
 }
 @media only screen and (min-width: 20em) {
   .weatherCard {
@@ -163,7 +164,6 @@ section {
   flex-direction: column;
   flex: 1;
   background-color: transparent;
-  overflow: scroll;
 }
 
 .header {
@@ -175,7 +175,6 @@ section {
   height: 40rem;
   position: relative;
   flex: 1 0 100%;
-  padding-bottom: 1rem;
 }
 .header__container {
   margin: 2rem;
@@ -187,7 +186,7 @@ section {
   position: relative;
   z-index: 1;
 }
-.header__box:hover, .header__box:hover h3, .header__box:hover path {
+.header__box:hover, .header__box:hover h3, .header__box:hover h5, .header__box:hover path {
   cursor: pointer;
   color: #06d6a0;
   fill: #06d6a0;
@@ -198,12 +197,18 @@ section {
   color: #073b4c;
   text-shadow: 0 0 1rem white;
 }
+.header__heading--sub {
+  font-size: 1.5rem;
+  color: #073b4c;
+  text-shadow: 0 0 1rem white;
+}
 .header--add-fav {
   fill: #073b4c;
 }
 .header__details {
   position: absolute;
-  top: 5rem;
+  z-index: 2;
+  top: 7.5rem;
   right: 12rem;
   font-weight: bold;
   font-size: 3rem;
@@ -217,27 +222,28 @@ section {
 .header__icon {
   position: absolute;
   z-index: 0;
-  top: 0.5rem;
+  top: 0;
   right: 3rem;
   height: auto;
   width: 100%;
   object-fit: cover;
 }
 .header__icon--img {
-  transform: scale(2);
+  transform: scale(1.75);
   position: absolute;
   top: 0;
   right: 0;
-  filter: drop-shadow(0.5rem 0.5rem 0.5rem rgba(0, 0, 0, 0.75)) contrast(2);
+  filter: drop-shadow(0.5rem 0.5rem 0.5rem gray) contrast(2);
 }
 .header__icon--description {
   position: absolute;
-  top: 7.5rem;
-  right: 1rem;
+  z-index: 1;
+  top: 9.5rem;
+  right: 0;
   display: flex;
-  color: white;
+  color: #f9f9f9;
   font-weight: 800;
-  text-shadow: 0 0 0.5rem black;
+  text-shadow: 0 0 1rem black;
   align-self: flex-end;
   font-size: 1.25rem;
 }
@@ -263,8 +269,7 @@ section {
   width: 100%;
   overflow: hidden;
   flex: 1 1 90%;
-  background-color: transparent;
-  box-shadow: 0 0 2rem black;
+  box-shadow: 0 0 1rem black;
   overflow: hidden;
 }
 
@@ -277,7 +282,6 @@ section {
   color: #f9f9f9;
   text-shadow: 0 0 0.5rem black;
   padding: 0.25rem 0.25rem 0.25rem 1rem;
-  margin-bottom: 0.5rem;
   font-weight: 400;
   letter-spacing: 0.15rem;
   text-transform: uppercase;
@@ -289,6 +293,7 @@ section {
   justify-content: space-between;
   flex: 1;
   margin-bottom: 1rem;
+  box-shadow: 0 0 1rem black;
 }
 .hourly__detail {
   display: flex;
@@ -314,9 +319,12 @@ section {
   padding: -0.5rem;
   height: 100%;
   width: 100%;
-  filter: drop-shadow(0.5rem 0.5rem 0.5rem black) contrast(2);
+  filter: drop-shadow(0.5rem 0.5rem 0.5rem gray) contrast(2);
 }
 
+.daily {
+  box-shadow: 0 0 1rem black;
+}
 .daily__detail {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -325,9 +333,6 @@ section {
   padding: 0 0.5rem;
   font-size: 1rem;
   color: #073b4c;
-}
-.daily__detail:first-child {
-  margin-top: 0.5rem;
 }
 .daily__detail--weekday {
   grid-column: 1/6;

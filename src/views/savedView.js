@@ -22,7 +22,7 @@ class DisplaySaved {
         this._store = store;
         // console.log(this._data);
         if(windowLoad) {
-            console.log(this._data);
+            // console.log(this._data);
             const markup = this._data.map(this._generateMarkup).join('');
             this._parentElement.insertAdjacentHTML('beforeend', markup);
 

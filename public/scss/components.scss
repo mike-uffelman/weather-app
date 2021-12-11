@@ -99,10 +99,11 @@
     flex-direction: column;
     flex: 1;    
     border-radius: 1rem;
-    box-shadow: 0 0 1rem $--black;
+    box-shadow: 0 0 2rem black;
     // padding: 2rem;
+    overflow: hidden;
 
-    & .box-styling {
+    &.box-styling {
         // background-color: $--white;
     }
 
@@ -132,7 +133,7 @@
         flex: 1;
         // border: 1px solid blue;
         background-color: transparent;
-        overflow: scroll;
+        // overflow: hidden;
 
     }
 
@@ -148,13 +149,12 @@
     font-size: 1.6rem;
     height: 40rem;
     // margin: 2rem;
-    // box-shadow: 0 0 2rem black;
     // border-radius: 1rem;
     // color: $--dark-blue-alt;
     position: relative;
     // overflow: hidden;
     flex: 1 0 100%;
-    padding-bottom: 1rem;
+    // padding-bottom: 1rem;
 
     &__container {
         margin: 2rem;
@@ -173,6 +173,7 @@
 
         &:hover,
         &:hover h3,
+        &:hover h5,
         &:hover path {
             cursor: pointer;
             color: $--greenish;
@@ -185,6 +186,12 @@
         font-size: 3rem;
         color: $--dark-blue;
         text-shadow: 0 0 1rem white;
+
+        &--sub {
+            font-size: 1.5rem;
+            color: $--dark-blue;
+            text-shadow: 0 0 1rem white;
+        }
     } 
 
     &--add-fav {
@@ -193,7 +200,8 @@
 
     &__details {
         position: absolute;
-        top: 5rem;
+        z-index: 2;
+        top: 7.5rem;
         right: 12rem;
         font-weight: bold;
         font-size: 3rem;
@@ -212,7 +220,7 @@
     &__icon {
         position: absolute;
         z-index: 0;
-        top: .5rem;
+        top: 0;
         right: 3rem;
         height: auto;
         width: 100%;
@@ -220,23 +228,24 @@
         object-fit: cover;
         
         &--img {
-            transform: scale(2);
+            transform: scale(1.75);
             position: absolute;
             top: 0;
             right: 0;
-            filter: drop-shadow(.5rem .5rem .5rem $--black-light) contrast(2);
+            filter: drop-shadow(.5rem .5rem .5rem gray) contrast(2);
             // filter: saturate(50%);
         }
 
         &--description {
             position: absolute;
-            top: 7.5rem;
-            right: 1rem;
+            z-index: 1;
+            top: 9.5rem;
+            right: 0;
             display: flex;
-            color: white;
+            color: $--white;
             font-weight: 800;
             // background-color: $--white-lightest;
-            text-shadow: 0 0 .5rem black;
+            text-shadow: 0 0 1rem black;
             align-self: flex-end;
             font-size: 1.25rem;
             // padding: 1rem;
@@ -274,10 +283,10 @@
         // border-radius: 1rem;
         overflow: hidden;
         flex: 1 1 90%;
-        background-color: transparent;
+        // background-color: transparent;
         // background-clip: content-box;
         // border: 2px solid $--black;
-        box-shadow: 0 0 2rem black;
+        box-shadow: $--weather-box-shadow;
         overflow: hidden;
         // filter: blur(1px);
         // border-radius: 1rem;
@@ -285,6 +294,7 @@
 
 
     }
+    
 
 }
 
@@ -298,10 +308,11 @@
         color: $--white;
         text-shadow: 0 0 .5rem black;
         padding: .25rem .25rem .25rem 1rem;
-        margin-bottom: .5rem;
+        // margin-bottom: .5rem;
         font-weight: 400;
         letter-spacing: .15rem;
         text-transform: uppercase;
+        // box-shadow: $--weather-box-shadow;
     }
 }
 
@@ -312,6 +323,7 @@
     justify-content: space-between;
     flex: 1;
     margin-bottom: 1rem;
+    box-shadow: $--weather-box-shadow;
 
 
     &__detail {
@@ -349,7 +361,7 @@
             width: 100%;
             // background-clip: content-box;
             // background-color: $--white-lightest;
-            filter: drop-shadow(.5rem .5rem .5rem black) contrast(2);
+            filter: drop-shadow(.5rem .5rem .5rem gray) contrast(2);
             // box-shadow: 0 0 1rem $--white-lightest;
         }
     }
@@ -357,6 +369,8 @@
 
 .daily {
     // box-shadow: 0 0 2rem black;
+    box-shadow: $--weather-box-shadow;
+
 
     &__detail {
         display: grid;
@@ -373,7 +387,7 @@
         
 
         &:first-child {
-            margin-top: .5rem;
+            // margin-top: .5rem;
         }
 
         &--weekday {

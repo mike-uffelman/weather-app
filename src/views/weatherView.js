@@ -85,35 +85,26 @@ class WeatherView {
             const precip = (day.pop * 100).toFixed(0);
             const icon = day.weather[0].icon
 
-            const tempLowVal = lowTemps/100 * 100;
-            const tempHighVal = highTemps/100 * 100;
-
-            weeklyForecastHTML +=  `
-            <div class='daily__detail'>
-                <div class='daily__detail--weekday'>
-                    <img src='http://openweathermap.org/img/wn/${icon}@2x.png' class='daily__detail--icon'>
-                    <p class='daily__detail--day'>${dailyDay}</p>
-                </div> 
-                <div id='precip' class='daily__detail--precip'>
-                    <p class=''>💧 <span class='text'>${precip}%</span></p>
-                </div>
-                <div class='daily__detail--temp'>
-                    <p class='detail--temp' ><span class='detail-temp-col low-temps'>${lowTemps}°F</span></p>
-                    <div class='temp__bars'>
-                        <div class='temp__bars--low' data-low-temp='${lowTemps}' data-bar='${i}'></div>
-                        <div class='temp__bars--high' data-high-temp='${highTemps}' data-bar='${i}'></div>
+            weeklyForecastHTML +=  
+                `
+                    <div class='daily__detail'>
+                        <div class='daily__detail--weekday'>
+                            <img src='http://openweathermap.org/img/wn/${icon}@2x.png' class='daily__detail--icon'>
+                            <p class='daily__detail--day'>${dailyDay}</p>
+                        </div> 
+                        <div id='precip' class='daily__detail--precip'>
+                            <p class=''>💧 <span class='text'>${precip}%</span></p>
+                        </div>
+                        <div class='daily__detail--temp'>
+                            <p class='detail--temp' ><span class='detail-temp-col low-temps'>${lowTemps}°F</span></p>
+                            <div class='temp__bars'>
+                                <div class='temp__bars--low' data-low-temp='${lowTemps}' data-bar='${i}'></div>
+                                <div class='temp__bars--high' data-high-temp='${highTemps}' data-bar='${i}'></div>
+                            </div>
+                            <p class='detail--temp' data-temp=''><span class='detail-temp-col high-temps'>${highTemps}°F</p>
+                        </div>
                     </div>
-                    <p class='detail--temp' data-temp=''><span class='detail-temp-col high-temps'>${highTemps}°F</p>
-                </div>
-            </div>`
-
-            
-            
-
-
-            // tempBarsLow.style.width = 
-            // tempBarsHigh.style.width = `${tempHighVal}%`;
-
+                `;
 
         })
 
@@ -123,48 +114,52 @@ class WeatherView {
             
             
 
-            let html = `
-            
-                <div class='weatherCard'>
-                    <div class='header'>
-                        <div class='header__container'>
-                            <div class='header__box'>
-                                <h3 id='city-display' class='header__heading'>${location[location.length -1 ].data.name}, ${!location[location.length -1 ].data.state ? '' : location[location.length -1 ].data.state}${!location[location.length -1 ].data.state ? '' : ', '} ${location[location.length -1 ].data.country === 'US' ? '' : location[location.length -1 ].data.country}</h3>
-                                <svg class='header--add-fav' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                                    <path fill-rule="evenodd" d="M11.75 4.5a.75.75 0 01.75.75V11h5.75a.75.75 0 010 1.5H12.5v5.75a.75.75 0 01-1.5 0V12.5H5.25a.75.75 0 010-1.5H11V5.25a.75.75 0 01.75-.75z">
-                                    </path>
-                                </svg>
-                            </div>
-                            
-                            
-                            <div class='header__icon'>
-                                <img id='icon' src='http://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png' class='header__icon--img'>
-                                <p id='temp-display' class='header__details'>${current.temp.toFixed(0)}° F
-                                </p>
-                                <p  class='header__icon--description'><span id='weather-desc'>${current.weather[0].description}</span></p>
+            let html = 
+                `
+                    <div class='weatherCard'>
+                        <div class='header'>
+                            <div class='header__container'>
+                                <div class='header__box'>
+                                    <div class='header__headers'>
+                                        <h3 id='city-display' class='header__heading'>${location.at(-1).data.name}</h3>
+                                        <h5 class='header__heading--sub'>${location.at(-1).data.state}, ${location.at(-1).data.country}</h5>
+                                    </div>
+                                    <svg class='header--add-fav' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                        <path fill-rule="evenodd" d="M11.75 4.5a.75.75 0 01.75.75V11h5.75a.75.75 0 010 1.5H12.5v5.75a.75.75 0 01-1.5 0V12.5H5.25a.75.75 0 010-1.5H11V5.25a.75.75 0 01.75-.75z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                
+                                
+                                <div class='header__icon'>
+                                    <img id='icon' src='http://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png' class='header__icon--img'>
+                                    <p id='temp-display' class='header__details'>${current.temp.toFixed(0)}° F
+                                    </p>
+                                    <p  class='header__icon--description'><span id='weather-desc'>${current.weather[0].description}</span></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                
                     
-                    <div class='forecast'>
-                        <h3 class='forecast__header'>Hourly Forecast</h3>
-                            <div class='hourly'>
-                                ${hourlyForecastHTML}
-                            </div>     
-                        <h3 class='forecast__header'>Weekly Forecast</h3>
-                        <div class='daily'>
-                            ${weeklyForecastHTML}
-                        </div>  
+                        
+                        <div class='forecast'>
+                            <h3 class='forecast__header'>Hourly Forecast</h3>
+                                <div class='hourly'>
+                                    ${hourlyForecastHTML}
+                                </div>     
+                            <h3 class='forecast__header'>Weekly Forecast</h3>
+                            <div class='daily'>
+                                ${weeklyForecastHTML}
+                            </div>  
+                        </div>
+                        <div class='map'>
+                            <div class='map__border'></div>
+                            <div class='map__window' id='mapwindow'>
+                                <div class='weather__map' id='mapid'></div>
+                            </div>
+                            <div class='map__border'></div>
+                        </div>
                     </div>
-                    <div class='map'>
-                        <div class='map__border'></div>
-                        <div class='map__window' id='mapwindow'></div>
-                        <div class='map__border'></div>
-                    </div>
-                </div>
-            
-            `
+                `;
             
             // const pseudoAfter = document.querySelector('.pseudos', ':after').getComputedStyle()
             // console.log(pseudoAfter)

@@ -46,7 +46,7 @@ $cg-blue: rgba(39, 125, 161, 1);
 $gradient-top: linear-gradient(90deg, #f94144ff, #f3722cff, #f8961eff, #f9844aff, #f9c74fff, #90be6dff, #43aa8bff, #4d908eff, #577590ff, #277da1ff);
 
 
-
+$--weather-box-shadow: 0 0 1rem $--black;
 
 $bp-largest: 75em; // 1200/16
 $bp-large: 62.5em; // 1000/16

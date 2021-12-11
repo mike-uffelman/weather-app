@@ -12,13 +12,14 @@ const APIkey = '63c966c95ff05cfed696cec21d7ff716';
 //the osm items are for the tiler, which require a tiler address and attribution to add to the map, then we add the layer to the map
 //also need to add css for the #map and #mapid ids -> the height, width, position
 
+
 export const buildMap = function(coords, zoom = 9) {     
     const mapid = document.querySelector('#mapid');
     mapid.innerHTML = "<div id='map'></div>";
 
     // console.log(coords[0]);
     // const lon = coords[1];
-    console.log(coords);
+    // console.log(coords);
     const [ lat, lon ] =  coords;
     // console.log(lat, lon);
     
@@ -95,7 +96,7 @@ export const buildMap = function(coords, zoom = 9) {
     
 
     setTimeout(() => {
-        console.log('map loaded')
+        // console.log('map loaded')
         mapid.style.opacity = 1;
         mapid.style.transition = 'opacity ease 2000ms'
 

@@ -24,19 +24,7 @@ import searchView from './views/searchView.js';
 
 class Storage {
     //pushing the current weather location to a temporary array, which will then be pushed to local storage if the user decides is a favorite
-    // static storeLocation(place) {
-        
-    //     const cityObj = new Location(place);
-    //     // Storage.addLocation(cityObj);
-    //     // const clone = new Object(JSON.parse(JSON.stringify(cityObj)));
-    //     // console.log(clone);
-    //     store.push(cityObj);
-    //     console.log('Store function: ', store);
-    //     // _currentLocation = store.at(-1);
-    //     // console.log(_currentLocation);
-        
-        
-    // }
+
 
     //this is for retrieving locally stored locations to edit storage and for display
     //to use local storage we have three functions - getLocation, addLocation, and removeLocation
@@ -55,86 +43,6 @@ class Request {
     //we're also taking the sunrise/sunset times and converting them to milliseconds and then to the locale time to display in a readable format and passing those along with the data variable to be displayed in the UI and copied to an array for storage
     //should we receive a failed response our catch(err) will notify and console log the error message
 
-    static _getSunriseSunset(dt, timezone) {
-        const timeStr = new Date(dt * 1000).toLocaleTimeString('en-US', {timeZone: `${timezone}`});
-    }
-
-    // static async getCity(city, ...stateCountry) {
-    //     try {
-    //         if(!city) return;
-
-    //         const res = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},${stateCountry},${stateCountry}&appid=${APIkey}`)
-    //         const data = await res.json();
-    //         const locHeader = data[0];
-    //         console.log('Location Header:', locHeader);
-    //         console.log(this);
-    //         this.getForecast(locHeader.lat, locHeader.lon);
-
-    //         //display weather in DOM          
-    //         //? UI.displayCurrent(locHeader, forecastData, sunrise, sunset);        
-
-    //     } catch(err) {
-    //         console.error('error!', err.message);
-    //     }
-    // }
-
-    // //* model logic ===================================================================
-    // static async getForecast(lat, lon) {
-    //     try {
-    //         if(!lat || !lon) return;
-
-    //         const res = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely&appid=${APIkey}`)
-    //         const data = await res.json();            
-    //         const forecastData = data;
-    //         console.log('Forecast Data:', forecastData);
-
-    //         const loc = await fetch(`http://api.openweathermap.org/geo/1.0/reverse?lat=${forecastData.lat}&lon=${forecastData.lon}&limit=10&appid=${APIkey}`)
-            
-    //         const locData = await loc.json()
-    //         const locHeader = locData[0];
-    //         console.log('locHeader: ', locHeader);
-
-            
-    //         mapView.buildMap(lat, lon);
-            
-    //         const locationObj = {
-    //             ...locHeader,
-    //             ...forecastData
-    //         }
-    //         const location = new Location(locationObj);
-    //         store.push(location);
-    //         console.log('LOCATION:    ', location);
-
-    //         //display weather in DOM     
-    //         //! move out of this function - this is presentation logic
-    //         UI.displayCurrent(location);    
-    //         //!-----------------------------------------------------
-
-    //     } catch(err) {
-    //         console.error('error!', err.message, err.stack);
-    //     }
-    // }
-    //possibility to combine this and the above
-    //this runs the weather fetch again with the lat/lon of a favorite city
-
-    
-    
-    // static async refreshWeather(lon, lat) {
-    //     try {
-    //         const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lon=${lon}&lat=${lat}&units=imperial&lang=en&appid=${APIkey}`)
-    //         console.log(res.data);
-
-    //         const data = await res.json();            
-
-    //         //display weather in DOM          
-    //         UI.displayCurrent(data);        
-    //     } catch(err) {
-    //         console.log('error!', err);
-    //     }
-    // }
-
-
-    
 }
 
 //display in browser------------------------------------------------------------------------
@@ -179,72 +87,6 @@ const favorites = document.querySelector('#favorites');
 const map = document.querySelector('#mapid');
 const locID = document.querySelector('.favorites__card--locationID');
 
-class App {
-    #mapEvent;
-    #currentLocation;
-    #store = [];
-
-    
-    constructor() {
-        // console.log('Store: ', this.#store);
-        // get and map current location on page load or random location
-        //* good
-
-        // this.execute();
-
-        // geoLoc.getGeolocation();
-        // model.store = this.#store;
-        // mapView.buildMap(lat, lon)
-        // console.log('store again', this.#store);
-
-        //render saved favorite locations
-        // let loc = storage.getLocation();
-        // console.log('Local Storage: ', loc)
-        
-        // if(!windowLoad) this.buildFavoriteDivs(store.at(-1))
-        
-        // loc.forEach(place => this.buildFavoriteDivs(place))
-
-        // if(!windowLoad) 
-
-
-
-        // saved.displayFavorites(); 
-        // set windowLoad flag to false
-        // windowLoad = false;
-    
-        //search form event listener
-        // form.addEventListener('submit', UI. displayCurrentWeatherBox.bind(this));
-
-        // currentWeather event listener for add to favorites
-
-        // favorite location event listener to remove or select location to get weather again
-        // favorites.addEventListener('click', this._favoritesActions.bind(this));
-        
-
-        // mapView.buildMap(lat, lon);
-
-        
-
-
-    }
-
-
-    //* navigator API - get current location or random location if block location
-   
-    
-
-    //TODO||||||||||||||||| fix add favorite on click - class change
-    
-
-    
-   
-}
-
-
-// const app = new App();
-
-
 
 // manually delete local storage index
         // function storageDeleteItem(locIndexStart) {
@@ -265,6 +107,10 @@ const controlAppStart = async function() {
     try {
         let windowLoad = true;
 
+        const savedLocs = await storage.getLocation();
+        // console.log('SAVED LOCATIONS: ', savedLocs);
+        // saved.displayFavorites(savedLocs, windowLoad, model.store);
+        savedView.render(savedLocs, true, model.store)
         // let windowLoad = true;
         //* get current or random location
         await geoLoc.getGeolocation();
@@ -286,10 +132,7 @@ const controlAppStart = async function() {
         // console.log('new store: ', store);
 
         //*render saved favorites from local storate
-        const savedLocs = await storage.getLocation();
-        // console.log('SAVED LOCATIONS: ', savedLocs);
-        // saved.displayFavorites(savedLocs, windowLoad, model.store);
-        savedView.render(savedLocs, true, model.store)
+        
         windowLoad = false;
         // console.log(model.store[0].data);
     } catch(err) {
@@ -300,11 +143,7 @@ const controlAppStart = async function() {
 
 const controlCurrentLocation = async function(loc) {
     try {
-        console.log('controlCurrentLocation: ', loc);
-        console.log(model.store)
-
-        storage.addLocation(loc)
-        
+        storage.addLocation(loc);
         await savedView.render(loc, false, model.store)
     } catch(err) {
         console.log('current location error!!!', err);
@@ -313,24 +152,16 @@ const controlCurrentLocation = async function(loc) {
 
 const controlCallSaved = async function(id) {
     try {
-        //? favorites events -- add remove location
-        // favorites.addEventListener('click', (e)=> {
-        //     const id =  saved.favoritesActions(e);
-        //     storage.removeLocation(id); 
-        //     console.log(id);
-
         let loc = await storage.getLocation();
         loc.forEach(async (place) => {
             if(place.data.id === Number(id)) {
                 const coords = [place.data.lat, place.data.lon, true];
+                mapView.buildMap(coords);
                 await model.getForecast(coords);
-                // console.log('store: ', model.store);
-                // console.log(model.store.at(-1));
-                // console.log(`Welcome to ${model.store[0].name}`)
-                
-                weatherView.render(model.store)
+                await weatherView.render(model.store)
             }
         })
+
     } catch(err) {
         console.log('saved location error!!!', err);
     }
@@ -338,25 +169,29 @@ const controlCallSaved = async function(id) {
 }
 
 const controlRemoveSaved = async function(id) {
-    
-    console.log('removing saved location!!!!!!!!!!!!!', id)
-    storage.removeLocation(Number(id));
-
+    try {
+        storage.removeLocation(Number(id));
+    } catch(err) {
+        console.log('unable to remove this location', err);
+    }
 }
 
 const controlSearch = async function(loc) {
-        console.log(loc);
-        const [ city, state, country ] = loc;
+    console.log(loc);
+    const [city, state, country] = loc
 
-        // console.log(city, state, country);
-        await model.getCity(city, state, country);
-    //    searchView.render(getCityTest)
-        // await model.getForecast(coords);
-        // const coords = [loc.at(-1).data.lat, loc.at(-1).data.lon]
-        // mapView.buildMap(coords)
-        // console.log(getCityTest);
-        console.log('after getCity call: ', model.store);
-        weatherView.render(model.store);
+    
+    const getCityTest = await model.getCity(city, state, country);
+
+    // searchView.render(getCityTest)
+    // await model.getForecast(coords);
+    const coords = [model.store.at(-1).data.lat, model.store.at(-1).data.lon]
+    // console.log(model.store.at(-1).data.lat, model.store.at(-1).data.lon));
+    mapView.buildMap(coords)
+    // console.log(getCityTest);
+    // console.log('after getCity call: ', model.store);
+    weatherView.render(model.store);
+
 
 }
     //? favorites get forecast
