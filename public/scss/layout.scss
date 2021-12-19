@@ -54,6 +54,7 @@ svg, path {
     // z-index: 1;
     display: grid;
     grid-template-columns: repeat(3, 100%);
+    // grid-template-rows: 1fr 1fr;
     will-change: transform;
     align-content: center;
     overflow-x: auto;
@@ -77,10 +78,12 @@ svg, path {
 // }
 
 
+// .pages {
+//     grid-row: 1 / 1;
 
+// }
 
 .weatherPage {
-
     display: none;
     justify-content: center;
     align-items: center;
@@ -98,9 +101,7 @@ svg, path {
 
 }
 
-// .favorites {
 
-// }
 
 section {
     // min-height: 100%;

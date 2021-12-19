@@ -5,13 +5,20 @@ class searchView {
     _parentElement = document.querySelector('#city-input');
     
     async addHandlerSearch(handler) {
+        const form = document.querySelector('form');
         form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const city = form.elements.city.value.split(', ');
-            // console.log('search value: ', city);
+            try {
+                
+                e.preventDefault();
+                const city = form.elements.city.value.split(', ');
+                if(!city) return;
+                // console.log('search value: ', city);
 
-            handler(city);
-            this._clear();        
+                handler(city);
+                this._clear();        
+            } catch(err) {
+                console.error('error!!!', err);
+            }
         })
     }
 

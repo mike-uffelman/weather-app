@@ -12,13 +12,16 @@ class WeatherView {
     // }
 
     render(data) {
+        this._clear();
+
+        // this.#currentWeather.innerHTML = '';
         // console.log('RENDERING WEATHER VIEW...........')
         this._data = data;
+        console.log(this._data);
         // console.log('store data: ', this._data);
         
-        console.log(`Welcome to ${this._data}`)
+        // console.log(`Welcome to ${this._data}`)
         //add a clear() function
-        this._clear();
         const markup = this._displayCurrent(this._data);
         this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
     }
@@ -49,7 +52,7 @@ class WeatherView {
     //* view=====================================================================================
     _displayCurrent(location) {
         // console.log(location.at(-1));
-        this.#currentWeather.innerHTML = '';
+        // this.#currentWeather.innerHTML = '';
         let weeklyForecastHTML = '';
         let hourlyForecastHTML = '';
         // console.log(location[1].data)
@@ -71,10 +74,10 @@ class WeatherView {
             const hourlyIcon = hour.weather[0].icon;
 
             hourlyForecastHTML += `
-                <div class='hourly__detail'>
-                    <div class='hourly__detail--time'>${hourlyTime}</div> 
-                    <div class='hourly__detail--temp'>${hourlyTemp}°F</div>
-                    <img src='http://openweathermap.org/img/wn/${hourlyIcon}@2x.png' class='hourly__detail--icon'>
+                <div class='hourly__detail--box'>
+                    <div class='hourly__detail--box-time'>${hourlyTime}</div> 
+                    <div class='hourly__detail--box-temp'>${hourlyTemp}°F</div>
+                    <img src='http://openweathermap.org/img/wn/${hourlyIcon}@2x.png' class='hourly__detail--box-icon'>
                 </div>`
         })
       
@@ -87,15 +90,15 @@ class WeatherView {
 
             weeklyForecastHTML +=  
                 `
-                    <div class='daily__detail'>
-                        <div class='daily__detail--weekday'>
-                            <img src='http://openweathermap.org/img/wn/${icon}@2x.png' class='daily__detail--icon'>
-                            <p class='daily__detail--day'>${dailyDay}</p>
+                    <div class='daily__detail--box'>
+                        <div class='daily__detail--box-weekday'>
+                            <img src='http://openweathermap.org/img/wn/${icon}@2x.png' class='daily__detail--box-icon'>
+                            <p class='daily__detail--box-day'>${dailyDay}</p>
                         </div> 
-                        <div id='precip' class='daily__detail--precip'>
+                        <div id='precip' class='daily__detail--box-precip'>
                             <p class=''>💧 <span class='text'>${precip}%</span></p>
                         </div>
-                        <div class='daily__detail--temp'>
+                        <div class='daily__detail--box-temp'>
                             <p class='detail--temp' ><span class='detail-temp-col low-temps'>${lowTemps}°F</span></p>
                             <div class='temp__bars'>
                                 <div class='temp__bars--low' data-low-temp='${lowTemps}' data-bar='${i}'></div>
@@ -117,6 +120,8 @@ class WeatherView {
             let html = 
                 `
                     <div class='weatherCard'>
+                        
+
                         <div class='header'>
                             <div class='header__container'>
                                 <div class='header__box'>
@@ -142,30 +147,32 @@ class WeatherView {
                     
                         
                         <div class='forecast'>
-                            <h3 class='forecast__header'>Hourly Forecast</h3>
-                                <div class='hourly'>
+                            <div class='hourly'>
+                                <h3 class='hourly__header'>Hourly Forecast</h3>
+                                <div class='hourly__detail'>
                                     ${hourlyForecastHTML}
-                                </div>     
-                            <h3 class='forecast__header'>Weekly Forecast</h3>
+                                </div>
+                            </div>     
                             <div class='daily'>
-                                ${weeklyForecastHTML}
+                                <h3 class='daily__header'>Weekly Forecast</h3>
+                                <div class='daily__detail'>
+                                    ${weeklyForecastHTML}
+                                </div>
                             </div>  
                         </div>
                         <div class='map'>
-                            <div class='map__border'></div>
-                            <div class='map__window' id='mapwindow'>
-                                <div class='weather__map' id='mapid'></div>
-                            </div>
-                            <div class='map__border'></div>
+                            <div class='weather__map' id='mapid'></div>
+                                
                         </div>
                     </div>
                 `;
-            
             // const pseudoAfter = document.querySelector('.pseudos', ':after').getComputedStyle()
             // console.log(pseudoAfter)
             // pseudoAfter.style.width = `${val}%`;
             
             this.#currentWeather.insertAdjacentHTML('afterbegin', html);
+            this.#currentWeather.firstChild.remove();
+
             this.#currentWeather.scrollIntoView({behavior: 'smooth'})
             this.#firstWeatherCall = false;
             this.#currentWeather.style.display = 'flex';

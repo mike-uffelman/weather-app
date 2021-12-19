@@ -1,12 +1,13 @@
 'use strict';
 
 import * as model from './model.js';
-import * as mapView from './views/mapView.js';
+import * as maps from './views/mapView.js';
 import * as geoLoc from './geoLocation.js';
 import * as storage from './localStorage.js';
 import weatherView from './views/weatherView.js';
 import savedView from './views/savedView.js';
 import searchView from './views/searchView.js';
+
 
 //the Location class is a constructor to build the location object for storage
 
@@ -83,9 +84,9 @@ class Request {
 //in the favorites section - when a user clicks the minus(-) svg we trace the click up to the element and pass the e.target into the removeFavoriteUI() function to remove it from the UI, then we find the cityID visibly hidden in the div and pass that city ID into the removeLocation() function that iterates through the LS object to find the matching index item and removes it
 
 
-const favorites = document.querySelector('#favorites');
+const saved = document.querySelector('#saved');
 const map = document.querySelector('#mapid');
-const locID = document.querySelector('.favorites__card--locationID');
+const locID = document.querySelector('.saved__card--locationID');
 
 
 // manually delete local storage index
@@ -106,17 +107,31 @@ const form = document.querySelector('form');
 const controlAppStart = async function() {
     try {
         let windowLoad = true;
-
         const savedLocs = await storage.getLocation();
         // console.log('SAVED LOCATIONS: ', savedLocs);
         // saved.displayFavorites(savedLocs, windowLoad, model.store);
+
+        //render saved locations on saved list
         savedView.render(savedLocs, true, model.store)
         // let windowLoad = true;
         //* get current or random location
         await geoLoc.getGeolocation();
+        // console.log(geoLoc.coords[2]);
+
+        if(geoLoc.coords[2] === true) {
+            // const searchMap = new Map();
+            maps.searchMap(geoLoc.coords, 9);
+        }
+
+        if(geoLoc.coords[2] === false) {
+            // const searchMap = new Map();
+            maps.searchMap(geoLoc.coords, 2);
+            return;
+        } 
+        
         // console.log(geoData);
         //* render map on current location or random
-        mapView.buildMap(geoLoc.coords, 9);
+        // await maps.buildMap(geoLoc.coords, 9); //*
         // console.log(geoLoc.coords)
         // console.log('BOOLEAN TOO????: ', geoLoc.coords[2])
 
@@ -125,7 +140,7 @@ const controlAppStart = async function() {
         console.log('DATA STORE: ', model.store)
 
         weatherView.render(model.store)
-
+        maps.buildMap(geoLoc.coords);
 
         // console.log('model.store: ', model.store);
         // const store = model.store;
@@ -134,6 +149,8 @@ const controlAppStart = async function() {
         //*render saved favorites from local storate
         
         windowLoad = false;
+
+
         // console.log(model.store[0].data);
     } catch(err) {
         console.log('app start error!!!', err);
@@ -156,9 +173,11 @@ const controlCallSaved = async function(id) {
         loc.forEach(async (place) => {
             if(place.data.id === Number(id)) {
                 const coords = [place.data.lat, place.data.lon, true];
-                mapView.buildMap(coords);
+                
                 await model.getForecast(coords);
                 await weatherView.render(model.store)
+                // const weatherMap = new Map();
+                maps.buildMap(coords); //*
             }
         })
 
@@ -181,22 +200,41 @@ const controlSearch = async function(loc) {
     const [city, state, country] = loc
 
     
-    const getCityTest = await model.getCity(city, state, country);
+    await model.getCity(city, state, country);
 
     // searchView.render(getCityTest)
     // await model.getForecast(coords);
     const coords = [model.store.at(-1).data.lat, model.store.at(-1).data.lon]
     // console.log(model.store.at(-1).data.lat, model.store.at(-1).data.lon));
-    mapView.buildMap(coords)
     // console.log(getCityTest);
     // console.log('after getCity call: ', model.store);
     weatherView.render(model.store);
+    await maps.buildMap(coords) //*
+
 
 
 }
     //? favorites get forecast
     
+const controlMapClickSearch = async function() {
+    const coords = await maps.eCoords;
+    coords.push(true);
+    console.log(coords);
+    // const [lat, lon] = maps.eCoords
+    // console.log(lat, lon);
+    // const { lat, lng }  = maps._eCoords[0];
+    // Number(lat.toFixed(4)), Number(lng.toFixed(4)))
+    // console.log(lat, lng);
+    // const coords = [Number(lat.toFixed(4)), Number(lng.toFixed(4)), true];
+    // console.log(coords);
+    await model.getForecast(coords);
+    weatherView.render(model.store);
+    await maps.buildMap(coords);
 
+    // // console.log(coords);
+    // console.log(model.store);
+    // alert('clicked the map')
+}
 
     // await model.getForecast(geoLoc.coords);
     // console.log(model.store.at(-1));
@@ -208,8 +246,11 @@ const init = function() {
     searchView.addHandlerSearch(controlSearch);
     savedView.addHandlerSaved(controlCallSaved, controlRemoveSaved);
     weatherView.addHandlerCurrent(controlCurrentLocation);
+    maps.addHandlerMapClick(controlMapClickSearch);
     
-    
+    // console.log(maps.eCoords);
+    // if(maps.eCoords) console.log(maps.eCoords);
+
 }
 
 init();

@@ -24,28 +24,61 @@ $--white-light: rgba(249, 249, 249, .75);
 $--white-lighter: rgba(249, 249, 249, .5);
 $--white-lightest: rgba(249, 249, 249, .25);
 
+$--white-alt: rgb(235, 235, 235);
+
 $--black: rgba(0, 0, 0, 1);
 $--black-light: rgba(0, 0, 0, .75);
 $--black-lighter: rgba(0, 0, 0, .5);
 $--black-lightest: rgba(0, 0, 0, .25);
 $--black-lightest2: rgba(0, 0, 0, .15);
 
+$--purple: rgb(132, 0, 172);
+$--purple-light: rgba(132, 0, 172, .5);
+$--purple-lighter: rgb(209, 123, 123);
+
+$--gradient-1: rgb(226, 241, 255);
+$--gradient-2: rgb(184, 148, 182);
+$--gradient-3: rgb(209, 23, 203);
+
+
+
 
 $red-salsa: rgba(249, 65, 68, 1);
+$red-salsa-light: rgba(249, 65, 68, .5);
+
 $orange-red: rgba(243, 114, 44, 1);
+$orange-red-light: rgba(243, 114, 44, .5);
+
 $yellow-orange-color-wheel: rgba(248, 150, 30, 1);
+$yellow-orange-color-wheel: rgba(248, 150, 30, .5);
+
+
 $mango-tango: rgba(249, 132, 74, 1);
+$mango-tango-light: rgba(249, 132, 74, .5);
+$mango-tango-lighter:rgb(252, 229, 176);
+
 $maize-crayola: rgba(249, 199, 79, 1);
+$maize-crayola-light: rgba(249, 199, 79, .5);
+
 $pistachio: rgba(144, 190, 109, 1);
+$pistachio-light: rgba(144, 190, 109, .5);
+
 $zomp: rgba(67, 170, 139, 1);
+$zomp-light: rgba(67, 170, 139, .5);
+
 $cadet-blue: rgba(77, 144, 142, 1);
+$cadet-blue-light: rgba(77, 144, 142, .5);
+
 $queen-blue: rgba(87, 117, 144, 1);
+$queen-blue-light: rgba(87, 117, 144, .5);
+
 $cg-blue: rgba(39, 125, 161, 1);
+$cg-blue-light: rgba(39, 125, 161, .5);
 
 /* SCSS Gradient */
 $gradient-top: linear-gradient(90deg, #f94144ff, #f3722cff, #f8961eff, #f9844aff, #f9c74fff, #90be6dff, #43aa8bff, #4d908eff, #577590ff, #277da1ff);
 
-
+$--box-radius: 1rem;
 $--weather-box-shadow: 0 0 1rem $--black;
 
 $bp-largest: 75em; // 1200/16

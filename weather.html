@@ -21,95 +21,65 @@
   
     <body class=''>
         <!--<h1>myWeather</h1>-->
-        <div id='mapid' class=''></div>
+        <!-- <div id='mapid' class=''></div> -->
 
         <main class='swipeView'>
             
-            
-            <section id='map-weather' class='searchPage'> 
-            <!-- <section id='map-weather' class='col-12 col-md-8'> -->
-                <h1 class="searchPage__header">Search for your current weather!</h1>
-                <form action='/somewhere' class='searchPage__form' id='form'>
-                    <input type='text' id='city-input' name='city'  class='searchPage__form--input' placeholder='enter city' autofocus>
-                    <button class='btn searchPage__form--btn' >Get Weather!</button>
-                </form>
-                <a href='' class='searchPage__searchMap'>Search Map</a>
+            <!-- <div class="pages"> -->
+                <section id='search__modal' class='search__modal'> 
+                <!-- <section id='map-weather' class='col-12 col-md-8'> -->
+                    
+                    <form action='/somewhere' class='search__modal--form' id='form'>
+                        <h3 class="search__modal--header">Enter a location or...</h3>
 
-                <!-- <div class='searchPage__results'>
-                    <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
-                    <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
-                    <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
+                        <input type='text' id='city-input' name='city'  class='search__modal--form-input' placeholder='enter city' autofocus>
 
+                        <h3 class='search__modal--header'>Select a location on the map!</h3>
 
-                </div> -->
-            </section>    
-            <section id='current-weather-box' class='weatherPage'>
-            
-                <!-- <div id='city-box' class=''> -->
-                    <!-- <div class='card'>
-                        <div class='card__img'>
-                            <img id='icon' src='http://openweathermap.org/img/wn/04n@2x.png' class='card__img--img'>
-                            <p id='weather-desc' class='card__img--description'><em>haze</em></p>
-                            
-                        </div> 
-                        <div class='card__body'>
-                            
-                                <div class='card__header add-favorite'>
-                                    <h3 id='city-display' class='card__header--title city-display m-0'>testasdf</h3>
-                                    <svg class='card__add-fav' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                                        <path fill-rule="evenodd" d="M11.75 4.5a.75.75 0 01.75.75V11h5.75a.75.75 0 010 1.5H12.5v5.75a.75.75 0 01-1.5 0V12.5H5.25a.75.75 0 010-1.5H11V5.25a.75.75 0 01.75-.75z"></path>
-                                    </svg>
-                                </div>
-                                <p id='temp-display'class='card__body--details'>49.69° F, feels like 48.94° F
-                                </p>
-                                
-                                <p id='sun-set-rise' class='card__body--details'>Sunrise 5:22:56 PM | Sunset 8:57:41 PM
-                                </p>
-                        </div>
-                        <div id='mapid' class=''></div>
+                        <!-- <div class="search__modal--form-map"> -->
+                        
+                                                <div id='searchMap' class='search__modal--form--map'></div>
+                            <!-- <div id='map' class='search__modal--map--map'></div> -->
+        
+        
+                        <!-- </div> -->
+                        <button id='search-btn' class='btn searchPage__form--btn btn--close-modal'>Search!</button>
+                    </form>
+                    
+
+                    <!-- <div class='searchPage__results'>
+                        <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
+                        <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
+                        <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
+
 
                     </div> -->
-                <!-- </div> -->
-            </section>
-            
-            <section id='favorites' class='favorites'>
-                <h3 class='favorites__header'>Saved Locations</h3>
-                <!-- <div class=''>
-                    <div class=''>
-                        <img id='icon' src='https://picsum.photos/100/100' class='img'>
-                    </div>
-                    <div class=''>
-                        <div class=''>
-                            <h2 id='city-favorite' class='city-display'>
-                                <a href='#current-weather-box' class='text-decoration-none text-muted align-self-center'>Cairo, EG</a>
-                            </h2> 
-                            <a href='#' class='remove-favorite text-decoration-none'>
-                                <svg class='remove-fav' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                                    <path fill-rule="evenodd" d="M4.5 12.75a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H5.25a.75.75 0 01-.75-.75z"></path>
-                                </svg>
-                            </a>           
-                        </div>
-                        <p class=''>${place.data.id}</p>
-                    </div>
-
-                </div> -->
-
-                <!-- <div class='card rounded bg-light'>
-                    <div class='row g-0 rounded'>
-                        <div class='col-2 d-flex flex-column justify-content-center bg-secondary'>
-                            <img id='icon' src='https://picsum.photos/100/100' class='img'>
-                        </div>
-                        <div class='col-10'>
-                            <div class='d-flex flex-row justify-content-between card-body text-muted p-1 '>
-                                <h3 id='city-favorite' class='card-title city-display'>testasdf</h3>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M4.5 12.75a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H5.25a.75.75 0 01-.75-.75z"></path></svg>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-            </section>
-            
+                </section>    
+                <!-- <section id='search__location--blocked' class='searchPage'> 
+                        <h1 class="searchPage__header">Search for your current weather!</h1>
+                        <form action='/somewhere' class='searchPage__form' id='form'>
+                            <input type='text' id='city-input' name='city'  class='searchPage__form--input' placeholder='enter city' autofocus>
+                            <button class='btn searchPage__form--btn' >Get Weather!</button>
+                        </form> -->
+        
+                        <!-- <div class='searchPage__results'>
+                            <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
+                            <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
+                            <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
+        
+        
+                        </div> -->
+                    <!-- </section>     -->
+                <section id='current-weather-box' class='weatherPage'></section>
+                
+                <section id='saved' class='saved'>
+                    
+                </section>
+            <!-- </div>
+            <footer class='footer'>
+                <a href='#search__modal' class='search__modal--link'>New Search</a>
+                <a href='#saved' class='search__modal--link'>Saved</a>
+            </footer> -->
             
         </main>
     
