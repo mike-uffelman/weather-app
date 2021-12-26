@@ -103,20 +103,18 @@ const locID = document.querySelector('.saved__card--locationID');
 const form = document.querySelector('form');
 
 
-
+//app start controller
 const controlAppStart = async function() {
     try {
+        //on window load, only need to render the saved location container once, after that add/remove individually
         let windowLoad = true;
         const savedLocs = await storage.getLocation();
-        // console.log('SAVED LOCATIONS: ', savedLocs);
-        // saved.displayFavorites(savedLocs, windowLoad, model.store);
+        // console.log('storage on load: ', savedLocs);
+        savedView.render(savedLocs, windowLoad, model.store)
 
-        //render saved locations on saved list
-        savedView.render(savedLocs, true, model.store)
-        // let windowLoad = true;
         //* get current or random location
         await geoLoc.getGeolocation();
-        // console.log(geoLoc.coords[2]);
+        console.log(geoLoc.coords[2]);
 
         if(geoLoc.coords[2] === true) {
             // const searchMap = new Map();
@@ -124,8 +122,9 @@ const controlAppStart = async function() {
         }
 
         if(geoLoc.coords[2] === false) {
+            const marker = false;
             // const searchMap = new Map();
-            maps.searchMap(geoLoc.coords, 2);
+            maps.searchMap(geoLoc.coords, 2, marker);
             return;
         } 
         
@@ -159,9 +158,54 @@ const controlAppStart = async function() {
 }
 
 const controlCurrentLocation = async function(loc) {
+    console.log(loc)
+    console.log('storage pre ')
+    const { bookmarked, id } = loc.at(-1).data;
+    // console.log(id)
+    const bookmarkedEl = document.querySelector('.header--add-fav');
+    // let windowLoad = true;
     try {
-        storage.addLocation(loc);
-        await savedView.render(loc, false, model.store)
+        if(!bookmarked) {
+            console.log('no to yes: ', loc.at(-1).data)
+            await model.updateBookmark();
+            console.log('no to yes: ', loc.at(-1).data)
+
+            storage.addLocation(loc);
+            await savedView.render(loc, false, model.store)
+            // console.log('storage on add: ', storage.getLocation())
+            console.log(model.store);
+        }
+
+        if(bookmarked) { 
+            storage.removeLocation(id); //*
+
+            await model.updateBookmark(); //*
+            savedView.removeEl(id);
+            console.log(id);
+            console.log(model.store);
+            // console.log('storage on remove: ', storage.getLocation())
+
+        }
+
+
+        
+        // if(bookmarkedEl.classList.contains('bookmarked')) {
+        //     console.log('already bookmarked')
+        //     console.log(bookmarked);
+        //     model.updateBookmark();
+        //     console.log(mod)
+        //     // prompt('are you sure you wish to remove from bookmarks?')
+        //     // console.log("bookmarked")
+        //     // console.log(bookmarked)
+        //     // storage.removeLocation(loc.at(-1).data.id)
+        //     // await savedView.render(loc, !windowLoad, model.store);
+        // };
+        
+        // if(!bookmarked) {
+        //     console.log('not yet bookmarked');
+        //     // console.log('not bookmarked');
+        // }
+        
     } catch(err) {
         console.log('current location error!!!', err);
     }
@@ -169,10 +213,14 @@ const controlCurrentLocation = async function(loc) {
 
 const controlCallSaved = async function(id) {
     try {
+        storage.incrementClicks(id);
+
+
+        //this should probably be abstracted
         let loc = await storage.getLocation();
         loc.forEach(async (place) => {
             if(place.data.id === Number(id)) {
-                const coords = [place.data.lat, place.data.lon, true];
+                const coords = [place.data.lat, place.data.lon, true, true, place.data.id];
                 
                 await model.getForecast(coords);
                 await weatherView.render(model.store)
@@ -180,6 +228,7 @@ const controlCallSaved = async function(id) {
                 maps.buildMap(coords); //*
             }
         })
+        console.log(storage.getLocation());
 
     } catch(err) {
         console.log('saved location error!!!', err);
@@ -190,6 +239,7 @@ const controlCallSaved = async function(id) {
 const controlRemoveSaved = async function(id) {
     try {
         storage.removeLocation(Number(id));
+        document.querySelector('.header--add-fav').classList.toggle('bookmarked');
     } catch(err) {
         console.log('unable to remove this location', err);
     }
@@ -198,14 +248,15 @@ const controlRemoveSaved = async function(id) {
 const controlSearch = async function(loc) {
     console.log(loc);
     const [city, state, country] = loc
-
+    
     
     await model.getCity(city, state, country);
 
     // searchView.render(getCityTest)
     // await model.getForecast(coords);
+    console.log(model.store);
     const coords = [model.store.at(-1).data.lat, model.store.at(-1).data.lon]
-    // console.log(model.store.at(-1).data.lat, model.store.at(-1).data.lon));
+    console.log(model.store.at(-1).data.lat, model.store.at(-1).data.lon);
     // console.log(getCityTest);
     // console.log('after getCity call: ', model.store);
     weatherView.render(model.store);

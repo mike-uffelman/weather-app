@@ -11,9 +11,9 @@ class searchView {
                 
                 e.preventDefault();
                 const city = form.elements.city.value.split(', ');
-                if(!city) return;
-                // console.log('search value: ', city);
-
+                if(!city || city.length <= 1 || city === ' ') return;
+                console.log('search value: ', city);
+                console.log(city.length);
                 handler(city);
                 this._clear();        
             } catch(err) {

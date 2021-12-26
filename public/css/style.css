@@ -205,6 +205,9 @@ input[type=text]:focus {
   border-radius: 1rem;
   box-shadow: 0 0 2rem black;
   overflow-x: hidden;
+  animation-name: fadeIn;
+  animation-duration: 4000ms;
+  animation-iteration-count: once;
 }
 @media only screen and (min-width: 20em) {
   .weatherCard {
@@ -228,10 +231,19 @@ input[type=text]:focus {
   font-size: 1.6rem;
   height: auto;
   position: relative;
-  margin-bottom: 2rem;
+  margin: 0 0 4rem 0;
+}
+.header:hover, .header:hover h3, .header:hover h5, .header:hover .header--add-fav {
+  cursor: pointer;
+  color: #073b4c;
+  stroke: rgba(0, 0, 0, 0.5);
+  stroke-width: 4;
+  text-shadow: 0.25rem 0.25rem 1rem #8400ac;
+  transition: all ease 300ms;
 }
 .header__container {
   margin: 2rem;
+  position: relative;
 }
 .header__box {
   display: flex;
@@ -239,16 +251,6 @@ input[type=text]:focus {
   justify-content: space-between;
   position: relative;
   z-index: 1;
-}
-.header__box:hover, .header__box:hover h3, .header__box:hover h5, .header__box:hover path {
-  cursor: pointer;
-  color: #073b4c;
-  fill: magenta;
-  text-shadow: 0 0 1rem black;
-  transition: all ease 300ms;
-}
-.header__box:hover path {
-  width: 2rem;
 }
 .header__heading {
   text-size-adjust: auto;
@@ -263,11 +265,19 @@ input[type=text]:focus {
   transition: all ease 300ms;
 }
 .header--add-fav {
-  fill: #8400ac;
+  position: absolute;
+  top: -0.5rem;
+  right: -1.5rem;
+  fill: transparent;
   transition: all ease 300ms;
+  transform: scale(0.5);
+  stroke: rgba(0, 0, 0, 0.5);
+  stroke-width: 3;
+  border-radius: 5px;
+  filter: drop-shadow(1rem 1rem 1rem gray);
 }
-.header--add-fav:hover {
-  transform: scale(2);
+.header--add-fav.bookmarked {
+  fill: #b894b6;
 }
 .header--add-fav path {
   transition: all ease 300ms;
@@ -276,15 +286,11 @@ input[type=text]:focus {
   position: absolute;
   z-index: 2;
   top: 7rem;
-  left: 4rem;
+  left: 3rem;
   font-weight: bold;
   font-size: 2.75rem;
-  margin: 0 0 1rem 1rem;
   color: #073b4c;
   text-shadow: 0 0 1rem white;
-}
-.header__details:not(:last-child) {
-  margin-bottom: 0.5rem;
 }
 .header__icon {
   position: absolute;
@@ -303,6 +309,8 @@ input[type=text]:focus {
   top: 0;
   right: 0;
   filter: drop-shadow(0.5rem 0.5rem 0.5rem gray) contrast(2);
+  animation-name: icon;
+  animation-duration: 3s;
 }
 .header__icon--description {
   position: absolute;
@@ -321,7 +329,7 @@ input[type=text]:focus {
   position: relative;
   width: 100%;
   display: flex;
-  flex: 1 0 15rem;
+  flex: 2 0 15rem;
   border-radius: 1rem;
   padding: 0 2rem 2rem 2rem;
 }
@@ -351,7 +359,7 @@ input[type=text]:focus {
   background-color: transparent;
   display: flex;
   flex-direction: column;
-  flex: 0 0 45rem;
+  flex: 1 1;
 }
 
 .hourly {
@@ -399,12 +407,13 @@ input[type=text]:focus {
   height: 100%;
   width: 100%;
   filter: drop-shadow(0.5rem 0.5rem 0.5rem gray) contrast(2);
+  animation-name: days;
+  animation-duration: 3s;
 }
 
 .daily {
   display: flex;
   flex-direction: column;
-  flex: 1 1;
   box-shadow: 0 0 1rem black;
   overflow: hidden;
   border-radius: 1rem;
@@ -422,7 +431,6 @@ input[type=text]:focus {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  flex: 1;
   background-color: #ebebeb;
   padding: 0 0.5rem;
   font-size: 1rem;
@@ -644,6 +652,34 @@ input[type=text]:focus {
 
 .leaflet-tile-loaded {
   background-blend-mode: darken;
+}
+
+@keyframes icon {
+  0% {
+    transform: scale(1.75) translateY(-10rem);
+  }
+  100% {
+    transform: scale(1.75) translateY(0rem);
+  }
+}
+@keyframes days {
+  0% {
+    transform: translateY(5rem);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes favs {}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transition: all ease 300ms;
+  }
+  100% {
+    opacity: 1;
+    transition: all ease 300ms;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -17,7 +17,7 @@ export const getGeolocation = async function() {
                 // console.log('Success: ', data);
                
             } catch(err) {
-                const res = await _randomCoords();
+                await _randomCoords();
                 // console.log(res);
                 // const { lat, lon } = res;
                 // const coords = [lat, lon];
@@ -28,7 +28,9 @@ export const getGeolocation = async function() {
         }
         if (!navigator.geolocation) {
             console.log('geolocation failure...')
-            // _randomCoords();
+            await _randomCoords();
+
+
         }
 
 
@@ -46,7 +48,7 @@ function _getPosition() {
 async function _randomCoords() {
     const lat = await Math.random() * (90 - (-90)) + (-90);
     const lon = await Math.random() * (180 - (-180)) + (-180);
-    coords.push(lat, lon, false);
+    return coords.push(lat, lon, false);
 }
 
 

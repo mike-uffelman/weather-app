@@ -242,6 +242,10 @@ input[type=text]:focus {
     // padding: 2rem;
     overflow-x: hidden;
 
+    animation-name: fadeIn;
+    animation-duration: 4000ms;
+    animation-iteration-count: once;
+
     &.box-styling {
         // background-color: $--white;
     }
@@ -291,13 +295,31 @@ input[type=text]:focus {
     // border-radius: 1rem;
     // color: $--dark-blue-alt;
     position: relative;
-    margin-bottom: 2rem;
+    margin: 0 0 4rem 0;
     // overflow: hidden;
     // flex: 1;
     // padding-bottom: 1rem;
 
+    &:hover,
+    &:hover h3, 
+    &:hover h5, 
+    &:hover &--add-fav {
+        cursor: pointer;
+        color: $--dark-blue;
+        // fill: $queen-blue;
+        stroke: $--black-lighter;
+        stroke-width: 4;
+        text-shadow: .25rem .25rem 1rem $--purple;
+        transition: all ease 300ms;
+        // animation-name: favs;
+        // animation-duration: 3s;
+        // animation-iteration-count: infinite;
+    }
+
+
     &__container {
         margin: 2rem;
+        position: relative;
         // background-color: $--black-lightest;
         // margin: 1rem;
         // border: 1px solid blue;
@@ -311,20 +333,12 @@ input[type=text]:focus {
         position: relative;
         z-index: 1;
 
-        &:hover,
-        &:hover h3,
-        &:hover h5,
-        &:hover path {
-            cursor: pointer;
-            color: $--dark-blue;
-            fill: magenta;
-            text-shadow: 0 0 1rem black;
-            transition: all ease 300ms;
-        }
+        
 
-        &:hover path {
-            width: 2rem;    
-        }
+        // &:hover path {
+        //     fill: blue;
+        //     width: 2rem;    
+        // }
     }
 
     &__heading {
@@ -344,35 +358,49 @@ input[type=text]:focus {
     } 
 
     &--add-fav {
-        fill: $--purple;
+        position: absolute;
+        top: -.5rem;
+        right: -1.5rem;
+        fill: transparent;
         transition: all ease 300ms;
+        transform: scale(.5);
+        stroke: $--black-lighter;
+        stroke-width: 3;
+        // fill-rule: evenodd;
+        border-radius: 5px;
+        filter: drop-shadow(1rem 1rem 1rem gray);
 
-        &:hover {
-            transform: scale(2);
+        &.bookmarked {
+            fill: $--gradient-2;
+            // filter: drop-shadow(1rem 1rem 1rem $--purple);
         }
+        
+
 
         & path {
         transition: all ease 300ms;
 
         }
     }
+    
 
     &__details {
         position: absolute;
         z-index: 2;
         top: 7rem;
-        left: 4rem;
+        left: 3rem;
         font-weight: bold;
         font-size: 2.75rem;
-        margin: 0 0 1rem 1rem;
+        // margin: 0 0 1rem 1rem;
         color: $--dark-blue;
         // background-color: $--white-light;
         // background-clip: text;
         text-shadow: 0 0 1rem white;
+
         
-        &:not(:last-child) {
-            margin-bottom: .5rem;
-        }
+        // &:not(:last-child) {
+        //     margin-bottom: .5rem;
+        // }
     }  
     
 
@@ -383,7 +411,6 @@ input[type=text]:focus {
         right: 3rem;
         height: auto;
         width: 100%;
-
         object-fit: cover;
         
         &--img {
@@ -394,6 +421,8 @@ input[type=text]:focus {
             top: 0;
             right: 0;
             filter: drop-shadow(.5rem .5rem .5rem gray) contrast(2);
+            animation-name: icon;
+            animation-duration: 3s;
             // filter: saturate(50%);
         }
 
@@ -415,6 +444,8 @@ input[type=text]:focus {
         }
     }
 }
+
+
 
 // &--map {
 //     display: flex;
@@ -453,7 +484,7 @@ input[type=text]:focus {
     width: 100%;
     display: flex;
     // flex-direction: row;
-    flex: 1 0 15rem;
+    flex: 2 0 15rem;
     border-radius: $--box-radius;
     // overflow: hidden;
     padding: 0 2rem 2rem 2rem;
@@ -538,10 +569,11 @@ input[type=text]:focus {
     // overflow: scroll;
     display: flex;
     flex-direction: column;
-    flex: 0 0 45rem;
+    flex: 1 1;
 
     
 }
+
 
 
 .hourly {
@@ -607,6 +639,8 @@ input[type=text]:focus {
                 // background-color: $--white-lightest;
                 filter: drop-shadow(.5rem .5rem .5rem gray) contrast(2);
                 // box-shadow: 0 0 1rem $--white-lightest;
+                animation-name: days;
+                animation-duration: 3s;
             }
         }
 
@@ -615,10 +649,12 @@ input[type=text]:focus {
     
 }
 
+
+
 .daily {
     display: flex;
     flex-direction: column;
-    flex: 1 1;
+    // flex: 1;
     // box-shadow: 0 0 2rem black;
     box-shadow: $--weather-box-shadow;
     overflow: hidden;
@@ -643,7 +679,7 @@ input[type=text]:focus {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        flex: 1;
+        // flex: 1 1;
         // background-color: $--white-lightest;
         // flex-direction: row;
         // justify-content: space-between;
@@ -995,3 +1031,48 @@ input[type=text]:focus {
     // filter: contrast(150%) ;
 }
 
+@keyframes icon {
+    0% { 
+        transform: scale(1.75) translateY(-10rem);
+        
+    }
+    100% {
+        transform: scale(1.75) translateY(0rem);
+    }
+}
+
+@keyframes days {
+    0% {
+        transform: translateY(5rem);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes favs {
+    0% {
+        // fill: $--dark-blue-alt;
+        // fill-opacity: 0;
+        // filter: drop-shadow($--weather-box-shadow);
+    }
+    100% {
+        // fill: $--dark-blue-alt;
+        // fill-opacity: 1;
+        // filter: drop-shadow($--weather-box-shadow);
+        
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transition: all ease 300ms;
+
+    }
+
+    100% {
+        opacity: 1;
+        transition: all ease 300ms;
+    }
+}

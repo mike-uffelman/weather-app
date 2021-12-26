@@ -33,7 +33,10 @@ export const addLocation = function(location) {
             country: saveLoc.country,
             lat: saveLoc.lat,
             lon: saveLoc.lon,
-            id: saveLoc.id
+            id: saveLoc.id,
+            bookmarked: true,
+            clicks: 1,
+            created: new Date()
         }
         
     }
@@ -62,5 +65,18 @@ export const removeLocation = function(id) {
     })
 
     //re-set LS with modified object
+    localStorage.setItem('loc',JSON.stringify(loc))
+}
+
+export const incrementClicks = function(id) {
+    let loc = this.getLocation();
+    console.log(loc);
+    loc.forEach(place => {
+        console.log(place.data.id);
+        console.log(id);
+        if(Number(place.data.id) === Number(id)) {
+            ++place.data.clicks;
+        }
+    })
     localStorage.setItem('loc',JSON.stringify(loc))
 }

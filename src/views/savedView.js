@@ -80,8 +80,23 @@ class DisplaySaved {
     }
 
     //remove UI favorite item, e is defined in the calling event
-    removeFavoriteUI = function(e) {
+    removeFavoriteUI(e) {
         e.remove();
+    }
+
+    removeEl(id) {
+        // console.log(loc)
+        // const {id} = loc.at(-1).data
+        const saved = document.querySelectorAll('.saved__card');
+        saved.forEach(save => {
+            // console.log(save);
+            console.log(save.dataset.id);
+            console.log(id)
+            
+            if(Number(save.dataset.id) === id) {
+                save.remove();
+            }
+        })
     }
 
 

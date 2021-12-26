@@ -36,29 +36,40 @@ export const getCity = async function (city, state, country) {
 //* model logic ===================================================================
 export const getForecast = async function(coords) {
     try {
-        const [ lat, lon, check ] = coords;
+        const [ lat, lon, check, bookmarked = false, id ] = coords;
         if(!check) return; // if a random location i.e. false, return
         if(!lat || !lon) return; // if lat or lon is undefined, return
 
         const res = await fetch(`${FORECAST_URL}onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely&appid=${API_KEY}`)
 
         const forecastData = await res.json();
-        console.log(forecastData);
+        console.log('forecast data: ', forecastData);
         const loc = await fetch(`${GEOCODE_REVERSE_URL}?lat=${forecastData.lat}&lon=${forecastData.lon}&limit=10&appid=${API_KEY}`)
         
         const locData = await loc.json()
         const locHeader = locData[0];
-        console.log(locHeader);
+        console.log('location header: ', locHeader);
         let locationObj = {
             ...locHeader,
-            ...forecastData
+            ...forecastData,
+            bookmarked
         }
 
+
         const location = new Location(locationObj);
-        console.log(location);
+
+        if(id) location.data.id = id;
+        console.log('location data object: ', location);
         store.push(location);
 
     } catch(err) {
         console.error('error!', err.message, err.stack);
     }
+}
+
+export const updateBookmark = async function() {
+    console.log('storage before bookmarking:' ,store, 'color: dark blue;');
+    store.at(-1).data.bookmarked = !store.at(-1).data.bookmarked;
+    console.log('storage after bookmarking: ', store);
+
 }

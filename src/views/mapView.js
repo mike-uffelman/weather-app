@@ -40,9 +40,9 @@ import {API_KEY} from '../config.js';
   
     }
 
-    export const searchMap = async function(coords, zoom) {
+    export const searchMap = async function(coords, zoom, ...marker) {
         const [ lat, lon ] =  coords;
-        let osmURL = await 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        let osmURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         let osmAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         let osmLayer = new L.tileLayer(osmURL, {attribution: osmAttribution,}
         );
@@ -52,27 +52,36 @@ import {API_KEY} from '../config.js';
             .addLayer(osmLayer)
             
             .on('click', (e) => {
+                
+
+
                 const searchMarker = L.marker([e.latlng.lat, e.latlng.lng])
-                if(searchMarker) {
-
-                    document.querySelector('.leaflet-marker-icon').remove();
-                    // document.querySelector('.leaflet-marker-shadow').remove();
-
-                }
-                console.log(e);
+                
+                
+                // console.log(e);
                 const {lat, lng} = e.latlng;
-                console.log(lat, lng);
+                // console.log(lat, lng);
                 eCoords = [lat, lng];
-                console.log(eCoords);
+                // console.log(eCoords);
                 // const eCoords2 = [];
                 // eCoords2.push(...eCoords);
                 // console.log(eCoords2);
                 // const {lat, lng} = eCoords2;
                 // console.log(lat, lng);
                 // // console.log(eCoords);
+                
+                
+                if(!marker) {
+
+                    document.querySelector('.leaflet-marker-icon').remove();
+                    // document.querySelector('.leaflet-marker-shadow').remove();
+
+                }
+
 
                 searchMarker.addTo(searchMapObj)
                 console.log(searchMapObj);
+
 
 
             //     // console.log(searchMarker);
