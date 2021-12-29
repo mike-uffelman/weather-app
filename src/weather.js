@@ -7,7 +7,7 @@ import * as storage from './localStorage.js';
 import weatherView from './views/weatherView.js';
 import savedView from './views/savedView.js';
 import searchView from './views/searchView.js';
-
+import * as layout from './layout.js';
 
 //the Location class is a constructor to build the location object for storage
 
@@ -215,7 +215,6 @@ const controlCallSaved = async function(id) {
     try {
         storage.incrementClicks(id);
 
-
         //this should probably be abstracted
         let loc = await storage.getLocation();
         loc.forEach(async (place) => {
@@ -287,6 +286,11 @@ const controlMapClickSearch = async function() {
     // alert('clicked the map')
 }
 
+const controlNavigation = function () {
+    console.log('navigation controller');
+}
+
+
     // await model.getForecast(geoLoc.coords);
     // console.log(model.store.at(-1));
 
@@ -298,7 +302,7 @@ const init = function() {
     savedView.addHandlerSaved(controlCallSaved, controlRemoveSaved);
     weatherView.addHandlerCurrent(controlCurrentLocation);
     maps.addHandlerMapClick(controlMapClickSearch);
-    
+    layout.addHandlerNav(controlNavigation);
     // console.log(maps.eCoords);
     // if(maps.eCoords) console.log(maps.eCoords);
 

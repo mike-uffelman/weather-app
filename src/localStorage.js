@@ -16,11 +16,11 @@ export const getLocation = function() {
 //so we set a variable to retrieve the data from localstorage and push the new data to the end of the LS array
 //then we re-add the variable with the new data back to the LS using setitem and stringify
 export const addLocation = function(location) {
-    console.log(location);
+    // console.log(location);
     
     
     const saveLoc = location.at(-1).data;
-    console.log('add location to Storage: ', location);
+    // console.log('add location to Storage: ', location);
 
     
 
@@ -46,7 +46,7 @@ export const addLocation = function(location) {
     let loc = this.getLocation();
     loc.push(newLocObj);
     localStorage.setItem('loc', JSON.stringify(loc));
-    console.log(loc)
+    // console.log(loc)
 }
 
 //this is to remove locations from the local storage
@@ -70,10 +70,10 @@ export const removeLocation = function(id) {
 
 export const incrementClicks = function(id) {
     let loc = this.getLocation();
-    console.log(loc);
+    // console.log(loc);
     loc.forEach(place => {
-        console.log(place.data.id);
-        console.log(id);
+        // console.log(place.data.id);
+        // console.log(id);
         if(Number(place.data.id) === Number(id)) {
             ++place.data.clicks;
         }

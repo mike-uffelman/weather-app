@@ -11,13 +11,14 @@ import {API_KEY} from '../config.js';
     export let mapClick;
     // export let _data;
     export let eCoords;
+    let mapEnabled = false;
 
     
 
     export const addHandlerMapClick = function(handler) {
         const form = document.querySelector('form');
         const button = document.querySelector('#search-btn');
-        
+        const mapBox = document.querySelector('#searchMap');
         // eCoords.addEventListener('change', () => {
         //     console.log('eCoords has changed')
         // })
@@ -26,11 +27,26 @@ import {API_KEY} from '../config.js';
         //     button.disabled = false;
         // }
 
+        mapBox.addEventListener('dblclick', () => {
+            const mapOverlay = document.querySelector('.map--overlay');
+            console.log('this is the search map')
+            // mapBox.classList.remove('map--overlay');
+            mapOverlay.style.opacity = '0';
+
+            mapOverlay.style.transition = 'all ease 500ms';
+            mapOverlay.style.display = 'none';
+            mapEnabled = true;
+
+        }, {once: true})
+
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            if(!eCoords || eCoords.length === 0) return;
+            if(!eCoords || eCoords.length === 0 || eCoords === undefined || eCoords === null) return;
             handler();
-            console.log(eCoords);
+            console.log('eCoords before submit: ', eCoords);
+            eCoords = '';
+            console.log('eCoords after submit: ', eCoords)
+            console.dir(eCoords);
         });
         
         
@@ -46,47 +62,48 @@ import {API_KEY} from '../config.js';
         let osmAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         let osmLayer = new L.tileLayer(osmURL, {attribution: osmAttribution,}
         );
+
+        // let disableClickEvent = L.DomEvent.disableClickPropagation(searchMapObj);
         
         searchMapObj = new L.map('searchMap')
+            
             .setView(new L.LatLng(lat, lon), zoom)
             .addLayer(osmLayer)
+            // .addLayer(overlay, [lat, lon], loadOverlay)
+        // searchMapObj.disableClickPropagation(this)
             
-            .on('click', (e) => {
-                
+        searchMapObj.on({
+            // dblclick: (e) => {
+            //     L.DomEvent.disableScrollPropagation(document.querySelector('#searchMap'))
+            // },
+            
+            click: (e) => {
+            if(!mapEnabled) return;
+            // L.DomEvent.disableScrollPropagation(e)
 
+            const searchMarker = L.marker([e.latlng.lat, e.latlng.lng])
+            const {lat, lng} = e.latlng;
+            eCoords = [lat, lng];
+            
+            if(!marker) {
+                document.querySelector('.leaflet-marker-icon').remove();
+            }
 
-                const searchMarker = L.marker([e.latlng.lat, e.latlng.lng])
-                
-                
-                // console.log(e);
-                const {lat, lng} = e.latlng;
-                // console.log(lat, lng);
-                eCoords = [lat, lng];
-                // console.log(eCoords);
-                // const eCoords2 = [];
-                // eCoords2.push(...eCoords);
-                // console.log(eCoords2);
-                // const {lat, lng} = eCoords2;
-                // console.log(lat, lng);
-                // // console.log(eCoords);
-                
-                
-                if(!marker) {
-
-                    document.querySelector('.leaflet-marker-icon').remove();
-                    // document.querySelector('.leaflet-marker-shadow').remove();
-
-                }
-
-
-                searchMarker.addTo(searchMapObj)
-                console.log(searchMapObj);
+            searchMarker.addTo(searchMapObj)
+            console.log(searchMapObj);
 
 
 
-            //     // console.log(searchMarker);
-            })
+        //     // console.log(searchMarker);
+            }
+            // mousemove: (onmousemove) => {
+            //     console.log('scrollling map')
+            //     console.log(onmousemove);
+            // }
+        })
             // .dragging.enable()
+
+                // document.querySelector('#searchMap').classList.add('map--overlay');
 
       
 

@@ -5,15 +5,23 @@ class WeatherView {
     //TODO ===== instead of conditional firstWeatherCall, we can just completely remove the weather card and recreate it, no need to update the content after building it
 
     _data;
-    #firstWeatherCall = true; //? need 'static', should this be private?
+    // #firstWeatherCall = true; //? need 'static', should this be private?
     // constructor() {
     //     this._data = data;
     //     this.#currentWeather.innerHTML = '';
     // }
 
-    render(data) {
-        this._clear();
+    removeEl() {
+        
 
+    }
+
+    render(data) {
+        this.#currentWeather.style.opacity = 0;
+        this.#currentWeather.style.transition = 'opacity ease 500ms';
+        this.#currentWeather.scrollIntoView({behavior: 'smooth'})
+
+        this._clear();
         // this.#currentWeather.innerHTML = '';
         // console.log('RENDERING WEATHER VIEW...........')
         this._data = data;
@@ -22,9 +30,11 @@ class WeatherView {
         
         // console.log(`Welcome to ${this._data}`)
         //add a clear() function
+        this.#currentWeather.style.opacity = 1;
+        
+
         const markup = this._generateMarkup(this._data);
         this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
-        this.#currentWeather.scrollIntoView({behavior: 'smooth'})
         this._tempBars();
         if(this._data.at(-1).data.bookmarked === true) {
             document.querySelector('.header--add-fav').classList.add('bookmarked');
@@ -32,8 +42,9 @@ class WeatherView {
         
         // this.#currentWeather.style.opacity = 1;
         // this.#currentWeather.style.transition = 'all ease 300ms';
-        this.#firstWeatherCall = false;
+        // this.#firstWeatherCall = false;
         this.#currentWeather.style.display = 'flex';
+
     }
 
     _clear() {
@@ -73,7 +84,7 @@ class WeatherView {
                                 <div class='header__box' data-id='${location.at(-1).data.id}'>
                                     <div class='header__headers'>
                                         <h3 id='city-display' class='header__heading'>${location.at(-1).data.name}</h3>
-                                        <h5 class='header__heading--sub'>${location.at(-1).data.state}, ${location.at(-1).data.country}</h5>
+                                        <h5 class='header__heading--sub'>${(!location.at(-1).data.state) ? '' : location.at(-1).data.state + ', '} ${location.at(-1).data.country}</h5>
                                     </div>
                                     <svg class='header--add-fav' height="50" width="50">
                                         <polygon points='6,2 42,2 42,48 24,32 6,48'>

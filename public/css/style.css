@@ -43,17 +43,10 @@ svg, path {
 
 /* --- scroll snap --- */
 .swipeView {
+  background-image: linear-gradient(135deg, #e2f1ff, #b894b6);
   height: 100vh;
-  display: grid;
-  grid-template-columns: repeat(3, 100%);
-  will-change: transform;
-  align-content: center;
-  overflow-x: auto;
-  scroll-snap-coordinate: 0 0;
-  scroll-snap-points-x: repeat(100%);
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  background-color: transparent;
+  display: flex;
+  flex-direction: column;
   width: 100%;
 }
 @media only screen and (min-width: 20em) {
@@ -62,21 +55,137 @@ svg, path {
   }
 }
 
-.weatherPage {
-  display: none;
-  justify-content: center;
-  align-items: center;
+.pages {
+  flex: 1;
   height: 100%;
-  width: auto;
-  /* position: absolute;
-  top: 70%;
-  right: 10px;
-  left: 10px; */
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 100%);
+  grid-template-rows: 100%;
+  will-change: transform;
+  align-content: center;
+  overflow-x: auto;
+  scroll-snap-coordinate: 0 0;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  background-color: transparent;
+  width: 100%;
+}
+@media only screen and (min-width: 20em) {
+  .pages {
+    height: 100vh;
+  }
+}
+.pages::-webkit-scrollbar {
+  display: none;
+}
+.pages > section {
+  scroll-snap-align: center;
 }
 
-section {
-  scroll-snap-align: center;
-  background-color: transparent;
+/* position: absolute;
+top: 70%;
+right: 10px;
+left: 10px; */
+.footer {
+  flex: 1 1 -4rem;
+  position: fixed;
+  bottom: -4rem;
+  width: 100%;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: #b894b6;
+  transition: all ease 300ms;
+}
+.footer.open {
+  transform: translateY(-4rem);
+  transition: all ease 300ms;
+}
+.footer__toggle {
+  height: 2rem;
+  background-color: #073b4c;
+  width: 100%;
+  position: relative;
+  border-top-right-radius: 10rem;
+  border-top-left-radius: 10rem;
+}
+.footer__toggle--burger::before, .footer__toggle--burger::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3rem;
+  height: 0.25rem;
+  background-color: magenta;
+}
+.footer__toggle--burger::before {
+  top: 0.5rem;
+}
+.footer__toggle--burger::after {
+  bottom: 0.5rem;
+}
+.footer__toggle:hover {
+  background-color: #06d6a0;
+}
+.footer__menu {
+  display: flex;
+  width: 100%;
+}
+.footer__link {
+  text-decoration: none;
+  color: #f9f9f9;
+  background-color: #073b4c;
+  padding: 0.5rem 1rem;
+  position: relative;
+  transition: all ease 300ms;
+  font-size: 2rem;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  text-shadow: 0.25rem 0.25rem 0.5rem black;
+}
+.footer__link::before, .footer__link::after {
+  content: "";
+  position: absolute;
+  height: 0.25rem;
+  width: 1.5rem;
+  background-color: #06d6a0;
+  filter: drop-shadow(0.25rem 0.25rem 0.5rem black);
+}
+.footer__link:first-child:before {
+  top: 1.25rem;
+  left: 1rem;
+  transform: rotate(135deg);
+  transition: all ease 300ms;
+}
+.footer__link:first-child:after {
+  top: 2.25rem;
+  left: 1rem;
+  transform: rotate(45deg);
+  transition: all ease 300ms;
+}
+.footer__link:last-child::before {
+  top: 1.25rem;
+  right: 1rem;
+  transform: rotate(45deg);
+  transition: all ease 300ms;
+}
+.footer__link:last-child::after {
+  top: 2.25rem;
+  right: 1rem;
+  transform: rotate(135deg);
+  transition: all ease 300ms;
+}
+.footer__link:hover {
+  color: #06d6a0;
+  background-color: #073b4c;
+  transition: all ease 300ms;
+}
+.footer__link:hover::before, .footer__link:hover::after {
+  color: #06d6a0;
+  background-color: magenta;
+  transition: all ease 300ms;
 }
 
 .searchPage {
@@ -138,16 +247,21 @@ input[type=text]:focus {
 
 .search__modal {
   position: relative;
-  align-self: center;
+  align-self: start;
   justify-self: center;
-  height: 95vh;
+  height: 100%;
   max-width: 40rem;
   display: flex;
   flex-direction: column;
-  background-image: linear-gradient(135deg, #e2f1ff, #b894b6);
+  background-color: transparent;
   position: relative;
-  box-shadow: 0 0 1rem black;
-  border-radius: 1rem;
+  padding: 4rem 0 6rem 0;
+}
+@media only screen and (min-width: 20em) {
+  .search__modal {
+    box-shadow: 0 0 1rem black;
+    border-radius: 1rem;
+  }
 }
 .search__modal--header {
   font-size: 2rem;
@@ -183,28 +297,47 @@ input[type=text]:focus {
   flex: 2;
   height: 100%;
   min-width: 100%;
+  position: relative;
   border-radius: 1rem;
   opacity: 1;
   box-shadow: 0 0 1rem black;
   margin-bottom: 2rem;
+  overflow: hidden;
 }
 .search__modal--form button {
   flex: 0;
   background-color: #90be6d;
 }
 
+.map--overlay {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  opacity: 0.5;
+  position: absolute;
+  z-index: 9999999999999;
+  top: 0;
+  left: 0;
+  color: white;
+  font-size: 3.5rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: all ease 300ms;
+}
+
 .weatherCard {
   position: relative;
-  background-image: linear-gradient(135deg, #e2f1ff, #b894b6);
-  height: 95vh;
+  background-color: transparent;
+  height: 100%;
   min-height: 60rem;
   max-width: 30rem;
   display: flex;
   flex-direction: column;
   flex: 1;
-  border-radius: 1rem;
-  box-shadow: 0 0 2rem black;
   overflow-x: hidden;
+  padding-bottom: 2rem;
   animation-name: fadeIn;
   animation-duration: 4000ms;
   animation-iteration-count: once;
@@ -213,6 +346,7 @@ input[type=text]:focus {
   .weatherCard {
     margin: 0;
     min-width: 32em;
+    box-shadow: 0 0 1rem black;
   }
 }
 .weatherCard__body {
@@ -507,20 +641,20 @@ input[type=text]:focus {
 }
 
 .saved {
-  height: 95vh;
-  padding: 2rem;
+  height: 100%;
+  padding: 2rem 2rem 7rem 2rem;
   overflow-y: scroll;
   overflow-x: hidden;
-  background-image: linear-gradient(135deg, #e2f1ff, #b894b6);
-  border-radius: 1rem;
-  box-shadow: 0 0 1rem black;
+  background-color: transparent;
   display: flex;
+  align-self: flex-end;
   justify-content: center;
   align-items: center;
 }
 @media only screen and (min-width: 20em) {
   .saved {
     width: 30rem;
+    box-shadow: 0 0 1rem black;
   }
 }
 .saved__box {
@@ -540,7 +674,8 @@ input[type=text]:focus {
   width: 100%;
   text-align: center;
   padding: 1rem 0;
-  position: relative;
+  position: sticky;
+  top: 0;
 }
 .saved__card {
   width: 100%;
@@ -588,53 +723,6 @@ input[type=text]:focus {
   display: none;
 }
 
-.footer {
-  grid-row: 2/2;
-  position: fixed;
-  bottom: 0;
-  display: flex;
-  padding: 1rem;
-  justify-content: center;
-  align-items: center;
-  margin-top: auto;
-}
-.footer link {
-  text-decoration: none;
-  color: #f9f9f9;
-  background-color: #8eb8cd;
-  padding: 0.5rem 1rem;
-  position: relative;
-  transition: all ease 300ms;
-}
-.footer link:hover {
-  color: #06d6a0;
-  background-color: #073b4c;
-  transition: all ease 300ms;
-}
-.footer link::before, .footer link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  height: 0.25rem;
-  width: 1.5rem;
-  background-color: #06d6a0;
-}
-.footer link::before {
-  top: 0;
-  transform: rotate(135deg);
-  transition: all ease 300ms;
-}
-.footer link::after {
-  top: 1rem;
-  transform: rotate(45deg);
-  transition: all ease 300ms;
-}
-.footer link:hover::before, .footer link:hover::after {
-  color: #06d6a0;
-  background-color: magenta;
-  transition: all ease 300ms;
-}
-
 .map-marker svg {
   transform: scale(0.1);
 }
@@ -652,6 +740,11 @@ input[type=text]:focus {
 
 .leaflet-tile-loaded {
   background-blend-mode: darken;
+}
+
+.leaflet-map-pane {
+  position: relative;
+  z-index: 9999;
 }
 
 @keyframes icon {
@@ -679,6 +772,14 @@ input[type=text]:focus {
   100% {
     opacity: 1;
     transition: all ease 300ms;
+  }
+}
+@keyframes slideIn {
+  0% {
+    transform: translateX(-60rem);
+  }
+  100% {
+    transform: translateX(0);
   }
 }
 

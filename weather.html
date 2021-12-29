@@ -24,63 +24,75 @@
         <!-- <div id='mapid' class=''></div> -->
 
         <main class='swipeView'>
+        
             
-            <!-- <div class="pages"> -->
-
-                <section id='search__modal' class='search__modal'> 
-                <!-- <section id='map-weather' class='col-12 col-md-8'> -->
-                    
-                    <form action='/somewhere' class='search__modal--form' id='form'>
-                        <h3 class="search__modal--header">Enter a location or...</h3>
-
-                        <input type='text' id='city-input' name='city'  class='search__modal--form-input' placeholder='enter city' autofocus>
-
-                        <h3 class='search__modal--header'>Select a location on the map!</h3>
-
-                        <!-- <div class="search__modal--form-map"> -->
+            <div class="pages">
+                    <section id='search__modal' class='search__modal'> 
+                    <!-- <section id='map-weather' class='col-12 col-md-8'> -->
                         
-                                                <div id='searchMap' class='search__modal--form--map'></div>
-                            <!-- <div id='map' class='search__modal--map--map'></div> -->
-        
-        
-                        <!-- </div> -->
-                        <button id='search-btn' class='btn searchPage__form--btn btn--close-modal'>Search!</button>
-                    </form>
-                    
-
-                    <!-- <div class='searchPage__results'>
-                        <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
-                        <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
-                        <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
-
-
-                    </div> -->
-                </section>    
-                <!-- <section id='search__location--blocked' class='searchPage'> 
-                        <h1 class="searchPage__header">Search for your current weather!</h1>
-                        <form action='/somewhere' class='searchPage__form' id='form'>
-                            <input type='text' id='city-input' name='city'  class='searchPage__form--input' placeholder='enter city' autofocus>
-                            <button class='btn searchPage__form--btn' >Get Weather!</button>
-                        </form> -->
-        
+                        <form action='/somewhere' class='search__modal--form' id='form'>
+                            <h3 class="search__modal--header">Enter a location or...</h3>
+    
+                            <input type='text' id='city-input' name='city'  class='search__modal--form-input' placeholder='enter city' autofocus>
+    
+                            <h3 class='search__modal--header'>Select a location on the map!</h3>
+    
+                            <!-- <div class="search__modal--form-map"> -->
+                            
+                            <div id='searchMap' class='search__modal--form--map'>
+                                <div class="map--overlay">Click to enable map</div>
+                            </div>
+                                <!-- <div id='map' class='search__modal--map--map'></div> -->
+            
+            
+                            <!-- </div> -->
+                            <button id='search-btn' class='btn searchPage__form--btn btn--close-modal'>Search!</button>
+                        </form>
+                        
+    
                         <!-- <div class='searchPage__results'>
                             <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
                             <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
                             <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
-        
-        
+    
+    
                         </div> -->
-                    <!-- </section>     -->
-                <section id='current-weather-box' class='weatherPage'></section>
-                
-                <section id='saved' class='saved'>
+                    </section>    
+                    <!-- <section id='search__location--blocked' class='searchPage'> 
+                            <h1 class="searchPage__header">Search for your current weather!</h1>
+                            <form action='/somewhere' class='searchPage__form' id='form'>
+                                <input type='text' id='city-input' name='city'  class='searchPage__form--input' placeholder='enter city' autofocus>
+                                <button class='btn searchPage__form--btn' >Get Weather!</button>
+                            </form> -->
+            
+                            <!-- <div class='searchPage__results'>
+                                <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
+                                <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
+                                <div class='searchPage__results--item'><a href='#'>Search result1</a></div>
+            
+            
+                            </div> -->
+                        <!-- </section>     -->
+                    <section id='current-weather-box' class='weatherPage'>
+
+                    </section>
                     
-                </section>
-            <!-- </div>
+                    <section id='saved' class='saved'>
+                        
+                    </section>
+
+            </div>
+
             <footer class='footer'>
-                <a href='#search__modal' class='search__modal--link'>New Search</a>
-                <a href='#saved' class='search__modal--link'>Saved</a>
-            </footer> -->
+                <div class="footer__toggle">
+                    <span class="footer__toggle--burger"></span>
+                </div>
+                <div class="footer__menu">
+                    <a href='#search__modal' class='footer__link search__link'>Search</a>
+                    <a href='#saved' class='footer__link saved__link'>Saved</a>
+                </div>
+                
+            </footer>
             
         </main>
     
