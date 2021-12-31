@@ -46,7 +46,7 @@ class DisplaySaved {
 
         return `
             <div class='saved__box'>
-                <h3 class='saved__header'>Saved Locations</h3>
+                <h3 class='saved__header'>Bookmarked Locations</h3>
 
                 ${this._data.map(this._generateMarkupItems).join('')}
             </div>
@@ -63,7 +63,7 @@ class DisplaySaved {
                 <div class='saved__card' data-id='${result.data.id}'> 
                     <div class='saved__card--detail'>
                         <h2 id='city-favorite' class='saved__card--detail-header '>
-                            <a href='#current-weather-box' class='call-favorite'>${result.data.name}, ${!result.data.state ? '' : result.data.state}${!result.data.state ? '' : ', '} ${result.data.country}</a>
+                            <a href='#' class='call-favorite'>${result.data.name}, ${!result.data.state ? '' : result.data.state}${!result.data.state ? '' : ', '} ${result.data.country}</a>
                         </h2> 
                         <a href='#' class='favorite__card--remove-favorite remove-favorite'>
                             <svg class='remove-fav' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -120,6 +120,10 @@ class DisplaySaved {
            
             }
         })
+    }
+
+    moveToSaved() {
+        this._parentElement.scrollIntoView({behavior: 'smooth'});
     }
 
     // savedActions = function(e) {

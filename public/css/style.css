@@ -71,16 +71,23 @@ svg, path {
   background-color: transparent;
   width: 100%;
 }
-@media only screen and (min-width: 20em) {
-  .pages {
-    height: 100vh;
-  }
-}
 .pages::-webkit-scrollbar {
   display: none;
 }
 .pages > section {
   scroll-snap-align: center;
+  min-width: 30rem;
+}
+@media only screen and (min-width: 25em) {
+  .pages > section {
+    max-width: 40rem;
+  }
+}
+@media only screen and (min-width: 50em) {
+  .pages > section {
+    box-shadow: 0 0 1rem black;
+    border-radius: 1rem;
+  }
 }
 
 /* position: absolute;
@@ -95,7 +102,7 @@ left: 10px; */
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  background-color: #b894b6;
+  background-color: transparent;
   transition: all ease 300ms;
 }
 .footer.open {
@@ -124,9 +131,6 @@ left: 10px; */
 }
 .footer__toggle--burger::after {
   bottom: 0.5rem;
-}
-.footer__toggle:hover {
-  background-color: #06d6a0;
 }
 .footer__menu {
   display: flex;
@@ -188,42 +192,6 @@ left: 10px; */
   transition: all ease 300ms;
 }
 
-.searchPage {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-.searchPage__header {
-  color: rgba(0, 0, 0, 0.75);
-  font-size: 4rem;
-  margin-bottom: 5rem;
-  text-align: center;
-  text-shadow: 0 0 1rem #118ab2;
-}
-.searchPage__form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: 1rem;
-  padding: 1rem;
-  font-size: 1.6rem;
-}
-.searchPage__form--input {
-  border-radius: 1rem;
-  border: none;
-  padding: 1rem 2rem;
-  margin-bottom: 2rem;
-  text-align: center;
-  box-shadow: 0 0.5rem 1rem black;
-  font-weight: 600;
-}
-.searchPage__form--btn {
-  border: none;
-}
-
 input[type=text]:focus {
   background-color: #f7f0b5;
   padding: 0.5rem;
@@ -250,21 +218,21 @@ input[type=text]:focus {
   align-self: start;
   justify-self: center;
   height: 100%;
-  max-width: 40rem;
+  width: 100%;
   display: flex;
   flex-direction: column;
   background-color: transparent;
-  position: relative;
+  font-size: 1rem;
   padding: 4rem 0 6rem 0;
 }
 @media only screen and (min-width: 20em) {
   .search__modal {
-    box-shadow: 0 0 1rem black;
-    border-radius: 1rem;
+    font-size: 1.5rem;
   }
 }
 .search__modal--header {
-  font-size: 2rem;
+  display: flex;
+  font-size: 1.5rem;
   text-align: left;
   margin: 1rem 0;
   color: rgba(0, 0, 0, 0.75);
@@ -273,17 +241,20 @@ input[type=text]:focus {
 .search__modal--header:first-of-type {
   margin-top: 0;
 }
+@media only screen and (min-width: 20em) {
+  .search__modal--header {
+    font-size: 2rem;
+  }
+}
 .search__modal--form {
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  width: 100%;
   padding: 1rem;
   flex: 1;
   position: relative;
 }
 .search__modal--form-input {
-  width: 100%;
   padding: 0.1rem 1rem;
   margin-bottom: 1rem;
   border: none;
@@ -296,13 +267,13 @@ input[type=text]:focus {
   display: flex;
   flex: 2;
   height: 100%;
-  min-width: 100%;
   position: relative;
   border-radius: 1rem;
   opacity: 1;
   box-shadow: 0 0 1rem black;
   margin-bottom: 2rem;
   overflow: hidden;
+  transition: all ease 300ms;
 }
 .search__modal--form button {
   flex: 0;
@@ -315,8 +286,8 @@ input[type=text]:focus {
   width: 100%;
   background-color: black;
   opacity: 0.5;
+  overflow: hidden;
   position: absolute;
-  z-index: 9999999999999;
   top: 0;
   left: 0;
   color: white;
@@ -331,8 +302,6 @@ input[type=text]:focus {
   position: relative;
   background-color: transparent;
   height: 100%;
-  min-height: 60rem;
-  max-width: 30rem;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -342,14 +311,8 @@ input[type=text]:focus {
   animation-duration: 4000ms;
   animation-iteration-count: once;
 }
-@media only screen and (min-width: 20em) {
-  .weatherCard {
-    margin: 0;
-    min-width: 32em;
-    box-shadow: 0 0 1rem black;
-  }
-}
 .weatherCard__body {
+  width: 100%;
   min-height: 100%;
   display: flex;
   flex-direction: column;
@@ -358,14 +321,9 @@ input[type=text]:focus {
 }
 
 .header {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   background-color: transparent;
   font-size: 1.6rem;
-  height: auto;
   position: relative;
-  margin: 0 0 4rem 0;
 }
 .header:hover, .header:hover h3, .header:hover h5, .header:hover .header--add-fav {
   cursor: pointer;
@@ -376,15 +334,15 @@ input[type=text]:focus {
   transition: all ease 300ms;
 }
 .header__container {
-  margin: 2rem;
+  padding: 2rem 2rem 0 2rem;
   position: relative;
 }
 .header__box {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
+  height: 100%;
   position: relative;
-  z-index: 1;
 }
 .header__heading {
   text-size-adjust: auto;
@@ -392,13 +350,23 @@ input[type=text]:focus {
   text-shadow: 0 0 1rem #f9f9f9;
   transition: all ease 300ms;
 }
+@media only screen and (min-width: 20em) {
+  .header__heading {
+    font-size: 3rem;
+  }
+}
 .header__heading--sub {
   font-size: 1.5rem;
   color: black;
   text-shadow: 0 0 1rem #f9f9f9;
   transition: all ease 300ms;
 }
-.header--add-fav {
+@media only screen and (min-width: 20em) {
+  .header__heading--sub {
+    font-size: 2rem;
+  }
+}
+.header__bookmark-icon {
   position: absolute;
   top: -0.5rem;
   right: -1.5rem;
@@ -410,21 +378,39 @@ input[type=text]:focus {
   border-radius: 5px;
   filter: drop-shadow(1rem 1rem 1rem gray);
 }
-.header--add-fav.bookmarked {
+.header__bookmark-icon.bookmarked {
   fill: #b894b6;
 }
-.header--add-fav path {
+.header__bookmark-icon path {
   transition: all ease 300ms;
 }
 .header__details {
-  position: absolute;
+  position: relative;
   z-index: 2;
-  top: 7rem;
-  left: 3rem;
   font-weight: bold;
-  font-size: 2.75rem;
+  font-size: 1.75rem;
+  margin-top: 4rem;
   color: #073b4c;
   text-shadow: 0 0 1rem white;
+  transition: all ease 300ms;
+  display: flex;
+  flex-direction: column;
+}
+@media only screen and (min-width: 20em) {
+  .header__details {
+    font-size: 3.25rem;
+    transition: all ease 300ms;
+  }
+}
+.header__details--date {
+  font-size: 1.25rem;
+  transition: all ease 300ms;
+}
+@media only screen and (min-width: 20em) {
+  .header__details--date {
+    font-size: 1.75rem;
+    transition: all ease 300ms;
+  }
 }
 .header__icon {
   position: absolute;
@@ -440,16 +426,23 @@ input[type=text]:focus {
   flex: 1 1;
   transform: scale(1.75);
   position: absolute;
-  top: 0;
+  top: 2rem;
   right: 0;
   filter: drop-shadow(0.5rem 0.5rem 0.5rem gray) contrast(2);
   animation-name: icon;
   animation-duration: 3s;
+  transition: all ease 300ms;
+}
+@media only screen and (min-width: 20em) {
+  .header__icon--img {
+    top: 6rem;
+    transition: all ease 300ms;
+  }
 }
 .header__icon--description {
   position: absolute;
   z-index: 1;
-  top: 9rem;
+  top: 11rem;
   right: 0;
   display: flex;
   color: #f9f9f9;
@@ -457,6 +450,13 @@ input[type=text]:focus {
   text-shadow: 0 0 1rem black;
   align-self: flex-end;
   font-size: 1.25rem;
+  transition: all ease 300ms;
+}
+@media only screen and (min-width: 20em) {
+  .header__icon--description {
+    top: 15rem;
+    transition: all ease 300ms;
+  }
 }
 
 .map {
@@ -513,6 +513,11 @@ input[type=text]:focus {
   letter-spacing: 0.15rem;
   text-transform: uppercase;
 }
+@media only screen and (min-width: 20em) {
+  .hourly__header {
+    font-size: 1.5rem;
+  }
+}
 .hourly__detail {
   display: flex;
   flex-direction: row;
@@ -529,12 +534,26 @@ input[type=text]:focus {
   margin-top: 0.5rem;
   font-weight: 800;
   font-size: 1.25rem;
+  transition: all ease 300ms;
+}
+@media only screen and (min-width: 20em) {
+  .hourly__detail--box-time {
+    font-size: 1.5rem;
+    transition: all ease 300ms;
+  }
 }
 .hourly__detail--box-temp {
   margin-top: 0.5rem;
   font-size: 1.2rem;
   color: #073b4c;
   font-weight: 800;
+  transition: all ease 300ms;
+}
+@media only screen and (min-width: 20em) {
+  .hourly__detail--box-temp {
+    font-size: 1.5rem;
+    transition: all ease 300ms;
+  }
 }
 .hourly__detail--box-icon {
   padding: -0.5rem;
@@ -543,6 +562,14 @@ input[type=text]:focus {
   filter: drop-shadow(0.5rem 0.5rem 0.5rem gray) contrast(2);
   animation-name: days;
   animation-duration: 3s;
+  transition: all ease 300ms;
+}
+@media only screen and (min-width: 20em) {
+  .hourly__detail--box-icon {
+    font-size: 3.25rem;
+    transform: scale(1.25);
+    transition: all ease 300ms;
+  }
 }
 
 .daily {
@@ -560,6 +587,13 @@ input[type=text]:focus {
   font-weight: 400;
   letter-spacing: 0.15rem;
   text-transform: uppercase;
+  transition: all ease 300ms;
+}
+@media only screen and (min-width: 20em) {
+  .daily__header {
+    font-size: 1.5rem;
+    transition: all ease 300ms;
+  }
 }
 .daily__detail {
   display: flex;
@@ -569,6 +603,7 @@ input[type=text]:focus {
   padding: 0 0.5rem;
   font-size: 1rem;
   color: #073b4c;
+  transition: all ease 300ms;
 }
 .daily__detail--box {
   display: grid;
@@ -589,6 +624,13 @@ input[type=text]:focus {
   align-self: center;
   letter-spacing: 0.1rem;
   font-weight: bold;
+  transition: all ease 300ms;
+}
+@media only screen and (min-width: 20em) {
+  .daily__detail--box-day {
+    font-size: 1.25rem;
+    transition: all ease 300ms;
+  }
 }
 .daily__detail--box-precip {
   grid-column: 9/12;
@@ -598,6 +640,13 @@ input[type=text]:focus {
   justify-content: flex-start;
   flex-direction: row;
   flex-wrap: nowrap;
+  transition: all ease 300ms;
+}
+@media only screen and (min-width: 20em) {
+  .daily__detail--box-precip {
+    font-size: 1.25rem;
+    transition: all ease 300ms;
+  }
 }
 .daily__detail--box-precip p .text {
   font-weight: bold;
@@ -611,6 +660,13 @@ input[type=text]:focus {
   flex-direction: row;
   align-self: center;
   font-weight: bold;
+  transition: all ease 300ms;
+}
+@media only screen and (min-width: 20em) {
+  .daily__detail--box-temp {
+    font-size: 1.25rem;
+    transition: all ease 300ms;
+  }
 }
 
 .temp__bars {
@@ -641,32 +697,30 @@ input[type=text]:focus {
 }
 
 .saved {
-  height: 100%;
+  position: relative;
+  width: 100%;
+  max-height: 70vh;
   padding: 2rem 2rem 7rem 2rem;
   overflow-y: scroll;
   overflow-x: hidden;
   background-color: transparent;
   display: flex;
-  align-self: flex-end;
-  justify-content: center;
-  align-items: center;
-}
-@media only screen and (min-width: 20em) {
-  .saved {
-    width: 30rem;
-    box-shadow: 0 0 1rem black;
-  }
+  margin-top: 8rem;
 }
 .saved__box {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   border-radius: 1rem;
   overflow: hidden;
+  width: 100%;
   box-shadow: 0 0 1rem black;
 }
 .saved__header {
+  display: block;
+  position: sticky;
+  top: 0;
   background-color: #577590;
   color: #f9f9f9;
   font-size: 1.4rem;
@@ -674,8 +728,13 @@ input[type=text]:focus {
   width: 100%;
   text-align: center;
   padding: 1rem 0;
-  position: sticky;
-  top: 0;
+  font-size: 1.5rem;
+}
+@media only screen and (min-width: 20em) {
+  .saved__header {
+    font-size: 2rem;
+    transition: all ease 300ms;
+  }
 }
 .saved__card {
   width: 100%;
@@ -710,17 +769,23 @@ input[type=text]:focus {
   margin-right: 1rem;
 }
 .saved__card--detail-header a {
-  padding: 0.5rem 0;
+  padding: 2rem 0;
   align-self: center;
   width: 100%;
   text-decoration: none;
   color: #073b4c;
+  font-size: 1.25rem;
+  transition: all ease 300ms;
+}
+@media only screen and (min-width: 20em) {
+  .saved__card--detail-header a {
+    font-size: 1.5rem;
+    padding: 1.5rem 0;
+    transition: all ease 300ms;
+  }
 }
 .saved__card--detail--remove-favorite {
   margin-left: auto;
-}
-.saved__card--locationID {
-  display: none;
 }
 
 .map-marker svg {
@@ -736,15 +801,6 @@ input[type=text]:focus {
 }
 .remove-fav:hover {
   background-color: #ef476f;
-}
-
-.leaflet-tile-loaded {
-  background-blend-mode: darken;
-}
-
-.leaflet-map-pane {
-  position: relative;
-  z-index: 9999;
 }
 
 @keyframes icon {

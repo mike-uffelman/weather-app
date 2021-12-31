@@ -3,67 +3,67 @@
 
 
 
-.searchPage {
-    position: relative;
+// .searchPage {
+//     position: relative;
     
-    // z-index: -1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    // border: 1px solid red;
-    height: 100%;
-    // margin-top: auto;
-    // background-color: blur(5px);
+//     // z-index: -1;
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     align-items: center;
+//     // border: 1px solid red;
+//     height: 100%;
+//     // margin-top: auto;
+//     // background-color: blur(5px);
 
-    // backdrop-filter: blur(5px);
+//     // backdrop-filter: blur(5px);
 
-    &__header {
-        color: $--black-light;
-        font-size: 4rem;
-        margin-bottom: 5rem;
-        text-align: center;
-        text-shadow: 0 0 1rem $--bluish;
-    }
+//     &__header {
+//         color: $--black-light;
+//         font-size: 4rem;
+//         margin-bottom: 5rem;
+//         text-align: center;
+//         text-shadow: 0 0 1rem $--bluish;
+//     }
 
-    &__form {
-        // position: absolute;
-        // z-index: 1;
-        // bottom: 5rem;
-        // width: 50%;
-        // height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        // align-items: center;
-        margin-top: 1rem;
-        padding: 1rem;
-        font-size: 1.6rem;
-        // border: 1px solid red;
+//     &__form {
+//         // position: absolute;
+//         // z-index: 1;
+//         // bottom: 5rem;
+//         // width: 50%;
+//         // height: 100%;
+//         display: flex;
+//         flex-direction: column;
+//         justify-content: center;
+//         // align-items: center;
+//         margin-top: 1rem;
+//         padding: 1rem;
+//         font-size: 1.6rem;
+//         // border: 1px solid red;
 
-        &--input {
-            border-radius: 1rem;
-            border: none;
-            padding: 1rem 2rem;
-            // font-size: 2rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            box-shadow: 0 .5rem 1rem $--black;
-            font-weight: 600;
-        }
+//         &--input {
+//             border-radius: 1rem;
+//             border: none;
+//             padding: 1rem 2rem;
+//             // font-size: 2rem;
+//             margin-bottom: 2rem;
+//             text-align: center;
+//             box-shadow: 0 .5rem 1rem $--black;
+//             font-weight: 600;
+//         }
 
 
 
         
 
-        &--btn {
-            border: none;
-        }
+//         &--btn {
+//             border: none;
+//         }
     
-    }
+//     }
 
     
-}
+// }
 
 input[type=text]:focus {
     background-color: rgb(247, 240, 181);
@@ -97,12 +97,12 @@ input[type=text]:focus {
     align-self: start;
     justify-self: center;
     height: 100%;
-    max-width: 40rem;
+    width: 100%;
     display: flex;
     flex-direction: column;
     background-color: transparent;
+    font-size: 1rem;
     // background-image: linear-gradient(135deg, $--gradient-1, $--gradient-2);
-    position: relative;
     // box-shadow: $--weather-box-shadow;
     // border-radius: $--box-radius;
     padding: 4rem 0 6rem 0;
@@ -111,15 +111,16 @@ input[type=text]:focus {
         // margin: 0;
         // max-width: 0;
         // min-width: 32em;
-        box-shadow: $--weather-box-shadow;
-        border-radius: $--box-radius;
+        font-size: 1.5rem;
+        // box-shadow: $--weather-box-shadow;
+        // border-radius: $--box-radius;
     }
 
 
 
     &--header {
-
-        font-size: 2rem;
+        display: flex;
+        font-size: 1.5rem;
         text-align: left;
         margin: 1rem 0;
         color: $--black-light;
@@ -127,6 +128,10 @@ input[type=text]:focus {
 
         &:first-of-type {
             margin-top: 0;
+        }
+
+        @media only screen and (min-width: $bp-smallest) {
+            font-size: 2rem;
         }
     }
 
@@ -138,14 +143,14 @@ input[type=text]:focus {
         // margin: 1rem;
         // background-color: $--black-lightest;
         min-height: 100%;
-        width: 100%;
+        // width: 100%;
         padding: 1rem;
         flex: 1;
         position: relative;
         // margin: .5rem;
 
         &-input {
-            width: 100%;
+            // width: 100%;
             padding: .1rem 1rem;
             margin-bottom: 1rem;
             border: none;
@@ -199,7 +204,7 @@ input[type=text]:focus {
             display: flex;
             flex: 2;
             height: 100%;
-            min-width: 100%;
+            // min-width: 100%;
             position: relative;
             // z-index: 1000 ;   
             // border: 1px solid orange;
@@ -208,38 +213,9 @@ input[type=text]:focus {
             box-shadow: $--weather-box-shadow;
             margin-bottom: 2rem;
             overflow: hidden;
-
-            // &::before {
-            //     content: 'Click to enable map';
-            //     color: white;
-            //     height: 100%;
-            //     width: 100%;
-            //     background-color: black;
-            //     opacity: .75;
-            //     position: absolute;
-            //     z-index: 9999999999999999;
-            //     top: 0;
-            //     left: 0;
-            // }
-
-            
+            transition: all ease 300ms;
 
         }
-            // }        
-            // #map {
-            //     min-height: 100%;
-            //     min-width: 100%;
-            //     border: 1px solid purple;
-            //     position: relative;
-            //     // z-index: 1000;
-            //     // top: 0;
-            //     // left: 0;
-            //     // z-index: 10000;
-            //     // filter: grayscale(50);
-                
-                
-            // }
-        // }
 
         & button {
             flex: 0;
@@ -257,9 +233,9 @@ input[type=text]:focus {
     width: 100%;
     background-color: black;
     opacity: .5;
-    // overflow: hidden;
+    overflow: hidden;
     position: absolute;
-    z-index: 9999999999999;
+    // z-index: 99;
     top: 0;
     left: 0;
     color: white;
@@ -271,13 +247,25 @@ input[type=text]:focus {
     
 }
 
+// .leaflet-control-container {
+//     position: absolute;
+//     top: 0;
+//     right: 0;
+//     z-index: 99999999999999;
+// }
+
+// .leaflet-control {
+//     position: relative;
+//     z-index: 9999999999;
+// }
+
 .weatherCard {
     position: relative;
     background-color: transparent;
     // background-image: linear-gradient(135deg, $--gradient-1, $--gradient-2);
     height: 100%;
-    min-height: 60rem;
-    max-width: 30rem;
+    // min-height: 60rem;
+    // min-width: 27.5rem;
     // margin: 2rem;
     display: flex;
     flex-direction: column;
@@ -302,10 +290,23 @@ input[type=text]:focus {
 
 
     @media only screen and (min-width: $bp-smallest) {
-        margin: 0;
-        // max-width: 0;
-        min-width: 32em;
-        box-shadow: $--weather-box-shadow;
+        // margin: 0;
+        // width: 100%;
+        // // max-width: 32em;
+        // min-height: 100vh;
+        // // min-width: 32em;
+        // box-shadow: $--weather-box-shadow;
+        // border-radius: $--box-radius;
+
+    }
+
+    @media only screen and (min-width: $bp-medium) {
+        // margin: 0;
+        // max-width: 25rem;
+        // max-width: 32em;
+        // min-height: 100vh;
+        // min-width: 32em;
+        // box-shadow: $--weather-box-shadow;
         // border-radius: $--box-radius;
 
     }
@@ -318,7 +319,7 @@ input[type=text]:focus {
         // grid-area: body;
         // margin: auto;
         // padding: 1rem 2rem;
-        // width: 100%;
+        width: 100%;
         min-height: 100%;
         display: flex;
         flex-direction: column;
@@ -334,20 +335,26 @@ input[type=text]:focus {
 }
 
 .header {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: space-between;
     background-color: transparent;
     font-size: 1.6rem;
-    height: auto;
+    // min-height: 20rem;
     // margin: 2rem;
     // border-radius: 1rem;
     // color: $--dark-blue-alt;
     position: relative;
-    margin: 0 0 4rem 0;
+    // margin: 0 0 2rem 0;
     // overflow: hidden;
     // flex: 1;
     // padding-bottom: 1rem;
+
+    @media only screen and (min-width: $bp-smallest) {
+        // height: 100vh;
+        // font-size: 3rem;
+        // margin: 0 0 4rem 0;
+    }
 
     &:hover,
     &:hover h3, 
@@ -367,7 +374,7 @@ input[type=text]:focus {
 
 
     &__container {
-        margin: 2rem;
+        padding: 2rem 2rem 0 2rem;
         position: relative;
         // background-color: $--black-lightest;
         // margin: 1rem;
@@ -376,11 +383,13 @@ input[type=text]:focus {
 
     &__box {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
+        height: 100%;
         // margin-left: 1rem;
         position: relative;
-        z-index: 1;
+        // margin: 3rem 0;
+        // z-index: 1;
 
         
 
@@ -390,6 +399,11 @@ input[type=text]:focus {
         // }
     }
 
+    // &__headers {
+    //     display: flex;
+    //     flex-direction: column;
+    // }
+
     &__heading {
         text-size-adjust: auto;
         color: $--black;
@@ -398,15 +412,25 @@ input[type=text]:focus {
         // font-size: 2.5rem;
         // max-width: 50%;
 
+        @media only screen and (min-width: $bp-smallest) {
+            // height: 100vh;
+            font-size: 3rem;
+        }
+
         &--sub {
             font-size: 1.5rem;
             color: $--black;
             text-shadow: 0 0 1rem $--white;
             transition: all ease 300ms;
+
+            @media only screen and (min-width: $bp-smallest) {
+                // height: 100vh;
+                font-size: 2rem;
+            }
         }
     } 
 
-    &--add-fav {
+    &__bookmark-icon {
         position: absolute;
         top: -.5rem;
         right: -1.5rem;
@@ -421,7 +445,6 @@ input[type=text]:focus {
 
         &.bookmarked {
             fill: $--gradient-2;
-            // filter: drop-shadow(1rem 1rem 1rem $--purple);
         }
         
 
@@ -434,18 +457,49 @@ input[type=text]:focus {
     
 
     &__details {
-        position: absolute;
+        position: relative;
         z-index: 2;
-        top: 7rem;
-        left: 3rem;
+        // top: 7rem;
+        // left: 3rem;
         font-weight: bold;
-        font-size: 2.75rem;
-        // margin: 0 0 1rem 1rem;
+        font-size: 1.75rem;
+        margin-top: 4rem;
         color: $--dark-blue;
         // background-color: $--white-light;
         // background-clip: text;
         text-shadow: 0 0 1rem white;
+        transition: all ease 300ms;
+        display: flex;
+        flex-direction: column;
 
+        @media only screen and (min-width: $bp-smallest) {
+            // height: 100vh;
+            font-size: 3.25rem;
+            // top: 10rem;
+            transition: all ease 300ms;
+
+
+
+        }
+
+        &--temp {
+
+        }
+
+        &--date {
+            font-size: 1.25rem;
+            transition: all ease 300ms;
+
+            @media only screen and (min-width: $bp-smallest) {
+                // height: 100vh;
+                font-size: 1.75rem;
+                // top: 10rem;
+                transition: all ease 300ms;
+    
+    
+    
+            }
+        }
         
         // &:not(:last-child) {
         //     margin-bottom: .5rem;
@@ -467,18 +521,27 @@ input[type=text]:focus {
             flex: 1 1;
             transform: scale(1.75);
             position: absolute;
-            top: 0;
+            top: 2rem;
             right: 0;
             filter: drop-shadow(.5rem .5rem .5rem gray) contrast(2);
             animation-name: icon;
             animation-duration: 3s;
             // filter: saturate(50%);
+            transition: all ease 300ms;
+
+            @media only screen and (min-width: $bp-smallest) {
+                top: 6rem;
+                // height: 100vh;
+                // transform: scale(2.25);
+                transition: all ease 300ms;
+                
+            }
         }
 
         &--description {
             position: absolute;
             z-index: 1;
-            top: 9rem;
+            top: 11rem;
             right: 0;
             display: flex;
             color: $--white;
@@ -488,6 +551,16 @@ input[type=text]:focus {
             align-self: flex-end;
             font-size: 1.25rem;
             // padding: 1rem;
+            transition: all ease 300ms;
+
+
+            @media only screen and (min-width: $bp-smallest) {
+                top: 15rem;
+                // height: 100vh;
+                // transform: scale(2.25);
+                transition: all ease 300ms;
+                
+            }
 
            
         }
@@ -579,8 +652,8 @@ input[type=text]:focus {
             // border: 5px solid orange;
             opacity: 1;
             overflow: hidden;
-    border-radius: $--box-radius;
-    box-shadow: $--weather-box-shadow;
+            border-radius: $--box-radius;
+            box-shadow: $--weather-box-shadow;
 
 
         }
@@ -592,8 +665,8 @@ input[type=text]:focus {
             min-width: 100%;
             // border: 5px solid purple;
             position: relative;
-    border-radius: $--box-radius;
-    box-shadow: $--weather-box-shadow;
+            border-radius: $--box-radius;
+            box-shadow: $--weather-box-shadow;
         
 
             // z-index: 1000;
@@ -623,7 +696,9 @@ input[type=text]:focus {
     
 }
 
-
+// .leaflet-tile-loaded {
+//     opacity: .5;
+// }
 
 .hourly {
     display: flex;
@@ -645,6 +720,11 @@ input[type=text]:focus {
         letter-spacing: .15rem;
         text-transform: uppercase;
         // box-shadow: $--weather-box-shadow;
+
+        @media only screen and (min-width: $bp-smallest) {
+            // height: 100vh;
+            font-size: 1.5rem;
+        }
     }
 
 
@@ -670,6 +750,15 @@ input[type=text]:focus {
                 margin-top: .5rem;
                 font-weight: 800;
                 font-size: 1.25rem;
+                transition: all ease 300ms;
+
+
+                @media only screen and (min-width: $bp-smallest) {
+                    // height: 100vh;
+                    font-size: 1.5rem;
+                    transition: all ease 300ms;
+
+                }
     
             }
     
@@ -678,6 +767,15 @@ input[type=text]:focus {
                 font-size: 1.2rem;
                 color: $--dark-blue;
                 font-weight: 800;
+                transition: all ease 300ms;
+
+
+                @media only screen and (min-width: $bp-smallest) {
+                    // height: 100vh;
+                    font-size: 1.5rem;
+                    transition: all ease 300ms;
+
+                }
             }
     
             &-icon {
@@ -690,6 +788,15 @@ input[type=text]:focus {
                 // box-shadow: 0 0 1rem $--white-lightest;
                 animation-name: days;
                 animation-duration: 3s;
+                transition: all ease 300ms;
+
+
+                @media only screen and (min-width: $bp-smallest) {
+                    // height: 100vh;
+                    font-size: 3.25rem;
+                    transform: scale(1.25);
+                    transition: all ease 300ms;
+                }
             }
         }
 
@@ -722,7 +829,16 @@ input[type=text]:focus {
         font-weight: 400;
         letter-spacing: .15rem;
         text-transform: uppercase;
+        transition: all ease 300ms;
+
         // box-shadow: $--weather-box-shadow;
+        
+        @media only screen and (min-width: $bp-smallest) {
+            // height: 100vh;
+            font-size: 1.5rem;
+            transition: all ease 300ms;
+
+        }
 
     }
 
@@ -741,6 +857,7 @@ input[type=text]:focus {
         padding: 0 .5rem;
         font-size: 1rem;
         color: $--dark-blue;
+        transition: all ease 300ms;
         
 
         &:first-child {
@@ -772,6 +889,15 @@ input[type=text]:focus {
                 align-self: center;
                 letter-spacing: .1rem;
                 font-weight: bold;
+                transition: all ease 300ms;
+
+
+                @media only screen and (min-width: $bp-smallest) {
+                    // height: 100vh;
+                    font-size: 1.25rem;
+                    transition: all ease 300ms;
+
+                }
             }
     
             &-precip {
@@ -789,6 +915,15 @@ input[type=text]:focus {
                 flex-direction: row;
                 flex-wrap: nowrap;
                 // font-size: 1rem;
+                transition: all ease 300ms;
+
+
+                @media only screen and (min-width: $bp-smallest) {
+                    // height: 100vh;
+                    font-size: 1.25rem;
+                    transition: all ease 300ms;
+
+                }
     
     
     
@@ -813,8 +948,15 @@ input[type=text]:focus {
                 // justify-self: start;
                 // margin-left: auto;
                 // justify-content: space-between;
+                transition: all ease 300ms;
+
     
-    
+                @media only screen and (min-width: $bp-smallest) {
+                    // height: 100vh;
+                    font-size: 1.25rem;
+                    transition: all ease 300ms;
+
+                }
     
     
                
@@ -874,9 +1016,9 @@ input[type=text]:focus {
 }
 
 .saved {
-    // position: relative;
-    // width: 100%;
-    height: 100%;
+    position: relative;
+    width: 100%;
+    max-height: 70vh;
     padding: 2rem 2rem 7rem 2rem;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -887,22 +1029,22 @@ input[type=text]:focus {
     // border-radius: $--box-radius;
     // box-shadow: $--weather-box-shadow;
     display: flex;
-    align-self: flex-end;
+    margin-top: 8rem;
+    // align-self: flex-start;
     // padding-bottom: 7rem;
     // flex: 0 1;
     // flex-direction: column;
     // flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
+    // justify-content: center;
+    // align-items: center;
     
     //TODO add media query for favorites size
 
 
 
     @media only screen and (min-width: $bp-smallest) {
-        width: 30rem;
+        // width: 30rem;
 
-        box-shadow: $--weather-box-shadow;
         // border-radius: $--box-radius;
     }
     
@@ -912,14 +1054,19 @@ input[type=text]:focus {
         // padding: 1rem;
         display: flex;
         flex-direction: column;
-        // justify-content: center;
-        align-items: center;
+        // justify-content: flex-start;
+        align-items: flex-start;
         border-radius: $--box-radius;
         overflow: hidden;
+        width: 100%;
         box-shadow: $--weather-box-shadow;
     }
 
     &__header {
+        display: block;
+        position: sticky;
+        top: 0;
+
         background-color: $queen-blue;
         color: $--white;
         font-size: 1.4rem;
@@ -927,10 +1074,19 @@ input[type=text]:focus {
         width: 100%;
         text-align: center;
         padding: 1rem 0;
-        position: sticky;
+        font-size: 1.5rem;
         // display: sticky;
-        top: 0;
         
+        @media only screen and (min-width: $bp-smallest) {
+            // height: 100vh;
+            font-size: 2rem;
+            // top: 10rem;
+            transition: all ease 300ms;
+
+
+
+        }
+
     }
 
     &__card {
@@ -946,6 +1102,7 @@ input[type=text]:focus {
         transition: all ease 200ms;
         box-shadow: 0 0 1px $--black-light;
 
+        
 
         &:hover {
             background-color: $--greenish-lighter;
@@ -979,12 +1136,26 @@ input[type=text]:focus {
                 margin-right: 1rem;
 
                 & a {
-                    padding: .5rem 0;
+                    padding: 2rem 0;
                     align-self: center;
                     width: 100%;
                     // background-color: rosybrown;
                     text-decoration: none;
                     color: $--dark-blue;
+                    font-size: 1.25rem;
+                    transition: all ease 300ms;
+
+
+                    @media only screen and (min-width: $bp-smallest) {
+                        // height: 100vh;
+                        font-size: 1.5rem;
+                        padding: 1.5rem 0;
+                        transition: all ease 300ms;
+            
+            
+            
+                    }
+
                 }
             }
 
@@ -993,9 +1164,9 @@ input[type=text]:focus {
             }
         }
 
-        &--locationID {
-            display: none;
-        }
+        // &--locationID {
+        //     display: none;
+        // }
     }
 
 
@@ -1029,16 +1200,16 @@ input[type=text]:focus {
     }
 }
 
-.leaflet-tile-loaded {
-    // background-color: transparent;
-    background-blend-mode: darken;
-    // filter: contrast(150%) ;
-}
+// .leaflet-tile-loaded {
+    // background-color: green;
+    // background-blend-mode: difference;
+    // filter: blur(5px) ;
+// }
 
-.leaflet-map-pane {
-    position: relative;
-    z-index: 9999;
-}
+// .leaflet-map-pane {
+//     position: relative;
+//     z-index: 99999999;
+// }
 
 @keyframes icon {
     0% { 

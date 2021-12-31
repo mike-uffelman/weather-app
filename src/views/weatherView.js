@@ -20,8 +20,9 @@ class WeatherView {
         this.#currentWeather.style.opacity = 0;
         this.#currentWeather.style.transition = 'opacity ease 500ms';
         this.#currentWeather.scrollIntoView({behavior: 'smooth'})
-
         this._clear();
+
+        
         // this.#currentWeather.innerHTML = '';
         // console.log('RENDERING WEATHER VIEW...........')
         this._data = data;
@@ -37,7 +38,7 @@ class WeatherView {
         this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
         this._tempBars();
         if(this._data.at(-1).data.bookmarked === true) {
-            document.querySelector('.header--add-fav').classList.add('bookmarked');
+            document.querySelector('.header__bookmark-icon').classList.add('bookmarked');
         }
         
         // this.#currentWeather.style.opacity = 1;
@@ -59,7 +60,7 @@ class WeatherView {
                 // console.log('add location!')
                 //add current location to LS
                 // this._data.at(-1).bookmarked = true;
-                document.querySelector('.header--add-fav').classList.toggle('bookmarked');
+                document.querySelector('.header__bookmark-icon').classList.toggle('bookmarked');
                 handler(this._data);
                 // storage.addLocation(store.at(-1));
                 //add current location search to favorites on UI
@@ -70,6 +71,10 @@ class WeatherView {
         
     };
 
+    toggleBookmarkIcon() {
+        document.querySelector('.header__bookmark-icon').classList.toggle('bookmarked');
+    }
+
 
     //upon receipt of the api data we pass to the displayCurrent() which displays the desired weather data in the browser by creating a new element appending within the DOM
     //in order to prevent duplicate elements from consecutive searches we set a flag variable to firstWeatherCall true so it will add once, else it will simply update the existing html displayed
@@ -77,27 +82,34 @@ class WeatherView {
     _generateMarkup(location) {
         const { current, daily, hourly } = location.at(-1).data;
 
+        const today = new Date(daily[0].dt * 1000)
+        const date = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'});
+
             return `
                 <div class='weatherCard'>
                         <div class='header'>
-                            <div class='header__container'>
+                            <div class='header__container' alt='bookmark location'>
                                 <div class='header__box' data-id='${location.at(-1).data.id}'>
                                     <div class='header__headers'>
                                         <h3 id='city-display' class='header__heading'>${location.at(-1).data.name}</h3>
                                         <h5 class='header__heading--sub'>${(!location.at(-1).data.state) ? '' : location.at(-1).data.state + ', '} ${location.at(-1).data.country}</h5>
                                     </div>
-                                    <svg class='header--add-fav' height="50" width="50">
+                                    <svg class='header__bookmark-icon' height="50" width="50">
                                         <polygon points='6,2 42,2 42,48 24,32 6,48'>
 
                                     </svg>
-                                    
+                                    <div class='header__details'>
+                                        <p class='header__details--temp'>${current.temp.toFixed(0)}° F
+                                        </p>
+                                        <p class='header__details--date'>${date}</p>
+                                    </div>
                                 </div>
                                 
                                 
                                 <div class='header__icon'>
-                                    <img id='icon' src='http://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png' class='header__icon--img'>
-                                    <p id='temp-display' class='header__details'>${current.temp.toFixed(0)}° F
-                                    </p>
+                                    <img id='icon' src='http://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png' alt='' class='header__icon--img'>
+                                    
+
 
                                     <p  class='header__icon--description'><span id='weather-desc'>${current.weather[0].description}</span></p>
                                 </div>
@@ -155,7 +167,7 @@ class WeatherView {
                 <div class='hourly__detail--box'>
                     <div class='hourly__detail--box-time'>${hourlyTime}</div> 
                     <div class='hourly__detail--box-temp'>${hourlyTemp}°F</div>
-                    <img src='http://openweathermap.org/img/wn/${hourlyIcon}@2x.png' class='hourly__detail--box-icon'>
+                    <img src='http://openweathermap.org/img/wn/${hourlyIcon}@2x.png' class='hourly__detail--box-icon' alt=''>
                 </div>`
         })
 
@@ -175,7 +187,7 @@ class WeatherView {
             dailyHTML +=  `
                     <div class='daily__detail--box'>
                         <div class='daily__detail--box-weekday'>
-                            <img src='http://openweathermap.org/img/wn/${icon}@2x.png' class='daily__detail--box-icon'>
+                            <img src='http://openweathermap.org/img/wn/${icon}@2x.png' class='daily__detail--box-icon' alt=''>
                             <p class='daily__detail--box-day'>${dailyDay}</p>
                         </div> 
                         <div id='precip' class='daily__detail--box-precip'>

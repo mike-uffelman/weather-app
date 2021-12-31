@@ -118,13 +118,19 @@ const controlAppStart = async function() {
 
         if(geoLoc.coords[2] === true) {
             // const searchMap = new Map();
-            maps.searchMap(geoLoc.coords, 9);
+            
+            // maps.searchMap(geoLoc.coords, 9);
+            await model.getForecast(geoLoc.coords);
+            console.log('DATA STORE: ', model.store)
+
+            weatherView.render(model.store)
+            maps.buildMap(geoLoc.coords);
         }
 
         if(geoLoc.coords[2] === false) {
             const marker = false;
             // const searchMap = new Map();
-            maps.searchMap(geoLoc.coords, 2, marker);
+            maps.searchMap(geoLoc.coords, 4, marker);
             return;
         } 
         
@@ -135,11 +141,7 @@ const controlAppStart = async function() {
         // console.log('BOOLEAN TOO????: ', geoLoc.coords[2])
 
         //* get forecast for current location if navigator.
-        await model.getForecast(geoLoc.coords);
-        console.log('DATA STORE: ', model.store)
-
-        weatherView.render(model.store)
-        maps.buildMap(geoLoc.coords);
+        
 
         // console.log('model.store: ', model.store);
         // const store = model.store;
@@ -238,7 +240,7 @@ const controlCallSaved = async function(id) {
 const controlRemoveSaved = async function(id) {
     try {
         storage.removeLocation(Number(id));
-        document.querySelector('.header--add-fav').classList.toggle('bookmarked');
+        weatherView.toggleBookmarkIcon();
     } catch(err) {
         console.log('unable to remove this location', err);
     }
@@ -266,6 +268,11 @@ const controlSearch = async function(loc) {
 }
     //? favorites get forecast
     
+const enableSearchMap = function() {
+    console.log('enabling search map!')
+    maps.searchMap(geoLoc.coords, 9);
+}
+
 const controlMapClickSearch = async function() {
     const coords = await maps.eCoords;
     coords.push(true);
@@ -286,8 +293,12 @@ const controlMapClickSearch = async function() {
     // alert('clicked the map')
 }
 
-const controlNavigation = function () {
-    console.log('navigation controller');
+const searchLink = function () {
+    searchView.moveToSearch();
+}
+
+const savedLink = function () {
+    savedView.moveToSaved();
 }
 
 
@@ -301,10 +312,45 @@ const init = function() {
     searchView.addHandlerSearch(controlSearch);
     savedView.addHandlerSaved(controlCallSaved, controlRemoveSaved);
     weatherView.addHandlerCurrent(controlCurrentLocation);
-    maps.addHandlerMapClick(controlMapClickSearch);
-    layout.addHandlerNav(controlNavigation);
+    maps.addHandlerMapClick(enableSearchMap, controlMapClickSearch);
+    layout.addHandlerToggleNav(searchLink, savedLink);
     // console.log(maps.eCoords);
     // if(maps.eCoords) console.log(maps.eCoords);
+
+
+
+
+
+
+
+
+
+
+
+
+    // clear timeout example from mdn
+    // const alarm = {
+    //     remind(aMessage) {
+    //       alert(aMessage);
+    //       this.timeoutID = undefined;
+    //     },
+      
+    //     setup() {
+    //       if (typeof this.timeoutID === 'number') {
+    //         this.cancel();
+    //       }
+      
+    //       this.timeoutID = setTimeout(function(msg) {
+    //         this.remind(msg);
+    //       }.bind(this), 1000, 'Wake up!');
+    //     },
+      
+    //     cancel() {
+    //       clearTimeout(this.timeoutID);
+    //     }
+    //   };
+    //   window.addEventListener('click', () => alarm.setup() );
+
 
 }
 

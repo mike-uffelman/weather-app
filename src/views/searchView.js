@@ -2,7 +2,8 @@
 
 class searchView {
     
-    _parentElement = document.querySelector('#city-input');
+    _parentElement = document.querySelector('#search__modal');
+    _searchInput = document.querySelector('#city-input');
     
     async addHandlerSearch(handler) {
         const form = document.querySelector('form');
@@ -22,8 +23,13 @@ class searchView {
         })
     }
 
+    moveToSearch() {
+        this._parentElement.scrollIntoView({behavior: 'smooth'})
+    }
+
+
     _clear() {
-        this._parentElement.value = '';
+        this._searchInput.value = '';
     }
 }
 export default new searchView();

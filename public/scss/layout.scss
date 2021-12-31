@@ -25,6 +25,7 @@ body {
     min-height: 100vh;
     // font-size: 1.2rem;
     background: transparent;
+    
 
     // @media screen and (min-width: $bp-small) {
     //     width: 50%;
@@ -71,7 +72,6 @@ svg, path {
     // overflow-y: hidden;
     // backdrop-filter: blur(5px);
     // overflow: hidden;
-    
     @media only screen and (min-width: $bp-smallest) {
         height: 100vh;
     }
@@ -120,12 +120,15 @@ svg, path {
     -webkit-overflow-scrolling: touch;
     background-color: transparent;
     width: 100%;
+    // min-width: 27.5rem;
+
     // overflow-y: hidden;
     // backdrop-filter: blur(5px);
 
 
     @media only screen and (min-width: $bp-smallest) {
-        height: 100vh;
+        // height: 100vh;
+        
     }
 
     &::-webkit-scrollbar {
@@ -136,14 +139,32 @@ svg, path {
         // min-height: 100%;
         // width: 100%;
         scroll-snap-align: center;
+        min-width: 30rem;
         // border: .5rem solid white;
         // border-left: .25rem solid white;
         // border-right: .25rem solid white;
 
-        // border-radius: $--box-radius;
         // margin-bottom: 0.5rem;
         // background-color: transparent;
         
+        @media only screen and (min-width: $bp-smallest) {
+            // height: 100vh;
+        }
+
+        @media only screen and (min-width: $bp-small) {
+            // height: 100vh;
+
+            max-width: 40rem;
+        }
+
+        @media only screen and (min-width: $bp-medium) {
+            // height: 100vh;
+            // max-width: 40rem;
+            box-shadow: $--weather-box-shadow;
+
+            border-radius: $--box-radius;
+
+        }
     }
 
 }
@@ -182,7 +203,7 @@ svg, path {
     margin-top: auto;
     display: flex;
     flex-direction: column;
-    background-color: $--gradient-2;
+    background-color: transparent;
     transition: all ease 300ms;
 
 
@@ -232,7 +253,7 @@ svg, path {
         }
         
         &:hover {
-            background-color: $--greenish;
+            // background-color: $--purple-light;
         }
 
 
