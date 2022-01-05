@@ -1,5 +1,6 @@
 'use strict';
 
+
 import * as model from './model.js';
 import * as maps from './views/mapView.js';
 import * as geoLoc from './geoLocation.js';
@@ -9,95 +10,12 @@ import savedView from './views/savedView.js';
 import searchView from './views/searchView.js';
 import * as layout from './layout.js';
 
-//the Location class is a constructor to build the location object for storage
-
-
-//windowLoad so the random map loaction is called once upon window laod
-//firstWeatherCall to only build the current weather div once, any searches after only update the existing div
-// let firstWeatherCall = true;
-//defining a global array called store, to store the current data, basically temp storage a destroyed every window load
-// let _currentLocation;
-//api key for the getweather()
-// const APIkey = '63c966c95ff05cfed696cec21d7ff716';
-/*const callAddress = `https://api.openweathermap.org/data/2.5/weather?q=`;*/
-
-//push key data to array then copy to local storage-------------------------------
-
-class Storage {
-    //pushing the current weather location to a temporary array, which will then be pushed to local storage if the user decides is a favorite
-
-
-    //this is for retrieving locally stored locations to edit storage and for display
-    //to use local storage we have three functions - getLocation, addLocation, and removeLocation
-    //getLocation() basically retrieves the current data from the localstorage, we define a variable and say if the local storage item we desire is null, then we create an empty array, otherwise(i.e. returns data) we return the parsed data to the variable for access/manipulation
-
-    //TODO change from if else------------------------------------------------------------
-
-    
-}
-
-//api request function---------------------------------------------------
-
-class Request {
-    //upon user submitting the form, city is passed into this function to retreive the API data from the server
-  
-    //we're also taking the sunrise/sunset times and converting them to milliseconds and then to the locale time to display in a readable format and passing those along with the data variable to be displayed in the UI and copied to an array for storage
-    //should we receive a failed response our catch(err) will notify and console log the error message
-
-}
-
-//display in browser------------------------------------------------------------------------
-
-
-                        // <div class='favorites__card--img'>
-                        //     <img id='icon' src='https://picsum.photos/100/100' class='img'>
-                        // </div>
-
-
-// map functions ---------------------------------------------------------------------------
-
-
-
-//event listeners----------------------------------------------------------------------
-//user enters a city name (specifies with state and/or country, if desired/necessary)
-//prevent default browser action (not posting anything)
-//pass the city name to getWeather();
-// document.querySelector('form').addEventListener('submit', (e) => {
-//     e.preventDefault();
-//     const city = document.querySelector('form').elements.city.value;
-//     Request.getWeather(city);
-//     document.querySelector('#current-weather-box').classList.remove('d-none');
-//     document.querySelector('#current-weather-box').classList.add('d-flex');
-//     //document.querySelector('form').classList.remove('top-50', 'start-50', 'flex-column');
-//     //document.querySelector('form').classList.add('bottom-25', 'start-0', 'flex-row');
-
-// })
-
-//event on click of plus sign to add location to LS
-//in the current weather section - when the user clicks the plus sign to add a favorite we call the addLocation() and pass in the last index of the temporary storage array called store
-// document.querySelector('#current-weather-box').addEventListener('click', (e) => {
-//     if(e.target.classList.contains('add-favorite') && e.target.nodeName === 'A') {
-        
-
-
-//remove favorite event - should call to local storage and a UI remove
-//in the favorites section - when a user clicks the minus(-) svg we trace the click up to the element and pass the e.target into the removeFavoriteUI() function to remove it from the UI, then we find the cityID visibly hidden in the div and pass that city ID into the removeLocation() function that iterates through the LS object to find the matching index item and removes it
-
-
 const saved = document.querySelector('#saved');
 const map = document.querySelector('#mapid');
 const locID = document.querySelector('.saved__card--locationID');
 
 
-// manually delete local storage index
-        // function storageDeleteItem(locIndexStart) {
-        //     const loc = JSON.parse(localStorage.getItem('loc'));
-        //     console.log('LOCAL STORAGE; ', loc);
-        //     loc.splice(locIndexStart, 3);
-        //     localStorage.setItem('loc',JSON.stringify(loc))
-        // }
-        
-        // storageDeleteItem(0);
+
 
 // let windowLoad = true;
 const form = document.querySelector('form');
@@ -107,10 +25,10 @@ const form = document.querySelector('form');
 const controlAppStart = async function() {
     try {
         //on window load, only need to render the saved location container once, after that add/remove individually
-        let windowLoad = true;
+        // let windowLoad = true;
         const savedLocs = await storage.getLocation();
         // console.log('storage on load: ', savedLocs);
-        savedView.render(savedLocs, windowLoad, model.store)
+        savedView.render(savedLocs)
 
         //* get current or random location
         await geoLoc.getGeolocation();
@@ -130,22 +48,11 @@ const controlAppStart = async function() {
         if(geoLoc.coords[2] === false) {
             const marker = false;
             // const searchMap = new Map();
+            searchView.toggleSearchViewBlockedGeoLoc();
             maps.searchMap(geoLoc.coords, 4, marker);
             return;
         } 
         
-        // console.log(geoData);
-        //* render map on current location or random
-        // await maps.buildMap(geoLoc.coords, 9); //*
-        // console.log(geoLoc.coords)
-        // console.log('BOOLEAN TOO????: ', geoLoc.coords[2])
-
-        //* get forecast for current location if navigator.
-        
-
-        // console.log('model.store: ', model.store);
-        // const store = model.store;
-        // console.log('new store: ', store);
 
         //*render saved favorites from local storate
         
@@ -168,14 +75,15 @@ const controlCurrentLocation = async function(loc) {
     // let windowLoad = true;
     try {
         if(!bookmarked) {
-            console.log('no to yes: ', loc.at(-1).data)
+            // console.log('no to yes: ', loc.at(-1).data)
             await model.updateBookmark();
-            console.log('no to yes: ', loc.at(-1).data)
+            // console.log('no to yes: ', loc.at(-1).data)
 
             storage.addLocation(loc);
-            await savedView.render(loc, false, model.store)
+            const location = storage.getLocation();
+            await savedView.render(location)
             // console.log('storage on add: ', storage.getLocation())
-            console.log(model.store);
+            // console.log(model.store);
         }
 
         if(bookmarked) { 
@@ -183,30 +91,8 @@ const controlCurrentLocation = async function(loc) {
 
             await model.updateBookmark(); //*
             savedView.removeEl(id);
-            console.log(id);
-            console.log(model.store);
-            // console.log('storage on remove: ', storage.getLocation())
 
         }
-
-
-        
-        // if(bookmarkedEl.classList.contains('bookmarked')) {
-        //     console.log('already bookmarked')
-        //     console.log(bookmarked);
-        //     model.updateBookmark();
-        //     console.log(mod)
-        //     // prompt('are you sure you wish to remove from bookmarks?')
-        //     // console.log("bookmarked")
-        //     // console.log(bookmarked)
-        //     // storage.removeLocation(loc.at(-1).data.id)
-        //     // await savedView.render(loc, !windowLoad, model.store);
-        // };
-        
-        // if(!bookmarked) {
-        //     console.log('not yet bookmarked');
-        //     // console.log('not bookmarked');
-        // }
         
     } catch(err) {
         console.log('current location error!!!', err);
@@ -262,9 +148,6 @@ const controlSearch = async function(loc) {
     // console.log('after getCity call: ', model.store);
     weatherView.render(model.store);
     await maps.buildMap(coords) //*
-
-
-
 }
     //? favorites get forecast
     
@@ -302,8 +185,8 @@ const savedLink = function () {
 }
 
 
-    // await model.getForecast(geoLoc.coords);
-    // console.log(model.store.at(-1));
+    
+
 
 
 
@@ -314,44 +197,47 @@ const init = function() {
     weatherView.addHandlerCurrent(controlCurrentLocation);
     maps.addHandlerMapClick(enableSearchMap, controlMapClickSearch);
     layout.addHandlerToggleNav(searchLink, savedLink);
-    // console.log(maps.eCoords);
-    // if(maps.eCoords) console.log(maps.eCoords);
 
 
 
-
-
-
-
-
-
-
-
-
-    // clear timeout example from mdn
-    // const alarm = {
-    //     remind(aMessage) {
-    //       alert(aMessage);
-    //       this.timeoutID = undefined;
-    //     },
-      
-    //     setup() {
-    //       if (typeof this.timeoutID === 'number') {
-    //         this.cancel();
-    //       }
-      
-    //       this.timeoutID = setTimeout(function(msg) {
-    //         this.remind(msg);
-    //       }.bind(this), 1000, 'Wake up!');
-    //     },
-      
-    //     cancel() {
-    //       clearTimeout(this.timeoutID);
-    //     }
-    //   };
-    //   window.addEventListener('click', () => alarm.setup() );
 
 
 }
 
 init();
+
+
+
+// manually delete local storage index
+        // function storageDeleteItem(locIndexStart) {
+        //     const loc = JSON.parse(localStorage.getItem('loc'));
+        //     console.log('LOCAL STORAGE; ', loc);
+        //     loc.splice(locIndexStart, 3);
+        //     localStorage.setItem('loc',JSON.stringify(loc))
+        // }
+        
+        // storageDeleteItem(0);
+
+
+        // clear timeout example from mdn------------------------------------------
+// const alarm = {
+//     remind(aMessage) {
+//       alert(aMessage);
+//       this.timeoutID = undefined;
+//     },
+    
+//     setup() {
+//       if (typeof this.timeoutID === 'number') {
+//         this.cancel();
+//       }
+    
+//       this.timeoutID = setTimeout(function(msg) {
+//         this.remind(msg);
+//       }.bind(this), 1000, 'Wake up!');
+//     },
+    
+//     cancel() {
+//       clearTimeout(this.timeoutID);
+//     }
+//   };
+//   window.addEventListener('click', () => alarm.setup() );

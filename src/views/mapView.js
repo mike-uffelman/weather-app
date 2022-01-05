@@ -137,9 +137,8 @@ import {API_KEY} from '../config.js';
 
         let weatherLayer = new L.tileLayer(weatherUrl)
         map = new L.Map('map', {
-            zoomControl: true,
+            zoomControl: true
             // layers: [osmLayer, weatherLayer] //add back for weather layer 
-            layers: [osmLayer]
 
         })
             .addLayer(osmLayer)

@@ -3,25 +3,25 @@
 
 
 export const addHandlerToggleNav = function(searchLink, savedLink) {
-    const footer = document.querySelector('.footer');
+    const nav = document.querySelector('.nav');
 
-    footer.addEventListener('mouseover', (e) => {
-        if(e.target.closest('.footer__toggle')) {
+    nav.addEventListener('mouseover', (e) => {
+        if(e.target.closest('.nav__toggle')) {
             console.log('nav toggled')
 
-            e.target.closest('.footer').classList.toggle('open');
+            e.target.closest('.nav').classList.toggle('open');
 
         }
 
         
-        // if(document.querySelector('.footer').classList.contains('open')) {
+        // if(document.querySelector('.nav').classList.contains('open')) {
         //     setTimeout(() => {
-        //         document.querySelector('.footer').classList.toggle('open')
+        //         document.querySelector('.nav').classList.toggle('open')
         //     }, 3000)
 
         // }
 
-        // if(!document.querySelector('.footer').classList.contains('open')) {
+        // if(!document.querySelector('.nav').classList.contains('open')) {
         //     clearTimeout();
         // };
 
@@ -29,9 +29,10 @@ export const addHandlerToggleNav = function(searchLink, savedLink) {
 
     })
 
-    footer.addEventListener('click', (e) => {
+    nav.addEventListener('click', (e) => {
         if(e.target.classList.contains('search__link')) {
             e.preventDefault();
+            console.log('clicked the search link!!!!!!!!!!!!')
             searchLink();
         };
 
@@ -40,6 +41,8 @@ export const addHandlerToggleNav = function(searchLink, savedLink) {
             savedLink();
         };
     })
+
+
 }
 
 

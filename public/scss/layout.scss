@@ -76,6 +76,10 @@ svg, path {
         height: 100vh;
     }
 
+    @media only screen and (min-width: $bp-medium) {
+        // display: none;
+    }
+
 
     
 }
@@ -131,6 +135,17 @@ svg, path {
         
     }
 
+    @media only screen and (min-width: $bp-medium) {
+        display: flex;
+        justify-content: center;   
+        align-items: flex-start;
+        width: 100%;
+        scroll-snap-type: none;
+        height: 100vh;
+
+             
+    }
+
     &::-webkit-scrollbar {
         display: none;
     }
@@ -158,12 +173,27 @@ svg, path {
         }
 
         @media only screen and (min-width: $bp-medium) {
-            // height: 100vh;
-            // max-width: 40rem;
-            box-shadow: $--weather-box-shadow;
+            display: none;
 
-            border-radius: $--box-radius;
+        }
 
+        &.tabDesktop {
+
+        
+            @media only screen and (min-width: $bp-medium) {
+                // height: 100vh;
+                // max-width: 40rem;
+                min-width: 100%;
+                display: flex;
+                // flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                // margin: 2rem;
+                // border-radius: $--box-radius;
+                // box-shadow: $--weather-box-shadow;
+
+            }
         }
     }
 
@@ -192,7 +222,7 @@ svg, path {
 
 
 
-.footer {
+.nav {
     flex: 1 1 -4rem;
     // grid-row: 2 / 2;
     position: fixed;
@@ -205,6 +235,17 @@ svg, path {
     flex-direction: column;
     background-color: transparent;
     transition: all ease 300ms;
+
+    @media only screen and (min-width: $bp-medium) {
+        // position: absolute;
+        // top: 0;
+        // left: 4rem;
+        // width: auto;
+        // bottom: 0;
+        // z-index: 0;
+        display: none;
+
+    }
 
 
     &.open {
@@ -220,7 +261,10 @@ svg, path {
         border-top-right-radius: 10rem;
         border-top-left-radius: 10rem;
 
-
+        @media only screen and (min-width: $bp-medium) {
+            display: none;
+    
+        }
 
 
         &--burger {
@@ -268,6 +312,13 @@ svg, path {
         // height: 3rem;
         width: 100%;
         // background-color: green;
+        
+        @media only screen and (min-width: $bp-medium) {
+            font-size: 1.5rem;
+            background-color: transparent;
+    
+        }
+
     }
 
     &__link {
@@ -284,6 +335,34 @@ svg, path {
         text-shadow: .25rem .25rem .5rem black;
         // margin-top: 1rem;
         // box-shadow: 0 0 1rem black;
+
+        &.search__link,
+        &.saved__link {
+            @media only screen and (min-width: $bp-medium) {
+                grid-area: nav;
+                font-size: 1.5rem;
+                text-shadow: .25rem .25rem .5rem black;
+                background-color: transparent;
+                color: $--white;
+                // text-shadow: .25rem .25rem .5rem gray;
+                font-weight: 600;
+                border-radius: 1rem;
+
+
+                &:hover {
+                    text-shadow: .25rem .25rem .5rem white;
+                    color: black;
+                    box-shadow: $--weather-box-shadow;
+                }
+
+                &:first-of-type {
+                    margin-right: 1rem;
+                }
+        
+            }
+        }
+
+        
         
         &::before,
         &::after {
@@ -293,7 +372,12 @@ svg, path {
             height: .25rem;
             width: 1.5rem;
             background-color: $--greenish;
-            filter: drop-shadow(.25rem .25rem .5rem black)
+            filter: drop-shadow(.25rem .25rem .5rem black);
+
+            @media only screen and (min-width: $bp-medium) {
+                display: none;
+        
+            }
         }
     
         &:first-child:before {
@@ -328,9 +412,10 @@ svg, path {
         }
     
         &:hover {
-            color: $--greenish;
-            background-color: $--dark-blue;
+            color: $--black;
+            background-color: $--gradient-1;
             transition: all ease 300ms;
+            // border-radius: 1rem;
         }
         
         &:hover::before,

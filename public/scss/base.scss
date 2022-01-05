@@ -9,6 +9,8 @@ $--mustard-lighter: rgba(255, 209, 102, .5);
 
 $--greenish: rgba(6, 214, 160, 1);
 $--greenish-lighter: rgba(6, 214, 160, .5);
+$--greenish-lighter2: rgb(44, 207, 164);
+
 
 $--bluish: rgba(17, 138, 178, 1);
 $--bluish-lighter: rgba(17, 138, 178, .5);
@@ -83,7 +85,7 @@ $--weather-box-shadow: 0 0 1rem $--black;
 
 $bp-largest: 75em; // 1200/16
 $bp-large: 62.5em; // 1000/16
-$bp-medium: 50em; //800/16
+$bp-medium: 43.75em; //800/16
 $bp-small: 25em; // 400/16
 $bp-smallest: 20em; //320/16 
 $bp-tiny: 18.75em; //300/16

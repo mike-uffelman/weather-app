@@ -116,6 +116,43 @@ input[type=text]:focus {
         // border-radius: $--box-radius;
     }
 
+    @media only screen and (min-width: $bp-medium) {
+        position: absolute;
+        // right: -40rem;
+        // top: 0;
+        transition: all ease 300ms;
+        
+        &.show {
+            display: flex;
+            // flex-direction: column;
+            max-height: 0;
+            min-height: 45rem;
+            // flex: 2 1 40rem;
+            // position: absolute;
+            z-index: 9999;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            // transform: translateX(-40rem);
+            // animation-name: menus;
+            // animation-duration: 5000ms;
+            // z-index: 99999;
+            // justify-content: center;
+            // align-items: center;
+
+            
+            transition: all ease 300ms;
+            background-color: $--gradient-2;
+            border-radius: 2rem;
+            padding: 0;
+            margin-top: 0;
+            
+        }
+    }
+
+
+    
+
 
 
     &--header {
@@ -125,6 +162,7 @@ input[type=text]:focus {
         margin: 1rem 0;
         color: $--black-light;
         text-shadow: 0 0 1rem white;
+        position: relative;
 
         &:first-of-type {
             margin-top: 0;
@@ -132,6 +170,45 @@ input[type=text]:focus {
 
         @media only screen and (min-width: $bp-smallest) {
             font-size: 2rem;
+        }
+
+        @media only screen and (min-width: $bp-medium) {
+            &:first-of-type {
+                padding-top: 2rem;
+            }
+
+            &.close {
+                &::before,
+                &::after {
+                    content: '';
+                    position: absolute;
+                    width: 2.25rem;
+                    height: .25rem;
+                    border-radius: 1rem;
+                    background-color: $--black-lightest;
+                    top: 1rem;
+                    right: 1rem;
+                }
+                
+                &:hover {
+                    cursor: pointer;
+                }
+                &:hover::before,
+                &:hover::after {
+                    background-color: $--mustard;
+                    // filter: drop-shadow(.5rem .5rem .5rem black);
+                    cursor: pointer;
+                }
+            }
+
+            &::before {
+                transform: rotate(135deg);
+            }
+
+            &::after {
+                transform: rotate(45deg);
+            }
+            
         }
     }
 
@@ -247,18 +324,6 @@ input[type=text]:focus {
     
 }
 
-// .leaflet-control-container {
-//     position: absolute;
-//     top: 0;
-//     right: 0;
-//     z-index: 99999999999999;
-// }
-
-// .leaflet-control {
-//     position: relative;
-//     z-index: 9999999999;
-// }
-
 .weatherCard {
     position: relative;
     background-color: transparent;
@@ -279,55 +344,54 @@ input[type=text]:focus {
     animation-duration: 4000ms;
     animation-iteration-count: once;
 
+
+    & > .nav__links {
+        display: none;
+    
+        @media only screen and (min-width: $bp-medium) {
+            display: flex;
+            grid-area: menu;
+            position: absolute;
+            justify-self: flex-end;
+
+        }
+    }
+
     &.box-styling {
         // background-color: $--white;
     }
 
-    // @media only screen and (min-width: $bp-small) {
-    //     margin: 0;
-    //     max-width: 90%;
-    // }
-
-
-    @media only screen and (min-width: $bp-smallest) {
-        // margin: 0;
-        // width: 100%;
-        // // max-width: 32em;
-        // min-height: 100vh;
-        // // min-width: 32em;
-        // box-shadow: $--weather-box-shadow;
-        // border-radius: $--box-radius;
-
-    }
-
     @media only screen and (min-width: $bp-medium) {
-        // margin: 0;
-        // max-width: 25rem;
-        // max-width: 32em;
-        // min-height: 100vh;
-        // min-width: 32em;
-        // box-shadow: $--weather-box-shadow;
-        // border-radius: $--box-radius;
-
+        background-color: $--black-lightest;
+        border-radius: $--box-radius;
+        box-shadow: $--weather-box-shadow;
+        // min-width: 100vw;
+        max-width: 100rem;
+        padding-bottom: 0;
+        padding: 2rem;
+        margin: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: .2fr 1fr 1fr;
+        grid-template-areas: 
+            "current menu"
+            "current forecast"
+            "map forecast";
+        grid-gap: 2rem;
+        transition: all ease 300ms;
+        justify-self: center;
+        align-self: center;
+        height: 100%;
+        
     }
-    
-
-
-    
 
     &__body {
-        // grid-area: body;
-        // margin: auto;
-        // padding: 1rem 2rem;
         width: 100%;
         min-height: 100%;
         display: flex;
         flex-direction: column;
         flex: 1;
-        // border: 1px solid blue;
         background-color: transparent;
-        // overflow: hidden;
-
     }
 
    
@@ -344,16 +408,44 @@ input[type=text]:focus {
     // margin: 2rem;
     // border-radius: 1rem;
     // color: $--dark-blue-alt;
+    background-color: $--white-alt;
     position: relative;
     // margin: 0 0 2rem 0;
     // overflow: hidden;
     // flex: 1;
     // padding-bottom: 1rem;
+    box-shadow: $--weather-box-shadow;
+    border-radius: $--box-radius;
+    margin: 2rem 2rem 0 2rem;
+    padding: 1rem;
+
 
     @media only screen and (min-width: $bp-smallest) {
         // height: 100vh;
         // font-size: 3rem;
         // margin: 0 0 4rem 0;
+    }
+
+    @media only screen and (min-width: $bp-medium) {
+        // margin: 0;
+        grid-area: current;
+
+        
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: flex-start;
+        // height: auto;
+
+        // max-width: 25rem;
+        // max-width: 32em;
+        // min-height: 100vh;
+        // min-width: 100%;
+        box-shadow: $--weather-box-shadow;
+        border-radius: $--box-radius;
+        padding: 1rem;
+        background-color: $--white-alt;
+        margin: 0;
+
     }
 
     &:hover,
@@ -374,11 +466,17 @@ input[type=text]:focus {
 
 
     &__container {
-        padding: 2rem 2rem 0 2rem;
+        // padding: 2rem 2rem 0 2rem;
         position: relative;
         // background-color: $--black-lightest;
         // margin: 1rem;
         // border: 1px solid blue;
+
+        @media only screen and (min-width: $bp-medium) {
+            // height: 100vh;
+            padding: 0;
+        }
+
     }
 
     &__box {
@@ -393,16 +491,19 @@ input[type=text]:focus {
 
         
 
-        // &:hover path {
-        //     fill: blue;
-        //     width: 2rem;    
-        // }
+        
     }
 
-    // &__headers {
-    //     display: flex;
-    //     flex-direction: column;
-    // }
+    &__headers {
+        // display: flex;
+        // flex-direction: column;
+    
+        // @media only screen and (min-width: $bp-medium) {
+        //     margin-top: -2rem;
+    
+        // }
+    
+    }
 
     &__heading {
         text-size-adjust: auto;
@@ -641,6 +742,14 @@ input[type=text]:focus {
     //     // filter: blur(1px);
     // border-radius: $--box-radius;
         
+    @media only screen and (min-width: $bp-medium) {
+        grid-area: map;
+        min-height: 20rem;
+        flex: 2 0 30rem;
+        padding: 0;
+
+    }
+
         
         #mapid {
             display: flex; 
@@ -693,6 +802,14 @@ input[type=text]:focus {
     flex-direction: column;
     flex: 1 1;
 
+    @media only screen and (min-width: $bp-medium) {
+        grid-area: forecast;
+        flex: 2 2;
+        padding: 0;
+        max-width: 45rem;
+        justify-self: center;
+    }
+
     
 }
 
@@ -709,6 +826,20 @@ input[type=text]:focus {
     box-shadow: $--weather-box-shadow;
     border-radius: $--box-radius;
     overflow: hidden;
+
+    @media only screen and (min-width: $bp-medium) {
+        // margin: 0;
+        // grid-area: hourly;
+        max-width: 45rem;
+        // flex: 1;
+        margin-bottom: 2rem;
+        // max-width: 32em;
+        // min-height: 100vh;
+        // min-width: 100%;
+        // box-shadow: $--weather-box-shadow;
+        // border-radius: $--box-radius;
+
+    }
 
     &__header {
         background-color: $--black-lighter;
@@ -740,11 +871,20 @@ input[type=text]:focus {
         // background-color: rgba(224, 224, 224, 0.747);
         // border-radius: 1rem;
 
+        // @media only screen and (min-width: $bp-medium) {
+        //     flex: 1 1 15rem;
+        // }
+
         &--box {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            border: 1px solid lightgray;
+
+            // @media only screen and (min-width: $bp-medium) {
+            //     flex: 1 1;
+            // }
 
             &-time {
                 margin-top: .5rem;
@@ -759,6 +899,10 @@ input[type=text]:focus {
                     transition: all ease 300ms;
 
                 }
+
+                // @media only screen and (min-width: $bp-medium) {
+                    // flex: 1;
+                // }
     
             }
     
@@ -775,6 +919,10 @@ input[type=text]:focus {
                     font-size: 1.5rem;
                     transition: all ease 300ms;
 
+                }
+
+                @media only screen and (min-width: $bp-medium) {
+                    // flex: 1;
                 }
             }
     
@@ -794,9 +942,13 @@ input[type=text]:focus {
                 @media only screen and (min-width: $bp-smallest) {
                     // height: 100vh;
                     font-size: 3.25rem;
-                    transform: scale(1.25);
+                    // transform: scale(1.25);
                     transition: all ease 300ms;
                 }
+
+                // @media only screen and (min-width: $bp-medium) {
+                //     flex: 1;
+                // }
             }
         }
 
@@ -820,6 +972,21 @@ input[type=text]:focus {
 
     // animation-duration: 1000ms;
 
+    @media only screen and (min-width: $bp-medium) {
+        // margin: 0;
+        // grid-area: daily;
+        max-width: 45rem;
+        flex: 2;
+
+        // max-width: 25rem;
+        // max-width: 32em;
+        // min-height: 100vh;
+        // min-width: 100%;
+        // box-shadow: $--weather-box-shadow;
+        // border-radius: $--box-radius;
+
+    }
+
     &__header {
         background-color: $--black-lighter;
         color: $--white;
@@ -839,6 +1006,7 @@ input[type=text]:focus {
             transition: all ease 300ms;
 
         }
+        
 
     }
 
@@ -858,6 +1026,12 @@ input[type=text]:focus {
         font-size: 1rem;
         color: $--dark-blue;
         transition: all ease 300ms;
+
+        @media only screen and (min-width: $bp-medium) {
+            flex: 1;
+        }
+        
+        
         
 
         &:first-child {
@@ -868,6 +1042,14 @@ input[type=text]:focus {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
             grid-template-rows: 1fr;
+            border: 1px solid lightgray;
+            border-left: none;
+            border-right: none;
+
+
+            @media only screen and (min-width: $bp-medium) {
+                flex: 1;
+            }
 
             &-weekday {
                 grid-column: 1 / 6;
@@ -878,8 +1060,16 @@ input[type=text]:focus {
             }
     
             &-icon {
+                // margin-top: -1rem;
                 height: 3rem;
                 filter: opacity(.75) contrast(2); 
+                justify-self: center;
+                align-self: center;
+
+                @media only screen and (min-width: $bp-medium) {
+                    
+                }
+
             }
     
             &-day {
@@ -890,6 +1080,7 @@ input[type=text]:focus {
                 letter-spacing: .1rem;
                 font-weight: bold;
                 transition: all ease 300ms;
+                padding-left: 1rem;
 
 
                 @media only screen and (min-width: $bp-smallest) {
@@ -1022,32 +1213,53 @@ input[type=text]:focus {
     padding: 2rem 2rem 7rem 2rem;
     overflow-y: scroll;
     overflow-x: hidden;
-    // display: grid;
-    // grid-template-columns: 1fr;
     background-color: transparent;
-    // background-image: linear-gradient(135deg, $--gradient-1, $--gradient-2);
-    // border-radius: $--box-radius;
-    // box-shadow: $--weather-box-shadow;
     display: flex;
     margin-top: 8rem;
-    // align-self: flex-start;
-    // padding-bottom: 7rem;
-    // flex: 0 1;
-    // flex-direction: column;
-    // flex-wrap: nowrap;
-    // justify-content: center;
-    // align-items: center;
-    
-    //TODO add media query for favorites size
-
-
+    flex: 1 0 20rem;
 
     @media only screen and (min-width: $bp-smallest) {
-        // width: 30rem;
 
-        // border-radius: $--box-radius;
     }
-    
+
+    @media only screen and (min-width: $bp-medium) {
+        position: absolute;
+
+        right: -40rem;
+        // transform: scale(0, 0);
+        // transform-origin: top right;
+        top: 0;
+        // transition: all ease 300ms;
+        
+        &.show {
+
+
+
+            display: flex;
+            // flex-direction: column;
+            max-height: 0;
+            min-height: 45vh;
+            // flex: 2 1 40rem;
+            position: absolute;
+            z-index: 9999;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            // transform-origin: top;
+            // transform: translateX(-40rem);
+            // animation-name: menus;
+            // animation-duration: 5000ms;
+            // z-index: 99999;
+            // justify-content: center;
+            // align-items: center;
+            
+            // transition: all ease 3000ms;
+            background-color: transparent;
+            padding: 0;
+            margin-top: 0;
+            
+        }
+    }
 
     &__box {
         position: relative;
@@ -1060,32 +1272,204 @@ input[type=text]:focus {
         overflow: hidden;
         width: 100%;
         box-shadow: $--weather-box-shadow;
+        overflow-y: scroll;
     }
 
     &__header {
-        display: block;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
         position: sticky;
         top: 0;
-
         background-color: $queen-blue;
         color: $--white;
         font-size: 1.4rem;
         text-transform: uppercase;
         width: 100%;
         text-align: center;
-        padding: 1rem 0;
+        padding: 1rem;
         font-size: 1.5rem;
         // display: sticky;
         
+        &--heading {
+            font-size: inherit;
+        }
+
         @media only screen and (min-width: $bp-smallest) {
             // height: 100vh;
             font-size: 2rem;
             // top: 10rem;
             transition: all ease 300ms;
-
-
-
         }
+
+
+        &--icons {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            // position: relative;
+            // border: 1px solid magenta;
+            width: 7rem;
+            
+
+            @media only screen and (min-width: $bp-medium) {
+    
+                & > .close {
+                    position: relative;
+                    // border: 1px solid blue;
+                    width: 3rem;
+                    order: 2;
+
+                    &::before,
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        width: 1.5rem;
+                        height: .25rem;
+                        border-radius: 1rem;
+                        background-color: $--white-light;
+                        top: 1rem;
+                        right: .5rem;
+                    }
+                    
+                    &:hover {
+                        cursor: pointer;
+                    }
+                    &:hover::before,
+                    &:hover::after {
+                        background-color: $--mustard;
+                        // filter: drop-shadow(0 0 .5rem black);
+                        cursor: pointer;
+                    }
+
+                    &::before {
+                        transform: rotate(135deg);
+                    }
+        
+                    &::after {
+                        transform: rotate(45deg);
+                    }
+                }
+    
+    
+                
+    
+                
+    
+                
+    
+                
+            }
+            & .sort {
+                position: relative;
+                width: 3rem;
+                order: 1;
+                display: flex;
+                justify-content: center;
+                color: $--greenish;
+    
+                &:hover  .sort__box {
+                    color: black;
+                    transform: scale(1, 1);
+                    transform-origin: top ;
+                    transition: all ease 300ms;
+                }
+                
+
+                & > .sort__header {
+                    font-size: 1rem;
+                    color: $--white;
+                    // width: auto;
+                    
+
+                    &::before,
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        top: 1.5rem;
+                        right: .75rem;
+                        background-color: $--white-light;
+                        height: .25rem;
+                        width: 1rem;
+                        transition: all ease 300ms;
+
+                    }
+        
+                    &::before {
+                        transform: rotate(45deg);
+                        right: 1.25rem;
+                        transition: all ease 300ms;
+
+        
+                    }
+        
+                    &::after {
+                        transform: rotate(135deg);
+                        transition: all ease 300ms;
+
+                    }
+
+                    
+
+                    
+                    &:hover::before,
+                    &:hover::after {
+                        background-color: $--mustard;
+                        cursor: pointer;
+                        transition: all ease 300ms;
+                    }
+
+                    
+
+                }
+
+                & > .sort__box {
+                    position: absolute;
+                    top: 2.5rem;
+                    right: 1.25rem;
+                    transform: scale(0, 0);
+                    transform-origin: top right;
+                    transition: all ease 300ms;
+
+                    
+                    
+
+
+                    & > ul{
+                        list-style: none;
+                        background-color: $--white;
+                        padding: .5rem;
+                        border-radius: 1rem;
+                        // transform: scale(0, 0);
+                        // transform-origin: top right;
+                        transition: all ease 300ms;
+                        
+                        & > li {
+                            list-style: none;
+                            text-decoration: none;
+                            text-align: left;
+                            color: $--dark-blue;
+                            font-size: 1.5rem;
+                            padding: .5rem;
+                            transition: all ease 250ms;
+
+                            &:hover {
+                                background-color: $--gradient-2;
+                                border-radius: .5rem;
+                                cursor: pointer;
+                                transition: all ease 250ms;
+                                color:  $--white;
+                            }
+                        }
+                    }
+
+                }
+
+                
+            }
+            
+        }
+        
 
     }
 
@@ -1101,11 +1485,16 @@ input[type=text]:focus {
         flex-direction: row;
         transition: all ease 200ms;
         box-shadow: 0 0 1px $--black-light;
+        flex: 1 0 2rem;
 
-        
+
+        @media only screen and (min-width: $bp-medium) {
+            // display: none;
+            
+        }
 
         &:hover {
-            background-color: $--greenish-lighter;
+            background-color: $--greenish-lighter2;
             transition: all ease 200ms;
         }
 
@@ -1122,10 +1511,14 @@ input[type=text]:focus {
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem;
+            padding: 0 1rem;
             // border: 1px solid blue;
             // background-color: $--dark-blue;
             max-height: 5rem;
+
+            @media only screen and (min-width: $bp-medium) {
+                padding: 1rem;                
+            }   
 
 
             &-header {
@@ -1144,6 +1537,7 @@ input[type=text]:focus {
                     color: $--dark-blue;
                     font-size: 1.25rem;
                     transition: all ease 300ms;
+
 
 
                     @media only screen and (min-width: $bp-smallest) {
@@ -1263,5 +1657,14 @@ input[type=text]:focus {
     }
     100% {
         transform: translateX(0);
+    }
+}
+
+@keyframes menus {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-40rem);
     }
 }

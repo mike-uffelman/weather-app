@@ -52,7 +52,7 @@ class WeatherView {
         this.#currentWeather.innerHTML = '';
     }
 
-    addHandlerCurrent(handler) {       
+    addHandlerCurrent(handler, searchLink, savedLink) {       
         this.#currentWeather.addEventListener('click', (e) => {
             if(e.target.closest('.header__container')) {
                 console.log(e.target)
@@ -66,10 +66,26 @@ class WeatherView {
                 //add current location search to favorites on UI
                 // saved.displayFavorites();
             };
+
+            if(e.target.classList.contains('search__link')) {
+                console.log('search link clicked');
+                document.querySelector('.search__modal').classList.toggle('show');
+            }
+            if(e.target.classList.contains('saved__link')) {
+                console.log('saved link clicked');
+                document.querySelector('.saved').classList.toggle('show');
+                
+            }
+
         });
+
+
+
         
         
     };
+
+
 
     toggleBookmarkIcon() {
         document.querySelector('.header__bookmark-icon').classList.toggle('bookmarked');
@@ -114,6 +130,10 @@ class WeatherView {
                                     <p  class='header__icon--description'><span id='weather-desc'>${current.weather[0].description}</span></p>
                                 </div>
                             </div>
+                        </div>
+                        <div class="nav__links">
+                            <a href='#' class='nav__link search__link'>Search</a>
+                                <a href='#' class='nav__link saved__link'>Saved</a>
                         </div>
                     
                         

@@ -3,52 +3,56 @@ import * as storage from '../localStorage.js';
 
 class DisplaySaved {
 
+    _data;
+    _sort;
+    // _store;
     _parentElement = document.querySelector('#saved');
+    // _sort = document.querySelector('#sort')
 
 
-    displaySaved =  function(loc, windowLoad, store) {
-        // let loc = storage.getLocation();
-        console.log('Local Storage: ', loc)
+    render(data, ...sort){
+        this._clear();
+
+        // this._store = store;
+        this._data = data;        
+        this.sortSavedView(this._data, sort);
+        sort ? this._sort = sort : undefined;
+        const markup = this._generateMarkup();
+        this._parentElement.insertAdjacentHTML('beforeend', markup);
         
-        if(!windowLoad) this.buildFavoriteDivs(store.at(-1))
-        
-        loc.forEach(place => this.buildFavoriteDivs(place))
-        
-        
-    }  
+        if(!sort) return;
 
-    render(data, windowLoad, store){
-        this._data = data;
-        this._store = store;
-        if(windowLoad) {
-            const markup = this._generateMarkup();
-            this._parentElement.insertAdjacentHTML('beforeend', markup);
-
-        } 
-        // else 
-        if(!windowLoad) {
-            const markup = this._generateMarkupItems(this._store.at(-1));
-            document.querySelector('.saved__box').insertAdjacentHTML('beforeend', markup);
-
-        }
-
-
-        // this._clear();
+        this.sortBookmarks(sort);
     }
 
     _clear() {
         this._parentElement.innerHTML = '';
     }
-   
-
 
     _generateMarkup() {
 
         return `
             <div class='saved__box'>
-                <h3 class='saved__header'>Bookmarked Locations</h3>
+                <div class='saved__header'>
+                    <h3 class='saved__header--heading'>Bookmarked Locations</h3>
+                    <div class='saved__header--icons'>
+                        <div class='close'></div>
+                        <div id='sort' class='sort'>
+                            <h3 class='sort__header'>Sort</h3>
+                            <div class='sort__box'>
+                                <ul class='sort__list'>
+                                    <li class='sort__list--item'>A ➡ Z</li>
+                                    <li class='sort__list--item'>Recent</li>
+                                    <li class='sort__list--item'>Views</li>
 
-                ${this._data.map(this._generateMarkupItems).join('')}
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                ${this._data.map(this._generateMarkupList).join('')}
             </div>
 
         `
@@ -58,7 +62,7 @@ class DisplaySaved {
         
     }      
 
-    _generateMarkupItems(result) {
+    _generateMarkupList(result) {
         return `
                 <div class='saved__card' data-id='${result.data.id}'> 
                     <div class='saved__card--detail'>
@@ -76,7 +80,23 @@ class DisplaySaved {
                 </div>
                 
             `;
-        // this._parentElement.insertAdjacentHTML('beforeend', html);
+    }
+
+    // appendBookmark() {
+    //     const markup = this._generateMarkupList(this._store.at(-1));
+    //     document.querySelector('.saved__box').insertAdjacentHTML('beforeend', markup);
+    // }
+
+    sortBookmarks(sort) {
+        const previousList = document.querySelectorAll('.saved__card')
+        previousList.forEach(item => item.remove());
+
+        // console.log('sorting bookmarks..........', this._data, this._sort);
+
+        const sortedLocationList = this._data.map(this._generateMarkupList).join('')
+
+        document.querySelector('.saved__box').insertAdjacentHTML('beforeend', sortedLocationList);
+        this.updateSortHeading(sort);
     }
 
     //remove UI favorite item, e is defined in the calling event
@@ -90,8 +110,8 @@ class DisplaySaved {
         const saved = document.querySelectorAll('.saved__card');
         saved.forEach(save => {
             // console.log(save);
-            console.log(save.dataset.id);
-            console.log(id)
+            // console.log(save.dataset.id);
+            // console.log(id)
             
             if(Number(save.dataset.id) === id) {
                 save.remove();
@@ -117,14 +137,97 @@ class DisplaySaved {
                 console.log('call favorite: ', e.target);
                 const id = e.target.closest('.saved__card').dataset.id;
                 handler(id);
+                if(this._parentElement.classList.contains('show')) {
+                    this._parentElement.classList.toggle('show');
+                };
+
            
             }
+
+            if(e.target.classList.contains('close')) {
+                this._parentElement.classList.toggle('show');
+            }
+
+            // if(e.target.classList.contains('sort__list--item')) {
+                // console.log(e.target.closest('.sort'))
+
+            // }
+            if(e.target.classList.contains('sort__list--item')) {
+                const sort = e.target.innerText;
+                console.log(sort);
+                console.log(this._data);
+
+                const sortedData = this.sortSavedView(this._data, sort);
+                this.render(sortedData, sort)
+                
+                // sortSaved(newSort);
+                // sortSaved();
+            }
+
+            
         })
+
+        // this._parentElement.addEventListener('mouseo')
     }
 
     moveToSaved() {
         this._parentElement.scrollIntoView({behavior: 'smooth'});
     }
+
+    updateSortHeading() {
+        if(this._sort.length === 0) return;
+        const sortHeading = document.querySelector('.sort__header');
+        sortHeading.innerText = this._sort;
+    }
+
+    sortSavedView(data, sort) {
+        // console.log(`sortSavedView: now sorting by ${sort}`);
+        
+        // const loc = storage.getLocation();
+        // console.log(data);
+        // console.log(sort);
+
+        // if(!sorting) return loc;
+
+        if(sort === 'A ➡ Z') {
+            this._data.sort((a, b) => (a.data.name > b.data.name) ? 1 : -1);
+            console.log(this._data);
+            return this._data;
+
+        };
+
+        if(sort === 'RECENT') {
+            this._data.sort((a, b) => (a.data.created < b.data.created) ? 1 : -1);
+            console.log(this._data);
+            return this._data;
+
+        };
+
+        if(sort === 'VIEWS') {
+            this._data.sort((a, b) => (a.data.clicks < b.data.clicks) ? 1 : -1);
+            console.log(this._data);
+            return this._data;
+        };
+
+
+        // console.log(loc);
+        // const sortVal = document.querySelector('.sort__header');
+
+        // document.querySelector('.sort__list').addEventListener('click', (e) => {
+        //     if(e.target.classList.contains('sort__list--item')) {
+        //         console.log(this);
+        //     }
+        // })
+
+        // console.log(this._sort);
+        // this._sort.addEventListener('click', (e) => {
+        //     console.log(e.target);
+        // })
+
+
+    }
+    
+
 
     // savedActions = function(e) {
     //     //! targets may change after layour redesign------------------------
