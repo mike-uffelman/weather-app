@@ -357,9 +357,9 @@ input[type=text]:focus {
         }
     }
 
-    &.box-styling {
-        // background-color: $--white;
-    }
+    // &.box-styling {
+    //     // background-color: $--white;
+    // }
 
     @media only screen and (min-width: $bp-medium) {
         background-color: $--black-lightest;
@@ -494,7 +494,7 @@ input[type=text]:focus {
         
     }
 
-    &__headers {
+    // &__headers {
         // display: flex;
         // flex-direction: column;
     
@@ -503,7 +503,7 @@ input[type=text]:focus {
     
         // }
     
-    }
+    // }
 
     &__heading {
         text-size-adjust: auto;
@@ -583,9 +583,9 @@ input[type=text]:focus {
 
         }
 
-        &--temp {
+        // &--temp {
 
-        }
+        // }
 
         &--date {
             font-size: 1.25rem;
@@ -1034,9 +1034,9 @@ input[type=text]:focus {
         
         
 
-        &:first-child {
+        // &:first-child {
             // margin-top: .5rem;
-        }
+        // }
 
         &--box{
             display: grid;
