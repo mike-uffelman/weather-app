@@ -56,7 +56,7 @@ const controlAppStart = async function() {
 
         //*render saved favorites from local storate
         
-        windowLoad = false;
+        // windowLoad = false;
 
 
         // console.log(model.store[0].data);
@@ -199,7 +199,7 @@ const init = function() {
     layout.addHandlerToggleNav(searchLink, savedLink);
 
 
-
+    
 
 
 }

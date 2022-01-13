@@ -151,7 +151,7 @@ svg, path {
     }
 
     & > section {
-        // min-height: 100%;
+        // max-height: 100%;
         // width: 100%;
         scroll-snap-align: center;
         min-width: 30rem;
@@ -325,7 +325,7 @@ svg, path {
         text-decoration: none;
         color: $--white;
         background-color: $--dark-blue;
-        padding: .5rem 1rem;
+        padding: 1rem 1rem 1rem 1rem;
         position: relative;
         transition: all ease 300ms;
         font-size: 2rem;
@@ -347,22 +347,37 @@ svg, path {
                 // text-shadow: .25rem .25rem .5rem gray;
                 font-weight: 600;
                 border-radius: 1rem;
+                padding: 1rem 1rem 0 1rem;
+                
+                & svg {
+                    fill: $--white;
+                    filter: drop-shadow(0 0 .5rem $--black);
+                    transition: all ease 300ms;
 
+                    &:hover {
+                        fill: $--black;
+                        filter: drop-shadow(0 0 .5rem $--white);
+                        transition: all ease 300ms;
+                    }
 
-                &:hover {
-                    text-shadow: .25rem .25rem .5rem white;
-                    color: black;
-                    box-shadow: $--weather-box-shadow;
+                    &:active {
+                        fill: $--mustard;
+                    }
                 }
 
-                &:first-of-type {
-                    margin-right: 1rem;
-                }
+
+                // &:hover {
+                //     text-shadow: .25rem .25rem .5rem white;
+                //     color: black;
+                //     box-shadow: $--weather-box-shadow;
+                // }
+
+                // &:first-of-type {
+                //     // margin-right: 1rem;
+                // }
         
             }
-        }
-
-        
+        }  
         
         &::before,
         &::after {
@@ -416,15 +431,18 @@ svg, path {
             background-color: $--gradient-1;
             transition: all ease 300ms;
             // border-radius: 1rem;
-        }
         
-        &:hover::before,
-        &:hover::after {
-            color: $--greenish;
-            background-color: magenta;
-            transition: all ease 300ms;
+            &::before,
+            &::after {
+                color: $--greenish;
+                background-color: magenta;
+                transition: all ease 300ms;
     
         }
+        
+        }
+        
+        
 
         // & .search--link::before,
         // & .saved--link::after {
