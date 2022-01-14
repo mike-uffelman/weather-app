@@ -158,7 +158,7 @@ class WeatherView {
 
                                         </div>
                                         <div class='weather-icon'>
-                                            <img id='icon' src='http://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png' alt='' class='weather-icon--img'>
+                                            <img id='icon' src='https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png' alt='' class='weather-icon--img'>
                                             
                                         </div>
                                     </div>    
@@ -329,7 +329,7 @@ class WeatherView {
                 <div class='hourly__detail--box'>
                     <div class='hourly__detail--box-time'>${hourlyTime}</div> 
                     <div class='hourly__detail--box-temp'>${hourlyTemp}°F</div>
-                    <img src='http://openweathermap.org/img/wn/${hourlyIcon}@2x.png' class='hourly__detail--box-icon' alt=''>
+                    <img src='https://openweathermap.org/img/wn/${hourlyIcon}@2x.png' class='hourly__detail--box-icon' alt=''>
                 </div>`
         })
 
@@ -349,7 +349,7 @@ class WeatherView {
             dailyHTML +=  `
                     <div class='daily__detail--box'>
                         <div class='daily__detail--box-weekday'>
-                            <img src='http://openweathermap.org/img/wn/${icon}@2x.png' class='daily__detail--box-icon' alt=''>
+                            <img src='https://openweathermap.org/img/wn/${icon}@2x.png' class='daily__detail--box-icon' alt=''>
                             <p class='daily__detail--box-day'>${dailyDay}</p>
                         </div> 
                         <div id='precip' class='daily__detail--box-precip'>
