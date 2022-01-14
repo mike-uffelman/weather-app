@@ -225,8 +225,10 @@ class WeatherView {
                 </svg>
                     </h3>
                     <div class='alert__detail'>
-                        <p class='alert__detail--text'>Starting at ${this._getHourTime(alert.start)}, ending at ${this._getHourTime(alert.end)}</p>
-                        <p class='alert__detail--text'>${alert.description}</p>
+                        <p class='alert__detail--time'>Beginning: ${this._getHourTime(alert.start)}</p>
+                        <p class='alert__detail--time'>Ending: ${this._getHourTime(alert.end)}</p>
+
+                        <p class='alert__detail--text'>${this._alertDescription(alert.description)}</p>
                     </div>
                 </div>`
         })
@@ -245,8 +247,11 @@ class WeatherView {
 
 
     _getHourTime(n) {
-        return new Date(n * 1000).toLocaleTimeString('en-us', {hour: '2-digit', minute:'2-digit', });
-        
+        const time = new Date(n * 1000);
+        const alertDate = time.toLocaleDateString('en-us', {weekday: 'long'});
+        const alertTime = time.toLocaleTimeString('en-us', {hour: 'numeric', hour: '2-digit', minute: '2-digit'});
+
+        return `${alertDate} ${alertTime}`;
     }
 
 
@@ -283,7 +288,7 @@ class WeatherView {
     _alertDescription(desc) {
         if(!desc) return '';
         let alertDesc = '';
-        return desc.replaceAll('...', '\n');
+        return desc.replaceAll('* ', '\n');
         // console.log(lines);
 
         // lines.map(line => console.log(`${line}\n`))

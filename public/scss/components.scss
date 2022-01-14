@@ -587,7 +587,9 @@ input[type=text]:focus {
     color: $--black;
     // flex: 1 1;
 
-    
+    &__testclass {
+        color: magenta;
+    }
 
     &__header { //* cw location header h3
         transition: all ease 300ms;
@@ -739,6 +741,8 @@ input[type=text]:focus {
             text-shadow: 0 0 .5rem black;
             font-weight: 600;
             letter-spacing: .15rem;
+
+
         }
 
         &--alerts {
@@ -874,13 +878,12 @@ input[type=text]:focus {
 
     
 
-    
 
     
 
     
 .weather-icon {
-    position: absolute;
+    // position: absolute;
     top: 0;
     right: 0;
     z-index: 1;
@@ -1635,12 +1638,14 @@ input[type=text]:focus {
             max-height: 100%;
         }
 
-        :first-child {
-            margin-bottom: 1rem;
-            color: $--reddish;
+        
+
+        &--time {
+            
         }
 
         &--text {
+            margin-top: 1rem;
             // font-weight: 600;
         }
     }
