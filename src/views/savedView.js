@@ -1,5 +1,3 @@
-import * as storage from '../localStorage.js';
-// import View from './view.js';
 
 class DisplaySaved {
 

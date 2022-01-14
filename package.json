@@ -2,9 +2,11 @@
   "name": "weather-app",
   "version": "1.0.0",
   "description": "User Stories:",
-  "main": "weather.js",
+  "default": "weather.html",
   "scripts": {
-    "watch:sass": "sass public/scss/main.scss public/css/style.css -w"
+    "watch:sass": "sass public/scss/main.scss public/css/style.css -w",
+    "start": "parcel weather.html",
+    "build": "parcel build weather.html --dist-dir ./dist"
   },
   "repository": {
     "type": "git",
@@ -18,8 +20,9 @@
   },
   "homepage": "https://github.com/mike-uffelman/weather-app#readme",
   "dependencies": {
-    "bootstrap": "^5.1.3",
-    "dotenv": "^10.0.0"
+    "core-js": "^3.20.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "parcel": "^2.2.0"
+  }
 }

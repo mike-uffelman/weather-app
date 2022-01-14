@@ -1,4 +1,5 @@
-import {API_KEY, FORECAST_URL, GEOCODE_REVERSE_URL, GEOCODE_DIRECT_URL} from './config.js';
+import {FORECAST_URL, GEOCODE_REVERSE_URL, GEOCODE_DIRECT_URL} from './config.js';
+let { OWM_APIKEY } = process.env;
 
 
 
@@ -19,7 +20,7 @@ export const getCity = async function (city, state, country) {
     try {
         if(!city) return;
 
-        const res = await fetch(`${GEOCODE_DIRECT_URL}?q=${city}${!state? '' : ','+country}${!country? '' : ','+country}&limit=5&appid=${API_KEY}`)
+        const res = await fetch(`${GEOCODE_DIRECT_URL}?q=${city}${!state? '' : ','+country}${!country? '' : ','+country}&limit=5&appid=${OWM_APIKEY}`)
 
         const data = await res.json();
         console.log(data);
@@ -40,11 +41,11 @@ export const getForecast = async function(coords) {
         if(!check) return; // if a random location i.e. false, return
         if(!lat || !lon) return; // if lat or lon is undefined, return
 
-        const res = await fetch(`${FORECAST_URL}onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely&appid=${API_KEY}`)
+        const res = await fetch(`${FORECAST_URL}onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely&appid=${OWM_APIKEY}`)
 
         const forecastData = await res.json();
         console.log('forecast data: ', forecastData);
-        const loc = await fetch(`${GEOCODE_REVERSE_URL}?lat=${forecastData.lat}&lon=${forecastData.lon}&limit=10&appid=${API_KEY}`)
+        const loc = await fetch(`${GEOCODE_REVERSE_URL}?lat=${forecastData.lat}&lon=${forecastData.lon}&limit=10&appid=${OWM_APIKEY}`)
         
         const locData = await loc.json()
         const locHeader = locData[0];

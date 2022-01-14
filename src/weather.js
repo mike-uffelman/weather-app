@@ -1,5 +1,15 @@
 'use strict';
 
+// not needed - just a console notification that we're in the development branch - based on the npm script (i.e. start or build(production) it will change the )
+if (process.env.NODE_ENV === 'development') {
+    console.log('Happy developing!');
+
+}
+
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
+
 
 import * as model from './model.js';
 import * as maps from './views/mapView.js';
@@ -9,6 +19,8 @@ import weatherView from './views/weatherView.js';
 import savedView from './views/savedView.js';
 import searchView from './views/searchView.js';
 import * as layout from './layout.js';
+
+
 
 const saved = document.querySelector('#saved');
 const map = document.querySelector('#mapid');
@@ -198,10 +210,9 @@ const init = function() {
     maps.addHandlerMapClick(enableSearchMap, controlMapClickSearch);
     layout.addHandlerToggleNav(searchLink, savedLink);
 
-
-    
-
-
+    if (module.hot) {
+        module.hot.accept();
+    }
 }
 
 init();

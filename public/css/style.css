@@ -1171,7 +1171,7 @@ input[type=text]:focus {
   background-color: transparent;
   display: flex;
   margin-top: 8rem;
-  flex: 1 0 20rem;
+  flex: 1 0 auto;
 }
 @media only screen and (min-width: 43.75em) {
   .saved {

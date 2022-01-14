@@ -1,9 +1,7 @@
-import {API_KEY} from '../config.js';
-
+let { OWM_APIKEY } = process.env;
 
 
 // class Map {
-    // APIkey = '63c966c95ff05cfed696cec21d7ff716';
 
     export let map;
     export let searchMapObj;
@@ -133,7 +131,7 @@ import {API_KEY} from '../config.js';
         //     iconAnchor: [50, 50]
         // })
         const layerName = 'precipitation_new'
-        const weatherUrl = await `https://tile.openweathermap.org/map/${layerName}/{z}/{x}/{y}.png?appid=${API_KEY}`
+        const weatherUrl = await `https://tile.openweathermap.org/map/${layerName}/{z}/{x}/{y}.png?appid=${OWM_APIKEY}`
 
         let weatherLayer = new L.tileLayer(weatherUrl)
         map = new L.Map('map', {

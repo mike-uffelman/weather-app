@@ -77,17 +77,6 @@ class WeatherView {
                 document.querySelector('#alerts').scrollIntoView({behavior: 'smooth'})
 
             }
-
-            //! not finished yet
-            // if(e.target.classList.contains('alert__heading--link') || e.target.className === 'alert__heading') {
-            //     const deets = e.target.closest('.alert__heading').nextElementSibling;
-            //     console.log(deets);
-            //     deets.classList.toggle('expand');
-
-            // }
-            
-            
-            
         });
         
         
@@ -224,7 +213,7 @@ class WeatherView {
     _generateWeatherAlert(alerts) {
         let alertHTML= ''; 
         
-        alerts.forEach((alert, i) => {
+        alerts.map((alert, i) => {
 
             alertHTML += `
                 <div class='alert__box'>
