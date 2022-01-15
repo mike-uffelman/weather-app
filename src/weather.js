@@ -75,7 +75,6 @@ const controlAppStart = async function() {
     } catch(err) {
         console.log('app start error!!!', err);
     }
-    //! end of this controller ========================================
 }
 
 const controlCurrentLocation = async function(loc) {

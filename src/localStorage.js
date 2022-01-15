@@ -1,19 +1,13 @@
 
 
 
-export const getLocation =  function() {
+export const getLocation = function() {
     let loc;
-    console.log(localStorage.getItem('loc'))
     if(localStorage.getItem('loc') !== null) {
         loc = JSON.parse(localStorage.getItem('loc'));
-        console.log(loc);
     } else {
         loc = [];
-        console.log(loc);
     }
-    
-    console.log(loc);
-
     return loc;
 }
 //this is to add locations to the local storage
@@ -48,7 +42,7 @@ export const addLocation = function(location) {
 
     console.log(newLocObj);
 
-    let loc =  this.getLocation();
+    let loc =  getLocation();
     loc.push(newLocObj);
     localStorage.setItem('loc', JSON.stringify(loc));
     // console.log(loc)
@@ -59,7 +53,7 @@ export const addLocation = function(location) {
 //so we retrieve the current LS data, then iterate through it to find the matching id, when found we splice(delete) the matching index, then put the data back in LS with setitem and stringify
 export const removeLocation = function(id) {
     //retrieve local storage
-    let loc = this.getLocation();
+    let loc = getLocation();
     // console.log(loc);
     
     //iterate through LS elements looking for a match by id, then remove the match
