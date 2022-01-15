@@ -1,10 +1,10 @@
 
 
 
-export const getLocation = function() {
+export const getLocation =  function() {
     let loc;
-    if(localStorage.getItem('loc') === null) {
-        loc = [];
+    if(localStorage.getItem('loc') === null || !localStorage.getItem('loc')) {
+        loc = new Array();
     } else {
         loc = JSON.parse(localStorage.getItem('loc'));
     }
@@ -43,7 +43,7 @@ export const addLocation = function(location) {
 
     console.log(newLocObj);
 
-    let loc = this.getLocation();
+    let loc =  this.getLocation();
     loc.push(newLocObj);
     localStorage.setItem('loc', JSON.stringify(loc));
     // console.log(loc)

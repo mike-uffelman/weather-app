@@ -81,6 +81,7 @@ const controlAppStart = async function() {
 const controlCurrentLocation = async function(loc) {
     console.log(loc)
     console.log('storage pre ')
+    
     const { bookmarked, id } = loc.at(-1).data;
     // console.log(id)
     const bookmarkedEl = document.querySelector('.header--add-fav');
