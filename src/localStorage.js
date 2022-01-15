@@ -3,12 +3,17 @@
 
 export const getLocation =  function() {
     let loc;
-    if(localStorage.getItem('loc') === null || !localStorage.getItem('loc')) {
-        loc = new Array();
-    } else {
+    console.log(localStorage.getItem('loc'))
+    if(localStorage.getItem('loc') !== null) {
         loc = JSON.parse(localStorage.getItem('loc'));
+        console.log(loc);
+    } else {
+        loc = [];
+        console.log(loc);
     }
     
+    console.log(loc);
+
     return loc;
 }
 //this is to add locations to the local storage
