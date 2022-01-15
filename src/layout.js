@@ -46,6 +46,3 @@ export const addHandlerToggleNav = function(searchLink, savedLink) {
 }
 
 
-// export const helpModal = function() {
-
-// }
