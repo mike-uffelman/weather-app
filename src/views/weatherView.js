@@ -11,10 +11,6 @@ class WeatherView {
     //     this.#currentWeather.innerHTML = '';
     // }
 
-    removeEl() {
-        
-
-    }
 
     render(data) {
         this.#currentWeather.style.opacity = 0;
@@ -26,7 +22,7 @@ class WeatherView {
         // this.#currentWeather.innerHTML = '';
         // console.log('RENDERING WEATHER VIEW...........')
         this._data = data;
-        console.log(this._data);
+        // console.log(this._data);
         // console.log('store data: ', this._data);
         
         // console.log(`Welcome to ${this._data}`)
@@ -72,9 +68,15 @@ class WeatherView {
                 document.querySelector('.saved').classList.toggle('show');
                 
             }
-            if(e.target.classList.contains('alerts')) {
-                console.log(e.target);
-                document.querySelector('#alerts').scrollIntoView({behavior: 'smooth'})
+            if(e.target.classList.contains('details__header--alerts')) {
+                
+                document.querySelector('#alerts').scrollIntoView({behavior: 'smooth'});
+
+                // const scrollable = document.documentElement.scrollHeight;
+                // const scrolled = window.scrollY;
+
+
+                // console.log(scrollable, scrolled);
 
             }
         });
@@ -137,26 +139,40 @@ class WeatherView {
                                 <div class='details'>
                                     <div class='details__header'>
                                         <h3 class='details__header--heading'>Right Now</h3>
-                                        <a href='#' class='details__header--alerts ${alerts ? "" : "hide"}' data-alerts=${alerts?.length}>Weather Advisory</a>
+                                        <a href='#alerts' class='details__header--alerts ${alerts ? "" : "hide"}' data-alerts=${alerts?.length}>Weather Advisory</a>
                                     </div>
                                     <div class='details__box'>
-                                        <p class='details__box--feels-like'>${current.weather[0].description}, feels like ${current.feels_like.toFixed(0)}° F
-                                        <p class='details__box--temp'>${current.temp.toFixed(0)}° F
-                                        </p>
-                                        <div class='details__box--wind'>
-                                            <svg class='details__box--wind-direction' data-wind-direction='${current.wind_deg}' height="25" width="25">
-                                                <polygon points='12.5,5 20,20 12.5,16 5,20'>
-
-                                            </svg>
-
-                                            <p class='detail__box--wind-speed'>${current.wind_speed.toFixed(0)} mph</p>
+                                        <div class='details__box--main'>
+                                            <p class='details__box--temp'>${current.temp.toFixed(0)}° F</p>    
+                                            <p class='details__box--conditions'>${current.weather[0].description}
                                         </div>
-                                        <div class='details__box--averages'>
-                                            <p class='temp'>Today ${today.day.toFixed(0)}°F </p>
-                                            <p class='temp'>Tonight ${today.night.toFixed(0)}°F</p>
+                                        <div class='details__box--high-low-feel'>
+                                            <p class='temp'>${today.max.toFixed(0)}°F / ${today.min.toFixed(0)}°F</p>
+                                            <p class='details__box--feels-like'>, feels like ${current.feels_like.toFixed(0)}° F</p>
+
+                                            
+                                        </div>
+                                        <div class='details__box--extra'>
+                                            <div class='details__box--wind'>
+                                                <svg class='details__box--wind-direction' data-wind-direction='${current.wind_deg}' height="25" width="25">
+                                                    <polygon points='12.5,5 20,20 12.5,16 5,20'>
+
+                                                </svg>
+
+                                                <p class='details__box--wind-speed'>${current.wind_speed.toFixed(0)} mph</p>
+                                            </div>
+                                            <div class='details__box--humidity'>
+                                                <p class='humidity__text'>${daily[0].pop * 100}%<span> precip</span></p>
+                                            </div>
+                                            <div class='details__box--humidity'>
+                                                <p class='humidity__text'>${this._uvIndexRating(current.uvi)}<span> UV</span></p>
+                                            </div>
+                                            <div class='details__box--humidity'>
+                                                <p class='humidity__text'>${current.humidity}%<span> humidity</span></p>
+                                            </div>
+                                        </div>
                                         
-
-                                        </div>
+                                        
                                         <div class='weather-icon'>
                                             <img id='icon' src='https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png' alt='' class='weather-icon--img'>
                                             
@@ -209,6 +225,32 @@ class WeatherView {
 
     // <p class='weather-icon--description'>${current.weather[0].description}</p>
 
+    _uvIndexRating(n) {
+        const val = Number(n);
+        let uvIndex;
+
+        switch(true) {
+            case val < 3:
+                uvIndex = 'low';
+                break;
+            case (val >= 3 && val < 6):
+                uvIndex = 'moderate';
+                break;
+            case (val >= 6 && val < 8):
+                uvIndex = 'high';
+                break;
+            case (val >= 8 && val < 11):
+                uvIndex = 'very high';
+                break;
+            case (val >= 11):
+                uvIndex = 'extreme';
+                break;
+            default:
+                uvIndex = 'n/a';
+                break;
+        };
+        return uvIndex;
+    };
 
     _generateWeatherAlert(alerts) {
         let alertHTML= ''; 
@@ -219,14 +261,12 @@ class WeatherView {
                 <div class='alert__box'>
                     <h3 class='alert__heading' data-alert-id=${i}>
                         <a href='#alerts' class='alert__heading--link'>${alert.event}</a>
-                        <svg height='25' width='25' class='alert__heading--icon'>
-                    <polyline  points='4,5 12.5,20 21,5 20,5 12.5,18 5,5'>
+                        
 
-                </svg>
+                        <svg class='alert__heading--icon' xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 24 24" width="36px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
                     </h3>
                     <div class='alert__detail'>
-                        <p class='alert__detail--time'>Beginning: ${this._getHourTime(alert.start)}</p>
-                        <p class='alert__detail--time'>Ending: ${this._getHourTime(alert.end)}</p>
+                        <p class='alert__detail--time'><span class=''>Beginning:</span> ${this._getHourTime(alert.start)}<span class=''> | Ending:</span> ${this._getHourTime(alert.end)}</p>
 
                         <p class='alert__detail--text'>${this._alertDescription(alert.description)}</p>
                     </div>
@@ -255,35 +295,27 @@ class WeatherView {
     }
 
 
-    _alertMessageToggle(e) {
-        console.log(e);
+    _alertMessageToggle() {
         const alerts = document.querySelectorAll('.alert__heading');
-
         alerts.forEach((alert, i) => {
-            alert.addEventListener('click', (e) => {
-                const alertDetail = alert.nextElementSibling
+            alert.addEventListener('click', () => {
+                const alertDetail = alert.nextElementSibling;                
+                const icon = alert.querySelector('.alert__heading--icon');
+
+                icon.classList.toggle('open');
                 alertDetail.classList.toggle('expand');
+                // alertDetail.style.display = 'flex';
+                alert.classList.toggle('active');
+
                 if(alertDetail.style.maxHeight) {
                     alertDetail.style.maxHeight = null;
                 } else {
-                    alertDetail.style.maxHeight = alertDetail.scrollHeight + 'px';
-                }
-
-                console.log(alertDetail);
-                console.log('clicked alert!', e);
-            })
-        })
-
-        // console.log(alerts);
-        // if(e.target.classList.contains('alert__heading--link') || e.target.className === 'alert__heading') {
-        //     const deets = e.target.closest('.alert__heading').nextElementSibling;
-        //     console.log(deets);
-        //     deets.classList.toggle('expand');
-
-        // }
-        // const details = document.querySelector('.alert__detail');
-        // this.classList.toggle('expand');
-    }
+                    const scrollableHeight = alertDetail.scrollHeight;
+                    alertDetail.style.maxHeight = scrollableHeight + 'px';
+                };
+            });
+        });
+    };
 
     _alertDescription(desc) {
         if(!desc) return '';

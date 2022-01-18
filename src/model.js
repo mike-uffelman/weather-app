@@ -69,8 +69,6 @@ export const getForecast = async function(coords) {
 }
 
 export const updateBookmark = async function() {
-    console.log('storage before bookmarking:' ,store);
     store.at(-1).data.bookmarked = !store.at(-1).data.bookmarked;
-    console.log('storage after bookmarking: ', store);
 
 }

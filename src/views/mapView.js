@@ -71,7 +71,10 @@ let { OWM_APIKEY } = process.env;
         let osmAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         let osmLayer = new L.tileLayer(osmURL, {attribution: osmAttribution}
         );
-        let mapOptions = {zoomControl: true};
+        let mapOptions = {
+            zoomControl: true,
+            worldCopyJump: true
+        };
 
         searchMapObj = L.map('searchMap', mapOptions)
             .setView(new L.LatLng(lat, lon), zoom)
@@ -84,7 +87,7 @@ let { OWM_APIKEY } = process.env;
                 const searchMarker = L.marker([e.latlng.lat, e.latlng.lng])
                 const {lat, lng} = e.latlng;
                 eCoords = [lat, lng];
-                
+                console.log(eCoords);
                 searchMarker.addTo(searchMapObj)
                 console.log(searchMapObj);
 

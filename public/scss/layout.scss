@@ -49,7 +49,7 @@ svg, path {
 
 /* --- scroll snap --- */
 .swipeView {
-    background-image: linear-gradient(135deg, $--gradient-1, $--gradient-2);
+    background-image: linear-gradient(135deg, $--gradient-5, $--gradient-4);
 
     height: 100vh;
     display: flex;
@@ -325,7 +325,7 @@ svg, path {
         text-decoration: none;
         color: $--white;
         background-color: $--dark-blue;
-        padding: 1rem 1rem 1rem 1rem;
+        padding: 1rem 1rem .5rem 1rem;
         position: relative;
         transition: all ease 300ms;
         font-size: 2rem;

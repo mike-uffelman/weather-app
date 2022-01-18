@@ -12,10 +12,14 @@ class DisplaySaved {
         this._clear();
 
         // this._store = store;
-        this._data = data;        
+        
+        this._data = data;
+        console.log('data length: ', this._data.length);
+        console.log('bookmarked array length: ', this._data.length);        
         this.sortSavedView(this._data, sort);
         sort ? this._sort = sort : undefined;
         const markup = this._generateMarkup();
+
         this._parentElement.insertAdjacentHTML('beforeend', markup);
         
         if(!sort) return;
@@ -28,7 +32,6 @@ class DisplaySaved {
     }
 
     _generateMarkup() {
-
         return `
             <div class='saved__box'>
                 <div class='saved__header'>
@@ -49,18 +52,16 @@ class DisplaySaved {
 
                     </div>
                 </div>
-
                 ${this._data.map(this._generateMarkupList).join('')}
+                
             </div>
 
         `
-
-        // const saved = document.querySelector('#saved');    
-        //TODO --- change to insertAdjacentHTML---------------------------------------
-        
     }      
 
+    
     _generateMarkupList(result) {
+        console.log('markup data', result)
         return `
                 <div class='saved__card' data-id='${result.data.id}'> 
                     <div class='saved__card--detail'>
@@ -115,6 +116,7 @@ class DisplaySaved {
                 save.remove();
             }
         })
+        // this.render(this.data
     }
 
 
@@ -122,11 +124,8 @@ class DisplaySaved {
         this._parentElement.addEventListener('click', (e) => {
             if(e.target.classList.contains('remove-fav')) {
                 const div = e.target.closest('.saved__card');
-
                 const id = div.dataset.id;
-
                 removeSaved(id);
-
                 div.remove();
 
             }
@@ -164,6 +163,7 @@ class DisplaySaved {
 
             
         })
+
 
         // this._parentElement.addEventListener('mouseo')
     }

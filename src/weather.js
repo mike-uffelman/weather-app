@@ -51,7 +51,7 @@ const controlAppStart = async function() {
             
             // maps.searchMap(geoLoc.coords, 9);
             await model.getForecast(geoLoc.coords);
-            console.log('DATA STORE: ', model.store)
+            // console.log('DATA STORE: ', model.store)
 
             weatherView.render(model.store)
             maps.buildMap(geoLoc.coords);
@@ -73,13 +73,13 @@ const controlAppStart = async function() {
 
         // console.log(model.store[0].data);
     } catch(err) {
-        console.log('app start error!!!', err);
+        console.error('app start error!!!', err);
     }
 }
 
 const controlCurrentLocation = async function(loc) {
-    console.log(loc)
-    console.log('storage pre ')
+    // console.log(loc)
+    // console.log('storage pre ')
     
     const { bookmarked, id } = loc.at(-1).data;
     // console.log(id)
@@ -107,7 +107,7 @@ const controlCurrentLocation = async function(loc) {
         }
         
     } catch(err) {
-        console.log('current location error!!!', err);
+        console.error('current location error!!!', err);
     }
 }
 
@@ -127,10 +127,10 @@ const controlCallSaved = async function(id) {
                 maps.buildMap(coords); //*
             }
         })
-        console.log(storage.getLocation());
+        // console.log(storage.getLocation());
 
     } catch(err) {
-        console.log('saved location error!!!', err);
+        console.error('saved location error!!!', err);
     }
     
 }
@@ -139,13 +139,15 @@ const controlRemoveSaved = async function(id) {
     try {
         storage.removeLocation(Number(id));
         weatherView.toggleBookmarkIcon();
+        const loc = storage.getLocation();
+        await savedView.render(loc);
     } catch(err) {
-        console.log('unable to remove this location', err);
+        console.error('unable to remove this location', err);
     }
 }
 
 const controlSearch = async function(loc) {
-    console.log(loc);
+    // console.log(loc);
     const [city, state, country] = loc
     
     
@@ -153,9 +155,9 @@ const controlSearch = async function(loc) {
 
     // searchView.render(getCityTest)
     // await model.getForecast(coords);
-    console.log(model.store);
+    // console.log(model.store);
     const coords = [model.store.at(-1).data.lat, model.store.at(-1).data.lon]
-    console.log(model.store.at(-1).data.lat, model.store.at(-1).data.lon);
+    // console.log(model.store.at(-1).data.lat, model.store.at(-1).data.lon);
     // console.log(getCityTest);
     // console.log('after getCity call: ', model.store);
     weatherView.render(model.store);
@@ -164,14 +166,14 @@ const controlSearch = async function(loc) {
     //? favorites get forecast
     
 const enableSearchMap = function() {
-    console.log('enabling search map!')
+    // console.log('enabling search map!')
     maps.searchMap(geoLoc.coords, 9);
 }
 
 const controlMapClickSearch = async function() {
     const coords = await maps.eCoords;
     coords.push(true);
-    console.log(coords);
+    // console.log(coords);
     // const [lat, lon] = maps.eCoords
     // console.log(lat, lon);
     // const { lat, lng }  = maps._eCoords[0];
@@ -213,6 +215,8 @@ const init = function() {
     if (module.hot) {
         module.hot.accept();
     }
+
+
 }
 
 init();
