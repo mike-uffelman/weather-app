@@ -7,6 +7,8 @@ class searchView {
     
     async addHandlerSearch(handler) {
         const form = document.querySelector('form');
+        // const search = document.querySelector('#search')
+
         form.addEventListener('submit', (e) => {
             try {
                 
@@ -27,8 +29,9 @@ class searchView {
             }
         })
 
-        form.addEventListener('click', (e) => {
+        this._parentElement.addEventListener('click', (e) => {
             if(e.target.classList.contains('close')) {
+                console.log(e.target);
                 this._parentElement.classList.toggle('show');
             }
         })

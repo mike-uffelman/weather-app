@@ -16,6 +16,7 @@ export let store = [];
 export let searchResults = [];
 
 
+//Get the city data, including lat/lon
 export const getCity = async function (city, state, country) {
     try {
         if(!city) return;
@@ -30,11 +31,13 @@ export const getCity = async function (city, state, country) {
         await getForecast(coords);
 
     } catch(err) {
-        console.error('error!', err.message);
+        console.error('cannot get city', err.message);
+        throw err;
     }
 }
 
 //* model logic ===================================================================
+//Get the forecast for the lat/lon provided
 export const getForecast = async function(coords) {
     try {
         const [ lat, lon, check, bookmarked = false, id ] = coords;
@@ -56,19 +59,27 @@ export const getForecast = async function(coords) {
             bookmarked
         }
 
-
         const location = new Location(locationObj);
 
         if(id) location.data.id = id;
-        console.log('location data object: ', location);
+        // console.log('location data object: ', location);
+        //add forecast to current data store
         store.push(location);
+        // throw err;
 
     } catch(err) {
         console.error('error!', err.message, err.stack);
+        throw err;
     }
 }
 
 export const updateBookmark = async function() {
-    store.at(-1).data.bookmarked = !store.at(-1).data.bookmarked;
+    try {
+        store.at(-1).data.bookmarked = !store.at(-1).data.bookmarked;
+
+    } catch(err) {
+        console.log('unable to toggle bookmark property', err);
+        throw err;
+    }
 
 }

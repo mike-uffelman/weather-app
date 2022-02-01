@@ -1,6 +1,8 @@
 class WeatherView {
     #currentWeather = document.querySelector('#current-weather-box');
     #alerts;
+    #errorMessage = `Unable to load your location...`;
+    #successMessage = `Location weather has been rendered!`;
 
     //TODO ===== instead of conditional firstWeatherCall, we can just completely remove the weather card and recreate it, no need to update the content after building it
 
@@ -13,38 +15,80 @@ class WeatherView {
 
 
     render(data) {
-        this.#currentWeather.style.opacity = 0;
-        this.#currentWeather.style.transition = 'opacity ease 500ms';
-        this.#currentWeather.scrollIntoView({behavior: 'smooth'})
-        this._clear();
+        try {
+            this.#currentWeather.classList.toggle('show');
 
-        
-        // this.#currentWeather.innerHTML = '';
-        // console.log('RENDERING WEATHER VIEW...........')
-        this._data = data;
-        // console.log(this._data);
-        // console.log('store data: ', this._data);
-        
-        // console.log(`Welcome to ${this._data}`)
-        //add a clear() function
-        this.#currentWeather.style.opacity = 1;
-        
+            this.#currentWeather.style.opacity = 0;
+            this.#currentWeather.style.transition = 'opacity ease 500ms';
+            this.#currentWeather.scrollIntoView({behavior: 'smooth'})
+            this._clear();
+    
+            
+            // this.#currentWeather.innerHTML = '';
+            // console.log('RENDERING WEATHER VIEW...........')
+            this._data = data;
+            console.log(this._data);
+            // console.log('store data: ', this._data);
+            
+            // console.log(`Welcome to ${this._data}`)
+            //add a clear() function
+            this.#currentWeather.style.opacity = 1;
+            
+            
+            
+            const markup = this._generateMarkup(this._data);
+            this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
+            this._tempBars();
+            this._windDirection();
+            if(this._data.at(-1).data.bookmarked === true) {
+                document.querySelector('.location__bookmark--icon').classList.add('bookmarked');
+            }
+    
+    
+            
+            // this.#currentWeather.style.opacity = 1;
+            // this.#currentWeather.style.transition = 'all ease 300ms';
+            // this.#firstWeatherCall = false;
+            this.#currentWeather.style.display = 'flex';
+            this._alertMessageToggle();
+            
+            // this.renderSuccess(message);
+            // setTimeout(() => {
+            //     const successEl = document.querySelector('.success')
+            //     console.log(successEl);
+            //     successEl.remove();
+            // }, 3000)
 
-        const markup = this._generateMarkup(this._data);
-        this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
-        this._tempBars();
-        this._windDirection();
-        if(this._data.at(-1).data.bookmarked === true) {
-            document.querySelector('.location__bookmark--icon').classList.add('bookmarked');
+        } catch(err) {
+            console.log('error rendering location forecast!!!', err);
         }
-
-
         
-        // this.#currentWeather.style.opacity = 1;
-        // this.#currentWeather.style.transition = 'all ease 300ms';
-        // this.#firstWeatherCall = false;
-        this.#currentWeather.style.display = 'flex';
-        this._alertMessageToggle();
+    }
+
+
+    renderError(message = this.#errorMessage) {
+        const markup = `
+        <div class='error'>
+                <h3 class='error__type'>Error has occured...</h3>
+                <p class='error__message'>${message}</p>
+                <p class='error__message'>${err.stack}</p>
+
+            </div>
+        `
+        this._clear();
+        this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
+
+    }
+
+    renderSuccess(message = this.#successMessage) {
+        const markup = `
+        <div class='success'>
+                <h3 class='success__type'>${message}</h3>
+            </div>
+        `
+        this._clear();
+        this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
+
     }
 
     _clear() {
@@ -66,6 +110,11 @@ class WeatherView {
             if(e.target.classList.contains('saved__link--icon')) {
                 console.log('saved link clicked');
                 document.querySelector('.saved').classList.toggle('show');
+                
+            }
+            if(e.target.classList.contains('info__link--icon')) {
+                console.log('info link clicked');
+                document.querySelector('.info').classList.toggle('show');
                 
             }
             if(e.target.classList.contains('details__header--alerts')) {
@@ -99,8 +148,15 @@ class WeatherView {
 
     
 
-    toggleBookmarkIcon() {
-        document.querySelector('.location__bookmark-icon').classList.toggle('bookmarked');
+    toggleBookmarkIcon(id) {
+        console.log(this._data);
+        const currentId = this._data.at(-1).data.id;
+        console.log(id, currentId)
+
+        if(id !== currentId) return;   
+        
+        const currentLocationBookmark = document.querySelector('#bookmarkIcon');
+        currentLocationBookmark.classList.toggle('bookmarked');
     }
 
 
@@ -122,25 +178,26 @@ class WeatherView {
             return `
                 
                 <div class='weatherCard'>
-                    <div class='cw'>
+                    <section class='cw'>
                         <div class='cw__box' data-id='${location.at(-1).data.id}'>
-                            <div class='cw__box--location'>
-                                <div class='location'>
+                            <section class='cw__box--location'>
+                                <header class='location'>
                                     <h3 id='city-display' class='location__header'><a href='#' class='location__header--link'>${location.at(-1).data.name}</a></h3>
                                     <h5 class='location__header--sub'>${(!location.at(-1).data.state) ? '' : location.at(-1).data.state + ', '} ${location.at(-1).data.country}</h5>
                                     <p class='location__date'>${date}</p>
-                                </div>
-                                <svg class='location__bookmark--icon' height="50" width="50">
-                                    <polygon points='6,2 42,2 42,48 24,32 6,48'>
+                                </header>
+
+                                <svg id='bookmarkIcon' class='location__bookmark--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                                    <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
                                 </svg>
-                            </div>
+                            </section>
 
                             <div class='cw__box--details'>
-                                <div class='details'>
-                                    <div class='details__header'>
+                                <section class='details'>
+                                    <header class='details__header'>
                                         <h3 class='details__header--heading'>Right Now</h3>
                                         <a href='#alerts' class='details__header--alerts ${alerts ? "" : "hide"}' data-alerts=${alerts?.length}>Weather Advisory</a>
-                                    </div>
+                                    </header>
                                     <div class='details__box'>
                                         <div class='details__box--main'>
                                             <p class='details__box--temp'>${current.temp.toFixed(0)}° F</p>    
@@ -162,13 +219,13 @@ class WeatherView {
                                                 <p class='details__box--wind-speed'>${current.wind_speed.toFixed(0)} mph</p>
                                             </div>
                                             <div class='details__box--humidity'>
-                                                <p class='humidity__text'>${daily[0].pop * 100}%<span> precip</span></p>
+                                                <p class='humidity__text'>${(daily[0].pop * 100).toFixed(0)}%<span> precip</span></p>
                                             </div>
                                             <div class='details__box--humidity'>
                                                 <p class='humidity__text'>${this._uvIndexRating(current.uvi)}<span> UV</span></p>
                                             </div>
                                             <div class='details__box--humidity'>
-                                                <p class='humidity__text'>${current.humidity}%<span> humidity</span></p>
+                                                <p class='humidity__text'>${(current.humidity).toFixed(0)}%<span> humidity</span></p>
                                             </div>
                                         </div>
                                         
@@ -178,13 +235,18 @@ class WeatherView {
                                             
                                         </div>
                                     </div>    
-                                </div>
+                                </section>
                             </div>
                         </div>
-                    </div>
-                    <div class="nav__large">
-                        <p class='header__details--date date'>${date}</p>
+                    </section>
+                    <section class="nav__large">
+                        <h3 class='date'>${date}</h3>
                         <div class='nav__links'> 
+                            <a href='#' class='nav__link links info__link'>
+                                <svg class='info__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/>
+                                    <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                                </svg>
+                            </a>
                             <a href='#' class='nav__link links search__link'>
                                 <svg class='search__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
                                     <path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
@@ -196,9 +258,9 @@ class WeatherView {
                                 </svg>
                             </a>
                         </div>
-                    </div>
+                    </section>
                         
-                    <div class='forecast'>
+                    <section class='forecast'>
                         <div class='hourly'>
                             <h3 class='hourly__header'>Hourly Forecast</h3>
                             <div class='hourly__detail'>
@@ -211,15 +273,15 @@ class WeatherView {
                                 ${this._generateWeekly(daily)}
                             </div>
                         </div>  
-                    </div>
-                    <div class='map'>
+                    </section>
+                    <section class='map'>
                         <div class='weather__map' id='mapid'></div>
                             
-                    </div>
-                    <div id='alerts' class='${alerts ? "alert" : "hide"}'>
+                    </section>
+                    <section id='alerts' class='${alerts ? "alert" : "hide"}'>
                         <h3 class='alert__header'>Weather Alerts</h3>
                         ${alerts ? this._generateWeatherAlert(alerts) : ''}
-                    </div>                        
+                    </section>                        
                 </div>`;
     };
 

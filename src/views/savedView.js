@@ -14,7 +14,16 @@ class DisplaySaved {
         // this._store = store;
         
         this._data = data;
+
+        console.log(this._data);
         console.log('data length: ', this._data.length);
+        // this._parentElement.classList.toggle('show-mobile');
+
+        // if(this._data.length === 0) {
+            // this._parentElement.classList.toggle('show-mobile');
+            // return;
+        // };
+
         console.log('bookmarked array length: ', this._data.length);        
         this.sortSavedView(this._data, sort);
         sort ? this._sort = sort : undefined;
@@ -52,15 +61,27 @@ class DisplaySaved {
 
                     </div>
                 </div>
-                ${this._data.map(this._generateMarkupList).join('')}
-                
+
+                ${this._data.length > 0 ? this._data.map(this._generateMarkupList).join('') : this._generateEmptyMessage()}
+
             </div>
 
         `
     }      
 
+    _generateEmptyMessage() {
+        
+        return `
+        <div class='saved__card--empty'>
+            <span>No locations have been bookmarked</span>
+        </div>
+    `
+    }
     
+
     _generateMarkupList(result) {
+        // if(!result) document.querySelector('.saved__card--empty').classList.toggle('empty');
+
         console.log('markup data', result)
         return `
                 <div class='saved__card' data-id='${result.data.id}'> 
@@ -120,7 +141,7 @@ class DisplaySaved {
     }
 
 
-    addHandlerSaved(handler, removeSaved) {
+    addHandlerSaved(handler, removeSaved, sortSaved) {
         this._parentElement.addEventListener('click', (e) => {
             if(e.target.classList.contains('remove-fav')) {
                 const div = e.target.closest('.saved__card');
@@ -153,9 +174,9 @@ class DisplaySaved {
                 const sort = e.target.innerText;
                 console.log(sort);
                 console.log(this._data);
+                sortSaved(sort); //? what was this for again?
 
-                const sortedData = this.sortSavedView(this._data, sort);
-                this.render(sortedData, sort)
+                
                 
                 // sortSaved(newSort);
                 // sortSaved();
