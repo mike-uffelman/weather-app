@@ -16,6 +16,7 @@ export let store = [];
 export let searchResults = [];
 
 
+//Get the city data, including lat/lon
 export const getCity = async function (city, state, country) {
     try {
         if(!city) return;
@@ -25,21 +26,26 @@ export const getCity = async function (city, state, country) {
         const data = await res.json();
         console.log(data);
         const locHeader = data[0];
-        const coords = [locHeader.lat, locHeader.lon, true]
+        const coords = {
+            latitude: locHeader.lat,
+            longitude: locHeader.lon, 
+        }
 
         await getForecast(coords);
 
     } catch(err) {
-        console.error('error!', err.message);
+        console.error('cannot get city', err.message);
+        throw new Error('Cannot get city, please try again.');
     }
 }
 
 //* model logic ===================================================================
+//Get the forecast for the lat/lon provided
 export const getForecast = async function(coords) {
     try {
-        const [ lat, lon, check, bookmarked = false, id ] = coords;
-        if(!check) return; // if a random location i.e. false, return
-        if(!lat || !lon) return; // if lat or lon is undefined, return
+        const { latitude: lat, longitude: lon, bookmarked = false, id } = coords;
+        // if(!check) return; // if a random location i.e. false, return //? NOT SURE IF REALLY NEEDED...
+        if(!lat || !lon) return; // if lat or lon is undefined, return 
 
         const res = await fetch(`${FORECAST_URL}onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely&appid=${OWM_APIKEY}`)
 
@@ -47,7 +53,9 @@ export const getForecast = async function(coords) {
         console.log('forecast data: ', forecastData);
         const loc = await fetch(`${GEOCODE_REVERSE_URL}?lat=${forecastData.lat}&lon=${forecastData.lon}&limit=10&appid=${OWM_APIKEY}`)
         
+
         const locData = await loc.json()
+        console.log(locData);
         const locHeader = locData[0];
         console.log('location header: ', locHeader);
         let locationObj = {
@@ -56,21 +64,27 @@ export const getForecast = async function(coords) {
             bookmarked
         }
 
-
         const location = new Location(locationObj);
 
         if(id) location.data.id = id;
         console.log('location data object: ', location);
+        //add forecast to current data store
         store.push(location);
+        // throw err;
 
     } catch(err) {
         console.error('error!', err.message, err.stack);
+        throw err;
     }
 }
 
 export const updateBookmark = async function() {
-    console.log('storage before bookmarking:' ,store);
-    store.at(-1).data.bookmarked = !store.at(-1).data.bookmarked;
-    console.log('storage after bookmarking: ', store);
+    try {
+        store.at(-1).data.bookmarked = !store.at(-1).data.bookmarked;
+
+    } catch(err) {
+        console.log('unable to toggle bookmark property', err);
+        throw err;
+    }
 
 }

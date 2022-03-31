@@ -3,11 +3,13 @@
 
 $--reddish: rgba(239, 71, 111, 1);
 $--reddish-lighter: rgba(239, 71, 111, .5);
+$--reddish-alerts: rgb(188, 16, 56);
+
 
 $--mustard: rgba(255, 209, 102, 1);
 $--mustard-lighter: rgba(255, 209, 102, .5);
 
-$--greenish: rgba(6, 214, 160, 1);
+$--greenish: rgb(6, 214, 160);
 $--greenish-lighter: rgba(6, 214, 160, .5);
 $--greenish-lighter2: rgb(44, 207, 164);
 
@@ -39,9 +41,10 @@ $--purple-light: rgba(132, 0, 172, .5);
 $--purple-lighter: rgb(209, 123, 123);
 
 $--gradient-1: rgb(226, 241, 255);
-$--gradient-2: rgb(184, 148, 182);
+$--gradient-2: #b894b6;
 $--gradient-3: rgb(209, 23, 203);
-
+$--gradient-4: rgb(114, 76, 112);
+$--gradient-5: rgb(77, 83, 115);
 
 
 
@@ -85,7 +88,8 @@ $--weather-box-shadow: 0 0 1rem $--black;
 
 $bp-largest: 75em; // 1200/16
 $bp-large: 62.5em; // 1000/16
-$bp-medium: 43.75em; //800/16
+$bp-medium-large: 50em; // 800/16
+$bp-medium: 43.75em; //700/16
 $bp-small: 25em; // 400/16
 $bp-smallest: 20em; //320/16 
 $bp-tiny: 18.75em; //300/16

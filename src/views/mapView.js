@@ -8,7 +8,10 @@ let { OWM_APIKEY } = process.env;
     // export let mapEvent;
     export let mapClick;
     // export let _data;
-    export let eCoords;
+    export let eCoords = {
+        latitude: null,
+        longitude: null
+    };
     // let mapEnabled = false;
 
     
@@ -40,22 +43,23 @@ let { OWM_APIKEY } = process.env;
                 }, 3000)
 
                 if(searchMapObj) return;
-
-                enableAndBuild();
+                enableAndBuild(); // build the search map if not already, i.e. for permission allowed search map, this is already done for permission blocked search map
 
                 // mapEnabled = true;
             }
-        }, {once: true})
+        }, {once: true}) // only allow this event once
 
         form.addEventListener('submit', (e) => {
+            const mapRadio = form.elements.mapRadio.checked;
             e.preventDefault();
-            if(!eCoords || eCoords.length === 0 || eCoords === undefined || eCoords === null) return;
+            if(!mapRadio || mapRadio && eCoords.latitude === null || eCoords.longitude === null) return;
             gotoLocation();
             console.log('eCoords before submit: ', eCoords);
-            eCoords = '';
+            eCoords = {}; //clear coordinates each form submit
             // searchMapObj = '';
             console.log('eCoords after submit: ', eCoords)
-            console.dir(eCoords);
+
+            clearMarkers();
         });
         
         
@@ -66,12 +70,16 @@ let { OWM_APIKEY } = process.env;
     }
 
     export const searchMap = async function(coords, zoom, ...marker) {
-        const [ lat, lon ] =  coords;
+        console.log(coords);
+        const { latitude: lat, longitude: lon } = coords;
         let osmURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         let osmAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         let osmLayer = new L.tileLayer(osmURL, {attribution: osmAttribution}
         );
-        let mapOptions = {zoomControl: true};
+        let mapOptions = {
+            zoomControl: true,
+            worldCopyJump: true
+        };
 
         searchMapObj = L.map('searchMap', mapOptions)
             .setView(new L.LatLng(lat, lon), zoom)
@@ -79,12 +87,18 @@ let { OWM_APIKEY } = process.env;
         
         searchMapObj.on({
             click: (e) => {
+                clearMarkers();
+
+                // document.querySelector('.map--overlay').style.display = 'none';
+
+                console.log(eCoords);
                 if(!marker) document.querySelector('.leaflet-marker-icon').remove();
 
                 const searchMarker = L.marker([e.latlng.lat, e.latlng.lng])
                 const {lat, lng} = e.latlng;
-                eCoords = [lat, lng];
-                
+                eCoords.latitude = lat;
+                eCoords.longitude = lng;
+                console.log(eCoords);
                 searchMarker.addTo(searchMapObj)
                 console.log(searchMapObj);
 
@@ -92,17 +106,22 @@ let { OWM_APIKEY } = process.env;
         })
     }
 
+    const clearMarkers = function () {
+        document.querySelectorAll('.leaflet-marker-pane img').forEach(mark => mark.remove());
+        document.querySelectorAll('.leaflet-shadow-pane img').forEach(shadow => shadow.remove());
+    }
+
     export const returnCoords = async function() {
         return eCoords;
     }
 
-    export const buildMap = async function (coords, zoom = 9) {     
+    export const weatherMap = async function (coords, zoom = 9) {     
         // console.log(this.map);
     const mapid = document.querySelector('#mapid');
 
         mapid.innerHTML = "<div id='map' class='search__modal--map--map'></div>";
 
-        const [ lat, lon ] =  coords;
+        const { latitude: lat, longitude: lon } =  coords;
         
 
         // mapid.style.transition = 'opacity ease 1000ms'

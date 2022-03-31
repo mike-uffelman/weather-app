@@ -5,18 +5,19 @@ class searchView {
     _parentElement = document.querySelector('#search__modal');
     _searchInput = document.querySelector('#city-input');
     
-    async addHandlerSearch(handler) {
+    addHandlerSearch(handler) {
         const form = document.querySelector('form');
+        // const search = document.querySelector('#search')
+
         form.addEventListener('submit', (e) => {
             try {
-                
-
-
                 e.preventDefault();
                 this._parentElement.classList.toggle('show');
-
+                console.log(form.elements.city.value);
                 const city = form.elements.city.value.split(', ');
-                if(!city || city.length <= 1 || city === ' ') return;
+                const cityRadio = form.elements.textRadio.checked;
+                if(!cityRadio || cityRadio && !city || city.length <= 1 || city === ' ') return;
+                // throw new Error('Unable to find city...');
                 console.log('search value: ', city);
                 console.log(city.length);
                 handler(city);
@@ -24,12 +25,15 @@ class searchView {
 
             } catch(err) {
                 console.error('error!!!', err);
+                throw err;
             }
         })
 
-        form.addEventListener('click', (e) => {
+        this._parentElement.addEventListener('click', (e) => {
             if(e.target.classList.contains('close')) {
+                console.log(e.target);
                 this._parentElement.classList.toggle('show');
+
             }
         })
     }

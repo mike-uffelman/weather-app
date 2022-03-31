@@ -34,12 +34,20 @@ export const addHandlerToggleNav = function(searchLink, savedLink) {
             e.preventDefault();
             console.log('clicked the search link!!!!!!!!!!!!')
             searchLink();
+            e.target.closest('.nav').classList.toggle('open');
         };
 
         if(e.target.classList.contains('saved__link')) {
             e.preventDefault();
             savedLink();
+            e.target.closest('.nav').classList.toggle('open');
         };
+
+        if(e.target.classList.contains('info__link')) {
+            console.log('opening info modal...')
+            document.querySelector('#info').classList.toggle('show');
+        }
+    
     })
 
 

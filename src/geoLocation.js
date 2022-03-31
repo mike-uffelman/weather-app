@@ -1,43 +1,42 @@
-import * as mapView from './views/mapView.js';
-import * as model from './model.js';
+export const coords = {
+    latitude: 0,
+    longitude: 0
+}; 
 
+//navigator.permissions is current experimental - would have used this instead to handle the state of navigator.geolocation
 
-
-export const coords = new Array(); 
-
+// get current user location (allow location) or return random lat/lon (block location)
 export const getGeolocation = async function() {
     try{
-        if(navigator.geolocation) {
+        if(navigator.geolocation) { //if allowed
             try {
                 const res = await _getPosition();
-                const { latitude: lat, longitude: lon } = res.coords;
-                // console.log(lat, lon);
-                coords.push(lat, lon, true);
-                // console.log(coords);
-                // console.log('Success: ', data);
+                console.log(res);
+                const { latitude, longitude } = res.coords;
+                coords.latitude = latitude,
+                coords.longitude = longitude; // push lat/lon to coords array and true boolean indicating a user location
+                coords.locPermission = true;
+                console.log(coords);
                
-            } catch(err) {
+            } catch(err) { // if blocked
                 await _randomCoords();
-                // console.log(res);
-                // const { lat, lon } = res;
-                // const coords = [lat, lon];
-
+                console.log(err);
+                console.log(coords);
+                console.log(navigator.permissions);
                 console.log(`failed - random: ${err}`, coords);
+                throw err;
             }
                             
         }
         if (!navigator.geolocation) {
             console.log('geolocation failure...')
             await _randomCoords();
-
-
         }
-
-
     } catch(err) {
         console.error(err);
     }
 };
+
 
 function _getPosition() {
     return new Promise(function(resolve, reject) {
@@ -45,10 +44,17 @@ function _getPosition() {
     })
 }
  
+// get random lat, lon and push to coord array, indicate false for random
 async function _randomCoords() {
-    const lat = await Math.random() * (90 - (-90)) + (-90);
-    const lon = await Math.random() * (180 - (-180)) + (-180);
-    return coords.push(lat, lon, false);
+    try {
+        coords.latitude = await Math.random() * (50 - (-50)) + (-50); 
+        coords.longitude = await Math.random() * (180 - (-180)) + (-180);
+        coords.locPermission = false;
+        return coords;
+    } catch(err) {
+        throw new Error('Unable to get random location');
+    }
 }
 
 
+//? may be able to use the resolve reject to access allow/block
