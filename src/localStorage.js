@@ -1,9 +1,11 @@
 
 
 
-export const getLocation = function() {
+// get locations from local storage
+export const getStoredLocations = function() {
     try {
         let loc;
+        // if 'loc' in LS is not null, parse and set 'loc' to the LS data, otherwise return loc as an empty array
         if(localStorage.getItem('loc') !== null) {
             loc = JSON.parse(localStorage.getItem('loc'));
         } else {
@@ -20,7 +22,7 @@ export const getLocation = function() {
 //here we pass in last index of the temporary store array
 //so we set a variable to retrieve the data from localstorage and push the new data to the end of the LS array
 //then we re-add the variable with the new data back to the LS using setitem and stringify
-export const addLocation = function(location) {
+export const addStoredLocation = function(location) {
     
     try {
         const saveLoc = location.at(-1).data;
@@ -42,7 +44,7 @@ export const addLocation = function(location) {
     
         console.log(newLocObj);
     
-        let loc =  getLocation();
+        let loc =  getStoredLocations();
         loc.push(newLocObj);
         localStorage.setItem('loc', JSON.stringify(loc));
         // console.log(loc)
@@ -56,10 +58,10 @@ export const addLocation = function(location) {
 //this is to remove locations from the local storage
 //to remove from the local storage we pass in the city id which serves as a unique identifier
 //so we retrieve the current LS data, then iterate through it to find the matching id, when found we splice(delete) the matching index, then put the data back in LS with setitem and stringify
-export const removeLocation = function(id) {
+export const removeStoredLocation = function(id) {
     try {
         //retrieve local storage
-        let loc = getLocation();
+        let loc = getStoredLocations();
         // console.log(loc);
 
         //iterate through LS elements looking for a match by id, then remove the match
@@ -71,6 +73,7 @@ export const removeLocation = function(id) {
 
         //re-set LS with modified object
         localStorage.setItem('loc',JSON.stringify(loc))
+
     } catch(err) {
         console.log('unable to remove location from storage', err);
         throw err;
@@ -78,18 +81,18 @@ export const removeLocation = function(id) {
     
 }
 
-export const incrementClicks = function(id) {
+export const incrementViewCount = function(id) {
     try {
-        let loc = this.getLocation();
-        // console.log(loc);
+        let loc = this.getStoredLocations();
+
         loc.forEach(place => {
-            // console.log(place.data.id);
-            // console.log(id);
             if(Number(place.data.id) === Number(id)) {
                 ++place.data.clicks;
             }
         })
+
         localStorage.setItem('loc',JSON.stringify(loc))
+
     } catch(err) {
         console.log('unable to increment location view count', err);
         throw err;

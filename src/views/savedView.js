@@ -8,32 +8,25 @@ class DisplaySaved {
     // _sort = document.querySelector('#sort')
 
 
+    // render the bookmarked locations view, 
     render(data, ...sort){
-        this._clear();
+        console.log(sort);
 
+        this._clear(); // clear the bookmarked locations container
         // this._store = store;
-        
-        this._data = data;
-
-        console.log(this._data);
-        console.log('data length: ', this._data.length);
-        // this._parentElement.classList.toggle('show-mobile');
-
-        // if(this._data.length === 0) {
-            // this._parentElement.classList.toggle('show-mobile');
-            // return;
-        // };
+        this._data = data; // set data to _data private variable
 
         console.log('bookmarked array length: ', this._data.length);        
-        this.sortSavedView(this._data, sort);
-        sort ? this._sort = sort : undefined;
+        this.sortSavedView(this._data, sort); // sort the bookmarks by the sort type
+        sort ? this._sort = sort : undefined; // if sort is defined set _sort, otherwise undefined
         const markup = this._generateMarkup();
 
         this._parentElement.insertAdjacentHTML('beforeend', markup);
         
-        if(!sort) return;
+        if(!sort) return; // if sort is not defined return, do not proceed
 
-        this.sortBookmarks(sort);
+        this.sortBookmarks(sort); // if sort is defined sort the bookmarks and return
+        console.log(this._sort);
     }
 
     _clear() {
@@ -61,16 +54,12 @@ class DisplaySaved {
 
                     </div>
                 </div>
-
                 ${this._data.length > 0 ? this._data.map(this._generateMarkupList).join('') : this._generateEmptyMessage()}
-
             </div>
-
         `
     }      
 
     _generateEmptyMessage() {
-        
         return `
         <div class='saved__card--empty'>
             <span>No locations have been bookmarked</span>
@@ -81,8 +70,7 @@ class DisplaySaved {
 
     _generateMarkupList(result) {
         // if(!result) document.querySelector('.saved__card--empty').classList.toggle('empty');
-
-        console.log('markup data', result)
+        // console.log('markup data', result)
         return `
                 <div class='saved__card' data-id='${result.data.id}'> 
                     <div class='saved__card--detail'>
@@ -98,25 +86,19 @@ class DisplaySaved {
 
                     </div>
                 </div>
-                
             `;
     }
 
-    // appendBookmark() {
-    //     const markup = this._generateMarkupList(this._store.at(-1));
-    //     document.querySelector('.saved__box').insertAdjacentHTML('beforeend', markup);
-    // }
 
+    // bookmarked locations sort function
     sortBookmarks(sort) {
         const previousList = document.querySelectorAll('.saved__card')
-        previousList.forEach(item => item.remove());
+        previousList.forEach(item => item.remove()); // remove each bookmarked location from DOM
 
-        // console.log('sorting bookmarks..........', this._data, this._sort);
-
-        const sortedLocationList = this._data.map(this._generateMarkupList).join('')
+        const sortedLocationList = this._data.map(this._generateMarkupList).join(''); // each bookmarked location in the new sorted _data will be added to the markup and joined together 
 
         document.querySelector('.saved__box').insertAdjacentHTML('beforeend', sortedLocationList);
-        this.updateSortHeading(sort);
+        this.updateSortHeading(sort); // set the sort type header in bookmarked view
     }
 
     //remove UI favorite item, e is defined in the calling event
@@ -125,19 +107,10 @@ class DisplaySaved {
     }
 
     removeEl(id) {
-        // console.log(loc)
-        // const {id} = loc.at(-1).data
         const saved = document.querySelectorAll('.saved__card');
         saved.forEach(save => {
-            // console.log(save);
-            // console.log(save.dataset.id);
-            // console.log(id)
-            
-            if(Number(save.dataset.id) === id) {
-                save.remove();
-            }
+            if(Number(save.dataset.id) === id) save.remove();
         })
-        // this.render(this.data
     }
 
 
@@ -148,7 +121,6 @@ class DisplaySaved {
                 const id = div.dataset.id;
                 removeSaved(id);
                 div.remove();
-
             }
 
             if(e.target.classList.contains('call-favorite')) {
@@ -158,41 +130,26 @@ class DisplaySaved {
                 if(this._parentElement.classList.contains('show')) {
                     this._parentElement.classList.toggle('show');
                 };
-
-           
             }
 
             if(e.target.classList.contains('close')) {
                 this._parentElement.classList.toggle('show');
             }
 
-            // if(e.target.classList.contains('sort__list--item')) {
-                // console.log(e.target.closest('.sort'))
-
-            // }
             if(e.target.classList.contains('sort__list--item')) {
                 const sort = e.target.innerText;
                 console.log(sort);
                 console.log(this._data);
                 sortSaved(sort); //? what was this for again?
-
-                
-                
-                // sortSaved(newSort);
-                // sortSaved();
             }
-
-            
         })
-
-
-        // this._parentElement.addEventListener('mouseo')
     }
 
     moveToSaved() {
         this._parentElement.scrollIntoView({behavior: 'smooth'});
     }
 
+    // set the sort type header in bookmarked view
     updateSortHeading() {
         if(this._sort.length === 0) return;
         const sortHeading = document.querySelector('.sort__header');
@@ -200,73 +157,19 @@ class DisplaySaved {
     }
 
     sortSavedView(data, sort) {
-        // console.log(`sortSavedView: now sorting by ${sort}`);
-        
-        // const loc = storage.getLocation();
-        // console.log(data);
-        // console.log(sort);
-
-        // if(!sorting) return loc;
-
+        if(!sort) return;
         if(sort === 'A ➡ Z') {
-            this._data.sort((a, b) => (a.data.name > b.data.name) ? 1 : -1);
-            console.log(this._data);
-            return this._data;
-
+            return this._data.sort((a, b) => (a.data.name > b.data.name) ? 1 : -1);
         };
 
         if(sort === 'RECENT') {
-            this._data.sort((a, b) => (a.data.created < b.data.created) ? 1 : -1);
-            console.log(this._data);
-            return this._data;
-
+            return this._data.sort((a, b) => (a.data.created < b.data.created) ? 1 : -1);
         };
 
         if(sort === 'VIEWS') {
-            this._data.sort((a, b) => (a.data.clicks < b.data.clicks) ? 1 : -1);
-            console.log(this._data);
-            return this._data;
+            return this._data.sort((a, b) => (a.data.clicks < b.data.clicks) ? 1 : -1);
         };
-
-
-        // console.log(loc);
-        // const sortVal = document.querySelector('.sort__header');
-
-        // document.querySelector('.sort__list').addEventListener('click', (e) => {
-        //     if(e.target.classList.contains('sort__list--item')) {
-        //         console.log(this);
-        //     }
-        // })
-
-        // console.log(this._sort);
-        // this._sort.addEventListener('click', (e) => {
-        //     console.log(e.target);
-        // })
-
-
     }
-    
-
-
-    // savedActions = function(e) {
-    //     //! targets may change after layour redesign------------------------
-    //     if(e.target.classList.contains('remove-fav')) {
-    //         removeFavoriteUI(e.target.closest('.saved__card'));
-    //         let id = Number(e.target.parentElement.nextSibling.nextSibling.innerText);
-    //         return id;
-    //         // storage.removeLocation(id);
-    //     }
-
-    //     //if the e.target is the city name we use the cityID again to iterate through the LS to find the lat/lon to re-load the favorite as the current weather    
-    //     if(e.target.classList.contains('call-favorite')) {
-
-    //         console.log('get this favorite location weather');
-
-    //         let eid = Number(e.target.nextElementSibling.innerText);
-    //         console.log(eid);
-    //         return eid;
-    //     }
-    // }
 }
 
 export default new DisplaySaved();

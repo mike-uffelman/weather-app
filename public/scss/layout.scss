@@ -1,5 +1,5 @@
 * {
-    scrollbar-width: thin;
+    scrollbar-width: none;
     scrollbar-color: $--dark-blue ;
 }
 
@@ -50,7 +50,7 @@ svg, path {
 /* --- scroll snap --- */
 .swipeView {
     background-image: linear-gradient(135deg, $--gradient-5, $--gradient-4);
-
+    
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -70,6 +70,7 @@ svg, path {
     // background-color: transparent;
     width: 100%;
     overflow-x: hidden;
+
     // backdrop-filter: blur(5px);
     // overflow: hidden;
     @media only screen and (min-width: $bp-smallest) {
@@ -147,7 +148,7 @@ svg, path {
     }
 
     &::-webkit-scrollbar {
-        display: none;
+        // display: none;
     }
 
     & > article {
@@ -167,12 +168,11 @@ svg, path {
         // background-color: transparent;
         
         @media only screen and (min-width: $bp-smallest) {
-            // height: 100vh;
+            width: 90%;
         }
 
         @media only screen and (min-width: $bp-small) {
             // height: 100vh;
-
             max-width: 40rem;
         }
 
@@ -345,19 +345,21 @@ svg, path {
         &.info__link {
             @media only screen and (min-width: $bp-medium) {
                 grid-area: nav;
-                font-size: 1.5rem;
-                text-shadow: .25rem .25rem .5rem black;
-                background-color: transparent;
+                // font-size: 1.5rem;
+                // text-shadow: .25rem .25rem .5rem black;
+                // background-color: transparent;
                 color: $--white;
-                // text-shadow: .25rem .25rem .5rem gray;
                 font-weight: 600;
                 border-radius: 1rem;
                 padding: 1rem 1rem 0 1rem;
+                pointer-events: none;
                 
+
                 & svg {
                     fill: $--white;
                     filter: drop-shadow(0 0 .5rem $--black);
                     transition: all ease 300ms;
+
 
                     &:hover {
                         fill: $--black;

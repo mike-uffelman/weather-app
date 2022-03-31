@@ -9,8 +9,6 @@ if (process.env.NODE_ENV === 'development') {
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-
-
 import * as model from './model.js';
 import * as maps from './views/mapView.js';
 import * as geoLoc from './geoLocation.js';
@@ -21,59 +19,28 @@ import searchView from './views/searchView.js';
 import * as layout from './layout.js';
 import infoView from './views/infoView.js';
 
-
-
-const saved = document.querySelector('#saved');
-const map = document.querySelector('#mapid');
-const locID = document.querySelector('.saved__card--locationID');
-
-
-
-
-// let windowLoad = true;
-const form = document.querySelector('form');
-
-
 //* ========== app start controller ==========
 const controlAppStart = async function() {
     try {
-        // retrieve and render bookmarked locations from local storage
-        const savedLocs = storage.getLocation();
-        savedView.render(savedLocs)
+        savedView.render(storage.getStoredLocations()); // retrieve and render bookmarked locations from local storage
 
-        // get current (browser location allowed) or random location(browser location blocked)
-        await geoLoc.getGeolocation();
+        await geoLoc.getGeolocation(); // get current (browser location allowed) or random location(browser location blocked)
 
         // if location allowed
-        if(geoLoc.coords[2] === true) {
-            
-            // retrieve current location forecast
-            await model.getForecast(geoLoc.coords);
-
-            // render current weather
-            weatherView.render(model.store)
-
-            // render map to current location
-            maps.buildMap(geoLoc.coords);
-
-            // display app instructions modal
-            infoView.toggleInfoView();
+        if(geoLoc.coords.locPermission) {
+            await model.getForecast(geoLoc.coords); // retrieve current location forecast
+            weatherView.render(model.store) // render current weather
+            maps.weatherMap(geoLoc.coords); // render map to current location
+            infoView.toggleInfoView(); // display app instructions modal
         }
 
         // if location blocked
-        if(geoLoc.coords[2] === false) {
+        if(!geoLoc.coords.locPermission) {
             //! marker comment here---------------------------------------
             const marker = false;
-            
-            // auto navigate to search view
-            searchView.toggleSearchViewBlockedGeoLoc();
-
-            // render map to a random location
-            maps.searchMap(geoLoc.coords, 4, marker);
-
-            // display app instructions modal
-            infoView.toggleInfoView();
-
+            searchView.toggleSearchViewBlockedGeoLoc(); // auto navigate to search view
+            maps.searchMap(geoLoc.coords, 4, marker); // render map to a random location
+            infoView.toggleInfoView(); // display app instructions modal
             return;
         } 
     } catch(err) {
@@ -84,36 +51,23 @@ const controlAppStart = async function() {
 
 //* ========== Current weather page controller ==========
 const controlCurrentLocation = async function(loc) {
-    // console.log(loc)
-    // console.log('storage pre ')
     
     const { bookmarked, id } = loc.at(-1).data;
-    // console.log(id)
-    const bookmarkedEl = document.querySelector('.header--add-fav');
-    // let windowLoad = true;
+
     try {
         console.log()
         if(!bookmarked) {
-            // console.log('no to yes: ', loc.at(-1).data)
             await model.updateBookmark();
-            // console.log('no to yes: ', loc.at(-1).data)
-            // console.log(loc);
-            storage.addLocation(loc);
-            const location = storage.getLocation();
-            savedView.render(location)
-            // console.log('storage on add: ', storage.getLocation())
-            // console.log(model.store);
+            storage.addStoredLocation(loc);
+
+            savedView.render(storage.getStoredLocations())
         }
 
         if(bookmarked) { 
-            storage.removeLocation(id); //*
-
+            storage.removeStoredLocation(id); //*
             await model.updateBookmark(); //*
             savedView.removeEl(id);
-            const data = storage.getLocation();
-            savedView.render(data);
-
-
+            savedView.render(storage.getStoredLocations());
         }
         
     } catch(err) {
@@ -125,21 +79,26 @@ const controlCurrentLocation = async function(loc) {
 //* ========== Call a saved location controller ==========
 const controlCallSaved = async function(id) {
     try {
-        storage.incrementClicks(id);
+        storage.incrementViewCount(id);
 
         //this should probably be abstracted
-        let loc = storage.getLocation();
+        let loc = storage.getStoredLocations();
         loc.forEach(async (place) => {
             if(place.data.id === Number(id)) {
-                const coords = [place.data.lat, place.data.lon, true, true, place.data.id];
+                const coords = { 
+                    latitude: place.data.lat,
+                    longitude: place.data.lon,
+                    bookmarked: true, 
+                    id: place.data.id
+                };
                 
                 await model.getForecast(coords);
                 weatherView.render(model.store)
                 // const weatherMap = new Map();
-                maps.buildMap(coords); //*
+                maps.weatherMap(coords); //*
             }
         })
-        // console.log(storage.getLocation());
+        // console.log(storage.getStoredLocations());
 
     } catch(err) {
         console.error('saved location error!!!', err);
@@ -151,11 +110,8 @@ const controlCallSaved = async function(id) {
 //* ========== Remove a saved location controller ==========
 const controlRemoveSaved = async function(id) {
     try {
-
-        storage.removeLocation(Number(id));
-        const loc = storage.getLocation();
-    
-        await savedView.render(loc);
+        storage.removeStoredLocation(Number(id));
+        await savedView.render(storage.getStoredLocations());
         weatherView.toggleBookmarkIcon(Number(id));
 
     } catch(err) {
@@ -169,15 +125,13 @@ const controlSearch = async function(loc) {
         const [city, state, country] = loc
     
         await model.getCity(city, state, country);
-        // searchView.render(getCityTest)
-        // await model.getForecast(coords);
-        // console.log(model.store);
-        const coords = [model.store.at(-1).data.lat, model.store.at(-1).data.lon]
-        // console.log(model.store.at(-1).data.lat, model.store.at(-1).data.lon);
-        // console.log(getCityTest);
-        // console.log('after getCity call: ', model.store);
+        const coords = { 
+            latitude: model.store.at(-1).data.lat, 
+            longitude: model.store.at(-1).data.lon
+        }
+        console.log(model.store);
         weatherView.render(model.store);
-        await maps.buildMap(coords) //*
+        await maps.weatherMap(coords) //*
     } catch(err) {
         console.log('unable to find searched location', err);
         weatherView.renderError(err);
@@ -195,22 +149,16 @@ const enableSearchMap = function() {
 const controlMapClickSearch = async function() {
     try {
         const coords = maps.eCoords;
+        // coords.push(true);
         console.log(coords);
-        coords.push(true);
-        // console.log(coords);
-        // const [lat, lon] = maps.eCoords
-        // console.log(lat, lon);
-        // const { lat, lng }  = maps._eCoords[0];
-        // Number(lat.toFixed(4)), Number(lng.toFixed(4)))
-        // console.log(lat, lng);
-        // const coords = [Number(lat.toFixed(4)), Number(lng.toFixed(4)), true];
-        // console.log(coords);
+
         await model.getForecast(coords);
+
         weatherView.render(model.store);
-        await maps.buildMap(coords);
+        await maps.weatherMap(coords);
     } catch(err) {
         console.log('an error has occured');
-        throw error;
+        weatherView.renderError(err);
     }
 }
 
@@ -227,10 +175,8 @@ const infoLink = function() {
 }
     
 const sortSaved = function(sort) {
+    const sortedData = savedView.sortSavedView(storage.getStoredLocations(), sort);
 
-    const data = storage.getLocation();
-
-    const sortedData = savedView.sortSavedView(data, sort);
     savedView.render(sortedData, sort)
 }
 

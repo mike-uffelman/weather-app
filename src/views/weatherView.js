@@ -43,8 +43,6 @@ class WeatherView {
             if(this._data.at(-1).data.bookmarked === true) {
                 document.querySelector('.location__bookmark--icon').classList.add('bookmarked');
             }
-    
-    
             
             // this.#currentWeather.style.opacity = 1;
             // this.#currentWeather.style.transition = 'all ease 300ms';
@@ -61,21 +59,22 @@ class WeatherView {
 
         } catch(err) {
             console.log('error rendering location forecast!!!', err);
+            this.renderError('Unable to load app!!!', err);
         }
         
     }
 
 
-    renderError(message = this.#errorMessage) {
+    renderError(err) {
+        this._clear();
+
         const markup = `
         <div class='error'>
-                <h3 class='error__type'>Error has occured...</h3>
-                <p class='error__message'>${message}</p>
+                <h3 class='error__type'>${err.message}</h3>
                 <p class='error__message'>${err.stack}</p>
 
             </div>
         `
-        this._clear();
         this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
 
     }
@@ -192,20 +191,20 @@ class WeatherView {
                                 </svg>
                             </section>
 
-                            <div class='cw__box--details'>
+                            
                                 <section class='details'>
                                     <header class='details__header'>
-                                        <h3 class='details__header--heading'>Right Now</h3>
-                                        <a href='#alerts' class='details__header--alerts ${alerts ? "" : "hide"}' data-alerts=${alerts?.length}>Weather Advisory</a>
+                                        <h3 class='section-header'>Right Now</h3>
+                                        <a href='#alerts' class='details__header--alerts section-header section-header__alerts ${alerts ? "" : "hide"}' data-alerts=${alerts?.length}>Weather Advisory</a>
                                     </header>
                                     <div class='details__box'>
                                         <div class='details__box--main'>
                                             <p class='details__box--temp'>${current.temp.toFixed(0)}° F</p>    
-                                            <p class='details__box--conditions'>${current.weather[0].description}
+                                            <p class='details__box--conditions detail-text current'>${current.weather[0].description}
                                         </div>
                                         <div class='details__box--high-low-feel'>
-                                            <p class='temp'>${today.max.toFixed(0)}°F / ${today.min.toFixed(0)}°F</p>
-                                            <p class='details__box--feels-like'>, feels like ${current.feels_like.toFixed(0)}° F</p>
+                                            <p class='temp detail-text current'>${today.max.toFixed(0)}°F / ${today.min.toFixed(0)}°F</p>
+                                            <p class='details__box--feels-like detail-text current'>, feels like ${current.feels_like.toFixed(0)}° F</p>
 
                                             
                                         </div>
@@ -216,16 +215,16 @@ class WeatherView {
 
                                                 </svg>
 
-                                                <p class='details__box--wind-speed'>${current.wind_speed.toFixed(0)} mph</p>
+                                                <p class='details__box--wind-speed detail-text current'>${current.wind_speed.toFixed(0)} mph</p>
                                             </div>
                                             <div class='details__box--humidity'>
-                                                <p class='humidity__text'>${(daily[0].pop * 100).toFixed(0)}%<span> precip</span></p>
+                                                <p class='humidity__text detail-text current'>${(daily[0].pop * 100).toFixed(0)}%<span> precip</span></p>
                                             </div>
                                             <div class='details__box--humidity'>
-                                                <p class='humidity__text'>${this._uvIndexRating(current.uvi)}<span> UV</span></p>
+                                                <p class='humidity__text detail-text current'>${this._uvIndexRating(current.uvi)}<span> UV</span></p>
                                             </div>
                                             <div class='details__box--humidity'>
-                                                <p class='humidity__text'>${(current.humidity).toFixed(0)}%<span> humidity</span></p>
+                                                <p class='humidity__text detail-text current'>${(current.humidity).toFixed(0)}%<span> humidity</span></p>
                                             </div>
                                         </div>
                                         
@@ -236,7 +235,7 @@ class WeatherView {
                                         </div>
                                     </div>    
                                 </section>
-                            </div>
+                            
                         </div>
                     </section>
                     <section class="nav__large">
@@ -262,13 +261,13 @@ class WeatherView {
                         
                     <section class='forecast'>
                         <div class='hourly'>
-                            <h3 class='hourly__header'>Hourly Forecast</h3>
+                            <h3 class='hourly__header section-header'>Hourly Forecast</h3>
                             <div class='hourly__detail'>
                                 ${this._generateHourly(hourly)}
                             </div>
                         </div>     
                         <div class='daily'>
-                            <h3 class='daily__header'>Weekly Forecast</h3>
+                            <h3 class='daily__header section-header'>Weekly Forecast</h3>
                             <div class='daily__detail'>
                                 ${this._generateWeekly(daily)}
                             </div>
@@ -279,7 +278,7 @@ class WeatherView {
                             
                     </section>
                     <section id='alerts' class='${alerts ? "alert" : "hide"}'>
-                        <h3 class='alert__header'>Weather Alerts</h3>
+                        <h3 class='section-header section-header__alerts alert-detail'>Weather Alerts</h3>
                         ${alerts ? this._generateWeatherAlert(alerts) : ''}
                     </section>                        
                 </div>`;
@@ -330,7 +329,7 @@ class WeatherView {
                     <div class='alert__detail'>
                         <p class='alert__detail--time'><span class=''>Beginning:</span> ${this._getHourTime(alert.start)}<span class=''> | Ending:</span> ${this._getHourTime(alert.end)}</p>
 
-                        <p class='alert__detail--text'>${this._alertDescription(alert.description)}</p>
+                        <p class='alert__detail--text detail-text'>${this._alertDescription(alert.description)}</p>
                     </div>
                 </div>`
         })
@@ -421,8 +420,8 @@ class WeatherView {
 
              hourlyHTML += `
                 <div class='hourly__detail--box'>
-                    <div class='hourly__detail--box-time'>${hourlyTime}</div> 
-                    <div class='hourly__detail--box-temp'>${hourlyTemp}°F</div>
+                    <p class='hourly__detail--box-time detail-text hourly-text'>${hourlyTime}</p> 
+                    <p class='hourly__detail--box-temp detail-text hourly-text'>${hourlyTemp}°F</p>
                     <img src='https://openweathermap.org/img/wn/${hourlyIcon}@2x.png' class='hourly__detail--box-icon' alt=''>
                 </div>`
         })
@@ -444,16 +443,16 @@ class WeatherView {
                     <div class='daily__detail--box'>
                         <div class='daily__detail--box-weekday'>
                             <img src='https://openweathermap.org/img/wn/${icon}@2x.png' class='daily__detail--box-icon' alt=''>
-                            <p class='daily__detail--box-day'>${dailyDay}</p>
+                            <p class='daily__detail--box-day detail-text'>${dailyDay}</p>
                         </div> 
                         <div id='precip' class='daily__detail--box-precip'>
-                            <p class=''>💧 <span class='text'>${precip}%</span></p>
+                            <p class=''>💧 <span class='text detail-text'>${precip}%</span></p>
                         </div>
                         <div class='daily__detail--box-temp'>
-                            <p class='detail--temp' ><span class='detail-temp-col low-temps'>${lowTemps}°F</span></p>
+                            <p class='detail--temp detail-text' ><span class='detail-temp-col low-temps'>${lowTemps}°F</span></p>
                             <div class='temp__bars'>
-                                <div class='temp__bars--low' data-low-temp='${lowTemps}' data-bar='${i}'></div>
-                                <div class='temp__bars--high' data-high-temp='${highTemps}' data-bar='${i}'></div>
+                                <div class='temp__bars--low detail-text' data-low-temp='${lowTemps}' data-bar='${i}'></div>
+                                <div class='temp__bars--high detail-text' data-high-temp='${highTemps}' data-bar='${i}'></div>
                             </div>
                             <p class='detail--temp' data-temp=''><span class='detail-temp-col high-temps'>${highTemps}°F</p>
                         </div>
