@@ -1,3 +1,5 @@
+import * as Message from './errorView'
+
 class WeatherView {
     #currentWeather = document.querySelector('#current-weather-box');
     #alerts;
@@ -57,26 +59,53 @@ class WeatherView {
             //     successEl.remove();
             // }, 3000)
 
+
         } catch(err) {
             console.log('error rendering location forecast!!!', err);
-            this.renderError('Unable to load app!!!', err);
+            this.renderMessage('Unable to load app!!!', err);
         }
         
     }
 
+    dismissMessage() {
+        const message = document.querySelector('.message');
+        if(!message) return;
+        message.style.transform = 'translateY(-8rem)';
+        message.style.transformOrigin = 'top';
+    }
 
-    renderError(err) {
-        this._clear();
+    renderMessage(message, quality) {
+        // this._clear();
 
         const markup = `
-        <div class='error'>
-                <h3 class='error__type'>${err.message}</h3>
-                <p class='error__message'>${err.stack}</p>
+        <div class='message message__${quality}'>
+            <div class='message__header'>
+                <h3 class='message__header--type'>${message === 'err' ? 'err.message' : message}</h3>
+                <p class='message__message'></p>
+            </div>    
+            <a href='#' class='message__close'><span class='message__close'></span></a>
+            
 
             </div>
         `
-        this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
 
+        document.querySelector('.swipeView').insertAdjacentHTML('afterbegin', markup);
+        
+        const messageEl = document.querySelector('.message');
+        setTimeout(() => { messageEl.classList.toggle('show') }, 0);
+
+        document.querySelector('.message').addEventListener('click', (e) => {
+            console.log(e.target);
+            if(e.target.classList.contains('message__close')) {
+                document.querySelector('.message').classList.toggle('show');
+                // document.querySelector('.message').style.transform = 'translateY(-8rem)';
+                // document.querySelector('.message').style.transformOrigin = 'top';
+                setTimeout(() => document.querySelector('.message').remove(), 1000);
+
+
+
+            }
+        })
     }
 
     renderSuccess(message = this.#successMessage) {
@@ -128,6 +157,8 @@ class WeatherView {
 
             }
         });
+
+        
         
         
         // const alertBox = document.querySelectorAll('.hourly__detail')
@@ -398,14 +429,14 @@ class WeatherView {
         setTimeout(() => {
             document.querySelectorAll('.temp__bars--low').forEach(bar => {
                 bar.style.width = `${bar.dataset.lowTemp}%`
-                bar.style.backgroundColor = `hsl(${Math.abs((bar.dataset.lowTemp / 100) * 240 - 240)}, 80%, 60%)`
+                bar.style.backgroundColor = `hsl(${Math.abs((bar.dataset.lowTemp / 100) * 300 - 300)}, 80%, 60%)`
             });
 
             document.querySelectorAll('.temp__bars--high').forEach(bar => {
                 bar.style.width = `${bar.dataset.highTemp }%`
-                bar.style.backgroundColor = `hsl(${Math.abs((bar.dataset.highTemp / 100) * 240 - 240)}, 80%, 60%)`
+                bar.style.backgroundColor = `hsl(${Math.abs((bar.dataset.highTemp / 100) * 300 - 300)}, 80%, 60%)`
             });
-        }, 0);
+        }, 1000);
     };
 
     _generateHourly(hourly) {

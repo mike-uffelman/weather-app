@@ -1,41 +1,43 @@
 
+import weatherView from "./weatherView";
 
 class searchView {
     
     _parentElement = document.querySelector('#search__modal');
     _searchInput = document.querySelector('#city-input');
+    _radioInput = document.querySelector('#textRadio');
     
     addHandlerSearch(handler) {
-        const form = document.querySelector('form');
         // const search = document.querySelector('#search')
-
         form.addEventListener('submit', (e) => {
-            try {
                 e.preventDefault();
+                const city = this.getInputs();
                 this._parentElement.classList.toggle('show');
-                console.log(form.elements.city.value);
-                const city = form.elements.city.value.split(', ');
-                const cityRadio = form.elements.textRadio.checked;
-                if(!cityRadio || cityRadio && !city || city.length <= 1 || city === ' ') return;
-                // throw new Error('Unable to find city...');
-                console.log('search value: ', city);
-                console.log(city.length);
-                handler(city);
-                this._clear();
 
-            } catch(err) {
-                console.error('error!!!', err);
-                throw err;
-            }
-        })
+                handler(city);
+                this._clearForm();
+        })        
 
         this._parentElement.addEventListener('click', (e) => {
             if(e.target.classList.contains('close')) {
                 console.log(e.target);
                 this._parentElement.classList.toggle('show');
+                
 
             }
         })
+    }
+
+    getInputs() {
+            const form = document.querySelector('form');
+
+            const city = form.elements.city.value.split(', ');
+            const cityRadio = form.elements.textRadio.checked;
+            if(cityRadio && city.length > 1) {
+                return city;
+            } else {
+                throw new Error('Search Failed! Please select search type and valid city name (city, state/country) or map location.');
+            }
     }
 
     moveToSearch() {
@@ -46,8 +48,9 @@ class searchView {
         document.querySelector('.search__modal').classList.toggle('show');
     }
 
-    _clear() {
+    _clearForm() {
         this._searchInput.value = '';
+        this._radioInput.checked = false;
     }
 }
 export default new searchView();

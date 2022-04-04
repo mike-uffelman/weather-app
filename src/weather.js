@@ -18,6 +18,8 @@ import savedView from './views/savedView.js';
 import searchView from './views/searchView.js';
 import * as layout from './layout.js';
 import infoView from './views/infoView.js';
+import errorHandler from './views/errorView.js';
+import errorView from './views/errorView.js';
 
 //* ========== app start controller ==========
 const controlAppStart = async function() {
@@ -32,6 +34,7 @@ const controlAppStart = async function() {
             weatherView.render(model.store) // render current weather
             maps.weatherMap(geoLoc.coords); // render map to current location
             infoView.toggleInfoView(); // display app instructions modal
+
         }
 
         // if location blocked
@@ -45,7 +48,7 @@ const controlAppStart = async function() {
         } 
     } catch(err) {
         console.error('app start error!!!', err);
-        weatherView.renderError(err);
+        weatherView.renderMessage(err);
     }
 }
 
@@ -72,7 +75,7 @@ const controlCurrentLocation = async function(loc) {
         
     } catch(err) {
         console.error('current location error!!!', err);
-        weatherView.renderError(err);
+        weatherView.renderMessage(err);
     }
 }
 
@@ -95,7 +98,9 @@ const controlCallSaved = async function(id) {
                 await model.getForecast(coords);
                 weatherView.render(model.store)
                 // const weatherMap = new Map();
-                maps.weatherMap(coords); //*
+                maps.weatherMap(coords);
+                weatherView.renderMessage('Location successfully loaded!', 'success');
+
             }
         })
         // console.log(storage.getStoredLocations());
@@ -130,11 +135,14 @@ const controlSearch = async function(loc) {
             longitude: model.store.at(-1).data.lon
         }
         console.log(model.store);
+        // weatherView.dismissMessage();
         weatherView.render(model.store);
-        await maps.weatherMap(coords) //*
+        await maps.weatherMap(coords)
+        weatherView.renderMessage('Location successfully loaded!', 'success');
+
     } catch(err) {
         console.log('unable to find searched location', err);
-        weatherView.renderError(err);
+        weatherView.renderMessage(err, 'success');
     }
 
 }
@@ -156,23 +164,17 @@ const controlMapClickSearch = async function() {
 
         weatherView.render(model.store);
         await maps.weatherMap(coords);
+        weatherView.renderMessage('Location successfully loaded!', 'success');
+
     } catch(err) {
         console.log('an error has occured');
-        weatherView.renderError(err);
+        weatherView.renderMessage(err);
     }
 }
 
-const searchLink = function () {
-    searchView.moveToSearch();
-}
-
-const savedLink = function () {
-    savedView.moveToSaved();
-}
-
-const infoLink = function() {
-    infoView.toggleInfoView();
-}
+const searchLink = () => searchView.moveToSearch();
+const savedLink = () => savedView.moveToSaved();
+const infoLink = () => infoView.toggleInfoView();
     
 const sortSaved = function(sort) {
     const sortedData = savedView.sortSavedView(storage.getStoredLocations(), sort);
@@ -180,9 +182,12 @@ const sortSaved = function(sort) {
     savedView.render(sortedData, sort)
 }
 
+const errorHandled = (message, type) => weatherView.renderMessage(message, type)
+
 
 
 const init = function() {
+    
     controlAppStart();
     searchView.addHandlerSearch(controlSearch);
     savedView.addHandlerSaved(controlCallSaved, controlRemoveSaved, sortSaved);
@@ -190,9 +195,28 @@ const init = function() {
     maps.addHandlerMapClick(enableSearchMap, controlMapClickSearch);
     layout.addHandlerToggleNav(searchLink, savedLink, infoLink);
 
-    if (module.hot) {
-        module.hot.accept();
-    }
+
+    if (module.hot) module.hot.accept();
+
+    // window.onerror = (e) => console.log(e)
+    // window.onerror = function(error) {
+    //     console.log(error);
+    //  };
+
+    window.addEventListener('error', function(e) {
+        console.log(e)
+        console.log(e.error.stack);
+        const message = e.error;
+        console.log(message);
+
+        e.preventDefault();
+        
+        errorHandled(message, 'error');
+    })
+
+    // errorHandled(e.error, 'error');
+    // errorView.handleErrors(errorHandled);
+
 
 
 }

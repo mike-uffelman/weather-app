@@ -1995,27 +1995,110 @@ input[type=text]:focus {
 }
 
 // ----- Flash Messages -----
-.error {
-    position: relative;
+.message {
+    position: absolute;
+    z-index: 99999;
+    top: -8rem;
 
-    justify-self: center;
+    // justify-self: center;
     align-self: center;
 
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex: 1;
     // justify-content: center;
     // align-items: center;
 
-    max-height: auto;
+    // max-height: auto;
     // max-width: ;
     margin: 1rem;
     padding: 1rem;
     border-radius: 1rem;
 
-    background-color: $red-salsa-light;
-    border: 1px solid white;
+    // background-color: rgb(233, 233, 233);
     color: $--white;
+    font-size: 1.2rem;
     
+
+    transform: translateY(-rem);
+    transform-origin: top;
+    transition: all linear 800ms;
+
+    &.show {
+        transform: translateY(8rem);
+        transform-origin: top;
+        transition: all linear 800ms;
+    }
+
+    &__success {
+        background-color: $--greenish-alerts;
+    }
+
+    &__error {
+        background-color: $--reddish-alerts;
+    }
+
+    // &.remove {
+    //     transform: translateY(-8rem);
+    //     transform-origin: top;
+    //     transition: all linear 800ms;
+    // }
+
+    &__header {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        flex: 2 1 90%;
+        margin-right: 2rem;
+
+        &--type {
+            font-size: 1.6rem;
+        }
+    }
+
+    & span {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1 1 10%;
+        transition: all ease 400ms;
+    
+        &:hover::before,
+        &:hover::after {
+            background-color: $--gradient-4;
+            transition: all ease 400ms;
+        }
+    }
+
+    & span::before,
+    & span::after {
+        content: '';
+        position: relative;
+        // z-index: 99999;
+        // display: flex;
+        justify-self: center;
+        align-self: center;
+        background-color: $--gradient-2;
+        width: 2rem;
+        height: .15rem;
+    }
+
+    & span::before {
+        transform: rotate(45deg);
+        right: -1rem;
+    }
+
+    & span::after {
+        transform: rotate(135deg);
+        right: 1rem;
+    }
+
+    
+
+    &__message {
+        
+    }
 }
 
 .success {

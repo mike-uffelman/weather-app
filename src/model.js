@@ -30,9 +30,9 @@ export const getCity = async function (city, state, country) {
             latitude: locHeader.lat,
             longitude: locHeader.lon, 
         }
-
+        console.log('before get forecast...');
         await getForecast(coords);
-
+        console.log('after get forecast');
     } catch(err) {
         console.error('cannot get city', err.message);
         throw new Error('Cannot get city, please try again.');
