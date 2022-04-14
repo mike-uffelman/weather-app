@@ -18,22 +18,22 @@ import savedView from './views/savedView.js';
 import searchView from './views/searchView.js';
 import * as layout from './layout.js';
 import infoView from './views/infoView.js';
-import errorHandler from './views/errorView.js';
-import errorView from './views/errorView.js';
+import message from './views/errorView.js';
+import * as search  from './search.js';
 
 //* ========== app start controller ==========
 const controlAppStart = async function() {
     try {
-        savedView.render(storage.getStoredLocations()); // retrieve and render bookmarked locations from local storage
+        savedView.render(await storage.getStoredLocations()); // retrieve and render bookmarked locations from local storage
 
         await geoLoc.getGeolocation(); // get current (browser location allowed) or random location(browser location blocked)
+        infoView.toggleInfoView(); // display app instructions modal
 
         // if location allowed
         if(geoLoc.coords.locPermission) {
             await model.getForecast(geoLoc.coords); // retrieve current location forecast
             weatherView.render(model.store) // render current weather
             maps.weatherMap(geoLoc.coords); // render map to current location
-            infoView.toggleInfoView(); // display app instructions modal
 
         }
 
@@ -42,13 +42,12 @@ const controlAppStart = async function() {
             //! marker comment here---------------------------------------
             const marker = false;
             searchView.toggleSearchViewBlockedGeoLoc(); // auto navigate to search view
-            maps.searchMap(geoLoc.coords, 4, marker); // render map to a random location
-            infoView.toggleInfoView(); // display app instructions modal
-            return;
+            // maps.searchMap(geoLoc.coords, 4, marker); // render map to a random location
+            // return;
         } 
     } catch(err) {
         console.error('app start error!!!', err);
-        weatherView.renderMessage(err);
+        message.renderMessage(err, 'error');
     }
 }
 
@@ -58,12 +57,12 @@ const controlCurrentLocation = async function(loc) {
     const { bookmarked, id } = loc.at(-1).data;
 
     try {
-        console.log()
         if(!bookmarked) {
             await model.updateBookmark();
             storage.addStoredLocation(loc);
-
             savedView.render(storage.getStoredLocations())
+            message.renderMessage('Location successfully saved!', 'success');
+
         }
 
         if(bookmarked) { 
@@ -71,11 +70,12 @@ const controlCurrentLocation = async function(loc) {
             await model.updateBookmark(); //*
             savedView.removeEl(id);
             savedView.render(storage.getStoredLocations());
+            message.renderMessage('Bookmark removed!', 'info');
         }
         
     } catch(err) {
-        console.error('current location error!!!', err);
-        weatherView.renderMessage(err);
+        console.error('Unable to update saved location!', err);
+        message.renderMessage(err, 'error');
     }
 }
 
@@ -99,7 +99,7 @@ const controlCallSaved = async function(id) {
                 weatherView.render(model.store)
                 // const weatherMap = new Map();
                 maps.weatherMap(coords);
-                weatherView.renderMessage('Location successfully loaded!', 'success');
+                // message.renderMessage('Location successfully loaded!', 'success');
 
             }
         })
@@ -107,7 +107,7 @@ const controlCallSaved = async function(id) {
 
     } catch(err) {
         console.error('saved location error!!!', err);
-        
+        message.renderMessage('Unable to load saved location!', 'error')
     }
     
 }
@@ -118,32 +118,39 @@ const controlRemoveSaved = async function(id) {
         storage.removeStoredLocation(Number(id));
         await savedView.render(storage.getStoredLocations());
         weatherView.toggleBookmarkIcon(Number(id));
+        message.renderMessage('Location successfully removed', 'info');
 
     } catch(err) {
         console.error('unable to remove this location', err);
+        message.renderMessage('An error has occured: Unable to remove saved location!')
     }
 }
 
 //* ========== Location search controller ==========
 const controlSearch = async function(loc) {
-    try {
-        const [city, state, country] = loc
+    // try {
+    //     const [city, ...region] = loc
     
-        await model.getCity(city, state, country);
-        const coords = { 
-            latitude: model.store.at(-1).data.lat, 
-            longitude: model.store.at(-1).data.lon
-        }
-        console.log(model.store);
-        // weatherView.dismissMessage();
-        weatherView.render(model.store);
-        await maps.weatherMap(coords)
-        weatherView.renderMessage('Location successfully loaded!', 'success');
+    //     console.log(city, region);
+    //     await model.getCity(city, region);
 
-    } catch(err) {
-        console.log('unable to find searched location', err);
-        weatherView.renderMessage(err, 'success');
-    }
+    //     // cities.forEach(city => console.log(city.name, city.state, city.country))
+
+
+    //     const coords = { 
+    //         latitude: model.store.at(-1).data.lat, 
+    //         longitude: model.store.at(-1).data.lon
+    //     }
+    //     console.log(model.store);
+    //     // weatherView.dismissMessage();
+    //     weatherView.render(model.store);
+    //     await maps.weatherMap(coords)
+    //     message.renderMessage('Location successfully loaded!', 'success');
+
+    // } catch(err) {
+    //     console.log('unable to find searched location', err);
+    //     message.renderMessage(err, 'error');
+    // }
 
 }
     //? favorites get forecast
@@ -155,36 +162,61 @@ const enableSearchMap = function() {
 }
 
 const controlMapClickSearch = async function() {
-    try {
-        const coords = maps.eCoords;
-        // coords.push(true);
-        console.log(coords);
+    // try {
+    //     const coords = maps.eCoords;
+    //     // coords.push(true);
+    //     console.log(coords);
 
-        await model.getForecast(coords);
+    //     await model.getForecast(coords);
 
-        weatherView.render(model.store);
-        await maps.weatherMap(coords);
-        weatherView.renderMessage('Location successfully loaded!', 'success');
+    //     weatherView.render(model.store);
+    //     await maps.weatherMap(coords);
+    //     message.renderMessage('Location successfully loaded!', 'success');
 
-    } catch(err) {
-        console.log('an error has occured');
-        weatherView.renderMessage(err);
-    }
+    // } catch(err) {
+    //     console.log('an error has occured');
+    //     message.renderMessage(err);
+    // }
 }
 
 const searchLink = () => searchView.moveToSearch();
 const savedLink = () => savedView.moveToSaved();
 const infoLink = () => infoView.toggleInfoView();
     
-const sortSaved = function(sort) {
-    const sortedData = savedView.sortSavedView(storage.getStoredLocations(), sort);
-
+const sortSaved = async function(sort) {
+    const getSaved = await storage.getStoredLocations();
+    // console.log('stored locations: ', getSaved);
+    const sortedData = await savedView.sortSavedView(getSaved, sort);
+    // console.log(sortedData);
     savedView.render(sortedData, sort)
 }
 
-const errorHandled = (message, type) => weatherView.renderMessage(message, type)
+const errorHandled = (message, type) => message.renderMessage(message, type)
 
+const controlLocationSearch = async function (e) {
+    const loc = searchView.getInputs();
+    const [city, ...region] = loc;
+    if(maps.eCoords.latitude === null && maps.eCoords.longitude === null && !loc) return;
 
+    // const mapLoc = maps.eCoords;
+    // console.log(inputs);
+    // console.log(mapLoc);
+    if(loc) await model.getCity(city, ...region);
+    console.log(maps.eCoords);
+    if(maps.eCoords) await model.getForecast(maps.eCoords);
+    const coords = { 
+        latitude: model.store.at(-1).data.lat, 
+        longitude: model.store.at(-1).data.lon
+    }
+    weatherView.render(model.store);
+    await maps.weatherMap(coords);
+    
+    searchView.toggleSearchViewBlockedGeoLoc();
+    searchView._clearForm();
+
+    
+    console.log('FORM SEARCH...: ', e)
+}
 
 const init = function() {
     
@@ -194,6 +226,7 @@ const init = function() {
     weatherView.addHandlerCurrent(controlCurrentLocation);
     maps.addHandlerMapClick(enableSearchMap, controlMapClickSearch);
     layout.addHandlerToggleNav(searchLink, savedLink, infoLink);
+    search.addHandlerSearchForm(controlLocationSearch);
 
 
     if (module.hot) module.hot.accept();
@@ -213,12 +246,6 @@ const init = function() {
         
         errorHandled(message, 'error');
     })
-
-    // errorHandled(e.error, 'error');
-    // errorView.handleErrors(errorHandled);
-
-
-
 }
 
 init();

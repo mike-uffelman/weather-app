@@ -30,20 +30,20 @@ export const addHandlerToggleNav = function(searchLink, savedLink) {
     })
 
     nav.addEventListener('click', (e) => {
-        if(e.target.classList.contains('search__link')) {
+        if(e.target.closest('.search__link')) {
             e.preventDefault();
             console.log('clicked the search link!!!!!!!!!!!!')
             searchLink();
             e.target.closest('.nav').classList.toggle('open');
         };
 
-        if(e.target.classList.contains('saved__link')) {
+        if(e.target.closest('.saved__link')) {
             e.preventDefault();
             savedLink();
             e.target.closest('.nav').classList.toggle('open');
         };
 
-        if(e.target.classList.contains('info__link')) {
+        if(e.target.closest('.info__link')) {
             console.log('opening info modal...')
             document.querySelector('#info').classList.toggle('show');
         }

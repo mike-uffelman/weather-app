@@ -17,14 +17,19 @@ export let searchResults = [];
 
 
 //Get the city data, including lat/lon
-export const getCity = async function (city, state, country) {
+export const getCity = async function (city, ...region) {
     try {
         if(!city) return;
-
-        const res = await fetch(`${GEOCODE_DIRECT_URL}?q=${city}${!state? '' : ','+country}${!country? '' : ','+country}&limit=5&appid=${OWM_APIKEY}`)
-
+        console.log(`${GEOCODE_DIRECT_URL}?q=${city}${region.map(place => ','+place).join('')}&limit=5&appid=${OWM_APIKEY}`)
+        const res = await fetch(`${GEOCODE_DIRECT_URL}?q=${city}${region.map(place => ','+place).join('')}&limit=5&appid=${OWM_APIKEY}`)
         const data = await res.json();
         console.log(data);
+
+        if(data.length === 0) throw new Error('Unable to find this location, please make sure it is entered correctly.')
+
+        
+
+
         const locHeader = data[0];
         const coords = {
             latitude: locHeader.lat,
@@ -34,8 +39,8 @@ export const getCity = async function (city, state, country) {
         await getForecast(coords);
         console.log('after get forecast');
     } catch(err) {
-        console.error('cannot get city', err.message);
-        throw new Error('Cannot get city, please try again.');
+        console.error(err.message);
+        throw err;
     }
 }
 

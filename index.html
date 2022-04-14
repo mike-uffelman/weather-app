@@ -19,33 +19,36 @@
   
     <body class=''>
         <!-- Main view -->
-        <main class='swipeView'>
+        <main class='l-swipeView'>
             <!-- Each swipe page, i.e. search, current weather, and saved -->
             <div class="pages">
                 <!-- Search page -->
-                <article id='search__modal' class='search__modal'> 
-                        <h2 class='search__modal--heading close'>Search</h2>
+                <article id='search' class='search'> 
+                        <h2 class='search__heading close'>Search</h2>
+                        
                         <!-- Search Form -->
-                        <form action='/somewhere' class='search__modal--form' id='form'>
-                            <div class="search__modal--form radio__box">
-                                <div class="search__modal--form radio__box--select">
+                        <form action='/somewhere' class='search__form' id='form'>
+                            <div class="search__form radio__box">
+                                <div class="search__form radio__box--select">
                                     <input type="radio" class="" id="textRadio" name="search-location" value="textsearch">
-                                    <label class="search__modal--header" for="textRadio">Location name:</label>
+                                    <label class="search__header" for="textRadio">Location name:</label>
                                 </div>
                                 
                             
                             
-                                <input type='text' id='city-input' name='city'  class='search__modal--form-input' placeholder='enter city' autofocus>
+                                <input type='text' id='city-input' name='city'  class='search__form-input' placeholder='e.g. "london, gb" OR "reno, nv, us"' autofocus>
                             </div>    
 
-                            <div class="search__modal--form radio__box radio__box--map">
-                                <div class="search__modal--form radio__box--select">
+                            <div class="search__form radio__box radio__box--map">
+                                <div class="search__form radio__box--select">
                                     <input type="radio" class="" id="mapRadio" name="search-location" value="mapsearch">
-                                    <label for="mapRadio" class='search__modal--header'>Location on the map:</label>
+                                    <label for="mapRadio" class='search__header'>Location on the map:</label>
                                 </div>
                             <!-- Search Map -->
-                                <div id='searchMap' class='search__modal--form-map'>
-                                    <div class="map--overlay">Click to enable map</div>
+                                <div id='searchMap' class='search__form-map'>
+                                    
+                                    <div class="search__form-map--overlay">
+                                        <a href='#' class=''></a>Click to enable map</a></div>
                                 </div>
                             </div>
 
@@ -59,20 +62,26 @@
                 <article id='current-weather-box' class='weatherPage tabDesktop'></article>
                 
                 <!-- Saved/Bookmarked View page -->
-                <article id='saved' class='saved'></article>
+                <article id='saved' class='saved' focus></article>
                      
             </div>
 
             <!-- Page Navigation -->
             <nav class='nav'>
                 <header class="nav__toggle">
-                    <span class="nav__toggle--burger">menu</span>
+                    <span class="nav__toggle--burger"></span>
                 </header>
                 <section class="nav__menu">
-                    <a href='#' class='nav__link search__link'>search</a>
-                    <a href='#' class='nav__link info__link'>info</a>
+                    <button class='nav__link search__link'>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/></svg>
+                        <span>search</span>
+                    </button>
+                    <button class='nav__link info__link'>info</button>
                     
-                    <a href='#' class='nav__link saved__link'>saved</a>
+                    <button class='nav__link saved__link'>
+                        <span>saved</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg>
+                    </button>
                 </section>
             </nav>
 
@@ -119,7 +128,7 @@
                             </li>
                         </ul>
                     </div>
-                    <a href='#' class='info__confirm btn btn__info close'>Got it!</a>
+                    <button class='info__confirm btn btn__info close'>Got it!</button>
 
                 </section>
             </dialog>

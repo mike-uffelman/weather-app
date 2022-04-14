@@ -18,25 +18,10 @@ class WeatherView {
 
     render(data) {
         try {
-            this.#currentWeather.classList.toggle('show');
-
-            this.#currentWeather.style.opacity = 0;
-            this.#currentWeather.style.transition = 'opacity ease 500ms';
-            this.#currentWeather.scrollIntoView({behavior: 'smooth'})
+            
+            this._loadStyles();
             this._clear();
-    
-            
-            // this.#currentWeather.innerHTML = '';
-            // console.log('RENDERING WEATHER VIEW...........')
             this._data = data;
-            console.log(this._data);
-            // console.log('store data: ', this._data);
-            
-            // console.log(`Welcome to ${this._data}`)
-            //add a clear() function
-            this.#currentWeather.style.opacity = 1;
-            
-            
             
             const markup = this._generateMarkup(this._data);
             this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
@@ -50,7 +35,7 @@ class WeatherView {
             // this.#currentWeather.style.transition = 'all ease 300ms';
             // this.#firstWeatherCall = false;
             this.#currentWeather.style.display = 'flex';
-            this._alertMessageToggle();
+            this._weatherAlertToggle();
             
             // this.renderSuccess(message);
             // setTimeout(() => {
@@ -62,9 +47,18 @@ class WeatherView {
 
         } catch(err) {
             console.log('error rendering location forecast!!!', err);
-            this.renderMessage('Unable to load app!!!', err);
+            throw err;
         }
         
+    }
+
+    _loadStyles() {
+        this.#currentWeather.classList.toggle('show');
+        this.#currentWeather.style.opacity = 0;
+        this.#currentWeather.style.transition = 'opacity ease 500ms';
+        this.#currentWeather.scrollIntoView({behavior: 'smooth'})
+        this.#currentWeather.style.opacity = 1;
+
     }
 
     dismissMessage() {
@@ -89,7 +83,7 @@ class WeatherView {
             </div>
         `
 
-        document.querySelector('.swipeView').insertAdjacentHTML('afterbegin', markup);
+        document.querySelector('.l-swipeView').insertAdjacentHTML('afterbegin', markup);
         
         const messageEl = document.querySelector('.message');
         setTimeout(() => { messageEl.classList.toggle('show') }, 0);
@@ -126,21 +120,20 @@ class WeatherView {
     addHandlerCurrent(handler) {       
         this.#currentWeather.addEventListener('click', (e) => {
             if(e.target.closest('.cw__box--location')) {
-                console.log(e.target)
                 document.querySelector('.location__bookmark--icon').classList.toggle('bookmarked');
                 handler(this._data);
             };
 
-            if(e.target.classList.contains('search__link--icon')) {
+            if(e.target.closest('.search__link')) {
                 console.log('search link clicked');
-                document.querySelector('.search__modal').classList.toggle('show');
+                document.querySelector('.search').classList.toggle('show');
             }
-            if(e.target.classList.contains('saved__link--icon')) {
+            if(e.target.closest('.saved__link')) {
                 console.log('saved link clicked');
                 document.querySelector('.saved').classList.toggle('show');
                 
             }
-            if(e.target.classList.contains('info__link--icon')) {
+            if(e.target.closest('.info__link')) {
                 console.log('info link clicked');
                 document.querySelector('.info').classList.toggle('show');
                 
@@ -212,7 +205,9 @@ class WeatherView {
                         <div class='cw__box' data-id='${location.at(-1).data.id}'>
                             <section class='cw__box--location'>
                                 <header class='location'>
-                                    <h3 id='city-display' class='location__header'><a href='#' class='location__header--link'>${location.at(-1).data.name}</a></h3>
+                                    <h3 id='city-display' class='location__header'>
+                                        <button class='location__header--link'>${location.at(-1).data.name}</button>
+                                    </h3>
                                     <h5 class='location__header--sub'>${(!location.at(-1).data.state) ? '' : location.at(-1).data.state + ', '} ${location.at(-1).data.country}</h5>
                                     <p class='location__date'>${date}</p>
                                 </header>
@@ -373,7 +368,7 @@ class WeatherView {
                 
         //     }
         // })
-        // this.#alerts?.addEventListener('click', this._alertMessageToggle.bind(this))
+        // this.#alerts?.addEventListener('click', this._weatherAlertToggle.bind(this))
         return alertHTML;
     };
 
@@ -387,7 +382,7 @@ class WeatherView {
     }
 
 
-    _alertMessageToggle() {
+    _weatherAlertToggle() {
         const alerts = document.querySelectorAll('.alert__heading');
         alerts.forEach((alert, i) => {
             alert.addEventListener('click', () => {

@@ -30,8 +30,8 @@ let { OWM_APIKEY } = process.env;
 
         mapBox.addEventListener('click', (e) => {
             console.log(e.target);
-            const mapOverlay = document.querySelector('.map--overlay');
-            if(e.target.classList.contains('map--overlay')) {
+            const mapOverlay = document.querySelector('.search__form-map--overlay');
+            if(e.target.closest('.search__form-map--overlay')) {
                 console.log('this is the search map')
                 // mapBox.classList.remove('map--overlay');
                 mapOverlay.style.opacity = '0';
@@ -49,18 +49,19 @@ let { OWM_APIKEY } = process.env;
             }
         }, {once: true}) // only allow this event once
 
-        form.addEventListener('submit', (e) => {
-            const mapRadio = form.elements.mapRadio.checked;
-            e.preventDefault();
-            if(!mapRadio || mapRadio && eCoords.latitude === null || eCoords.longitude === null) return;
-            gotoLocation();
-            console.log('eCoords before submit: ', eCoords);
-            eCoords = {}; //clear coordinates each form submit
-            // searchMapObj = '';
-            console.log('eCoords after submit: ', eCoords)
+        // form.addEventListener('submit', (e) => {
+        //     e.preventDefault();
 
-            clearMarkers();
-        });
+        //     const mapRadio = form.elements.mapRadio.checked;
+        //     if(mapRadio && eCoords.latitude !== null && eCoords.longitude !== null) return;
+        //     gotoLocation();
+        //     console.log('eCoords before submit: ', eCoords);
+        //     eCoords = {}; //clear coordinates each form submit
+        //     // searchMapObj = '';
+        //     console.log('eCoords after submit: ', eCoords)
+
+        //     clearMarkers();
+        // });
         
         
         
@@ -78,7 +79,8 @@ let { OWM_APIKEY } = process.env;
         );
         let mapOptions = {
             zoomControl: true,
-            worldCopyJump: true
+            worldCopyJump: true,
+            keyboard: true
         };
 
         searchMapObj = L.map('searchMap', mapOptions)
@@ -87,23 +89,32 @@ let { OWM_APIKEY } = process.env;
         
         searchMapObj.on({
             click: (e) => {
-                clearMarkers();
-
-                // document.querySelector('.map--overlay').style.display = 'none';
-
-                console.log(eCoords);
-                if(!marker) document.querySelector('.leaflet-marker-icon').remove();
-
-                const searchMarker = L.marker([e.latlng.lat, e.latlng.lng])
-                const {lat, lng} = e.latlng;
-                eCoords.latitude = lat;
-                eCoords.longitude = lng;
-                console.log(eCoords);
-                searchMarker.addTo(searchMapObj)
-                console.log(searchMapObj);
-
+                eCoords = {
+                    latitude: e.latlng.wrap().lat, 
+                    longitude: e.latlng.wrap().lng
+                };
+                setMarker(eCoords);
+            },
+            // enable keyboard map navigation
+            keydown: (e) => {
+                if(e.originalEvent.code === "Space") {
+                    const center = searchMapObj.getBounds().getCenter().wrap();
+                    eCoords = {
+                        latitude: center.lat,
+                        longitude: center.lng
+                    }
+                    setMarker(eCoords);
+                }
             }
         })
+            
+        
+    }
+
+    const setMarker = function(coords) {
+        clearMarkers();
+        const searchMarker = L.marker([coords.latitude, coords.longitude])
+        searchMarker.addTo(searchMapObj)
     }
 
     const clearMarkers = function () {
