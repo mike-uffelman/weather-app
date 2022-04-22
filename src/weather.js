@@ -20,28 +20,31 @@ import * as layout from './layout.js';
 import infoView from './views/infoView.js';
 import message from './views/errorView.js';
 import * as search  from './search.js';
+import Nav from './views/navigationView.js';
 
 //* ========== app start controller ==========
 const controlAppStart = async function() {
     try {
+        infoView.render(); // display app instructions modal
+        
         savedView.render(await storage.getStoredLocations()); // retrieve and render bookmarked locations from local storage
 
         await geoLoc.getGeolocation(); // get current (browser location allowed) or random location(browser location blocked)
-        infoView.toggleInfoView(); // display app instructions modal
-
+        // Nav._render();
         // if location allowed
         if(geoLoc.coords.locPermission) {
             await model.getForecast(geoLoc.coords); // retrieve current location forecast
             weatherView.render(model.store) // render current weather
             maps.weatherMap(geoLoc.coords); // render map to current location
-
+            searchView.render()
         }
 
         // if location blocked
         if(!geoLoc.coords.locPermission) {
             //! marker comment here---------------------------------------
             const marker = false;
-            searchView.toggleSearchViewBlockedGeoLoc(); // auto navigate to search view
+            searchView.render();
+            searchView.moveToSearch(); // auto navigate to search view
             // maps.searchMap(geoLoc.coords, 4, marker); // render map to a random location
             // return;
         } 
@@ -218,9 +221,9 @@ const controlLocationSearch = async function (e) {
     console.log('FORM SEARCH...: ', e)
 }
 
-const init = function() {
+const init = async function() {
     
-    controlAppStart();
+    await controlAppStart();
     searchView.addHandlerSearch(controlSearch);
     savedView.addHandlerSaved(controlCallSaved, controlRemoveSaved, sortSaved);
     weatherView.addHandlerCurrent(controlCurrentLocation);

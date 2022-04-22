@@ -1,6 +1,8 @@
 //----- typography -----
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
 
+$--dark-mode: true;
+
 $--reddish: rgba(239, 71, 111, 1);
 $--reddish-lighter: rgba(239, 71, 111, .5);
 $--reddish-alerts: rgb(188, 16, 56);

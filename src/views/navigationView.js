@@ -1,43 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-   
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>myWeather</title>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-            integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
-            
 
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-        <link rel="stylesheet" href="./public/scss/main.scss" type='text/css'>
-        
-        <script type='module' defer src="./src/weather.js"></script>
 
-     
-    </head>
-  
-    <body class=''>
-        <!-- Main view -->
-        <main class='main main__large'>
-            <!-- Each swipe page, i.e. search, current weather, and saved -->
-            <!-- <div class="l-main l-main__small l-main__large"> -->
-                <!-- Search page -->
-            <article id='search' class='c-card main__page search'> 
-                    
-                
-            </article>    
 
-            <!-- Current Weather Page -->
-            <article id='current-weather-box' class='main__page main__page--medium'></article>
-            
-            <!-- Saved/Bookmarked View page -->
-            <article id='saved' class='main__page saved' focus></article>
-                     
-            <!-- </div> -->
 
-            <!-- Page Navigation -->
-            <nav class='nav'>
+class Nav {
+
+
+
+    _render() {
+        const navContainer = document.querySelector('.nav');
+        navContainer.insertAdjacentHTML('afterbegin', this._generateMarkup());
+    }
+
+    _generateMarkup() {
+        return `
                 <header class="nav__toggle">
                     <span class="nav__toggle--burger"></span>
                 </header>
@@ -60,15 +35,8 @@
                         </svg>
                         <span class='text__nav'>saved</span>
                     </button>
-                </section>
-            </nav>
+                </section>`
+    }
+}
 
-            <!-- Site info/instructions -->
-            <dialog id='info' class="info show">
-            </dialog>
-            <!-- </div> -->
-
-        </main>
-    </body>
-  
-</html>
+export default new Nav;

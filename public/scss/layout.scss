@@ -32,187 +32,154 @@ body {
     // }
 }
 
-
-
-
 svg, path {
     pointer-events: stroke;
   
 }
 
 /* --- scroll snap --- */
-.l-swipeView { //main
-    background-image: linear-gradient(135deg, $--gradient-5, $--gradient-4);
-    
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    z-index: 1;
-    // display: grid;
-    // grid-template-columns: 1fr;
-    // grid-template-rows: 1fr;
-    // will-change: transform;
-    // align-content: center;
-    // overflow-x: auto;
-    
-    // scroll-snap-coordinate: 0 0;
-    // scroll-snap-points-x: repeat(100%);
-    // scroll-snap-type: x mandatory;
-    // -webkit-overflow-scrolling: touch;
-    // background-color: transparent;
-    width: 100%;
-    overflow-x: hidden;
-
-    // backdrop-filter: blur(5px);
-    // overflow: hidden;
-    @media only screen and (min-width: $bp-smallest) {
-        // height: 100vh;
-    }
-
-    @media only screen and (min-width: $bp-medium) {
-        // display: none;
-    }
-
-
-    
-}
-
-
-// .nav {
-//     position: fixed;
-//     bottom: 0;
-//     left: 50%;
-//     border: 1px solid magenta;
-//     padding: 3rem;
-// }
-// .scroll-align {
-//     scroll-snap-align: start;
-// }
-
-
-// .pages {
-//     grid-row: 1 / 1;
-
-// }
-
-
-
-.pages {
-    // grid-row: 1 / 1;
-    flex: 1;
-    height: 100%;  //?need this???
-    // margin-bottom: 8rem;
-    position: relative;
-    // z-index: 1;
+.main { //main
     display: grid;
+    grid-template-areas:
+        "search current saved";
     grid-template-columns: repeat(3, 100vw);
     grid-template-rows: 100%;
     column-gap: 3rem;
 
-    // will-change: transform;
-    align-content: center;
-    overflow-x: auto;
-    scroll-snap-coordinate: 0 0;
-    // scroll-snap-points-x: repeat(100%);
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    background-color: transparent;
+    height: 100vh;
     width: 100%;
-    // min-width: 27.5rem;
-    // overflow-y: hidden;
-    // backdrop-filter: blur(5px);
+    scroll-snap-coordinate: 0 0;
+    scroll-snap-type: x mandatory;
+    will-change: auto;
+
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+
+    background-image: linear-gradient(135deg, $--gradient-5, $--gradient-4);
+    background-color: transparent;
 
 
     @media only screen and (min-width: $bp-smallest) {
         // height: 100vh;
-        
     }
 
     @media only screen and (min-width: $bp-medium) {
-        display: flex;
-        justify-content: center;   
-        align-items: flex-start;
-        width: 100%;
-        scroll-snap-type: none;
-        height: 100vh;
-
-             
-    }
-
-    &::-webkit-scrollbar {
         // display: none;
+        
     }
 
-    & > article {
-        // max-height: 100%;
-        // width: 100%;
+
+
+    &__page {
         scroll-snap-align: center;
         min-width: 27.5rem;
-        // border: .5rem solid white;
-        // border-left: .25rem solid white;
-        // border-right: .25rem solid white;
-        // border: 1px solid magenta;
-        // overflow-x: hidden;
+        // max-height: 40rem;
         border-radius: $--box-radius;
         box-shadow: $--weather-box-shadow;
-
-        // margin-bottom: 0.5rem;
-        // background-color: transparent;
         
-        @media only screen and (min-width: $bp-smallest) {
+        
+
+
+        @media only screen and (min-width: $bp-smallest) { //keeps search and saved width 
             width: 90%;
         }
-
-        @media only screen and (min-width: $bp-small) {
-            // height: 100vh;
+    
+        @media only screen and (min-width: $bp-small) { 
             max-width: 40rem;
         }
-
+    
         @media only screen and (min-width: $bp-medium) {
             display: none;
-
+            
+            &.search,
+            &.saved {
+                display: none;
+            }
+    
         }
-
-        & + .weatherPage {
-            border-radius: none;
-            box-shadow: none;
-        }
-
-
-        &.tabDesktop {
-
-        
-            @media only screen and (min-width: $bp-medium) {
-                // height: 100vh;
-                // max-width: 40rem;
-                min-width: 100%;
+    
+        @media only screen and (min-width: $bp-medium) {
+    
+            &--medium {
                 display: flex;
-                // flex-direction: row;
                 justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-                // margin: 2rem;
-                // border-radius: $--box-radius;
-                // box-shadow: $--weather-box-shadow;
 
+                min-width: 100%;
             }
         }
     }
-
-}
-
-.weatherPage {
-    display: none;
-
-    &.show {
-        display: flex;
-    }
+    
 }
 
 
+#search {
+    grid-area: search;
+}
 
 
+#current-weather-box {
+    grid-area: current;
+    border: 1px solid rgb(255, 0, 0);
+}
+
+#saved {
+    grid-area: saved;
+}
+//! Remove this======
+// .weatherPage {
+//     display: none;
+
+//     &.show {
+//         display: flex;
+//     }
+// }
+//!=-================
+
+// .l-page {
+//     scroll-snap-align: center;
+//     min-width: 27.5rem;
+//     border-radius: $--box-radius;
+//     box-shadow: $--weather-box-shadow;
+//     // border: 1px solid aqua;
+    
+//     @media only screen and (min-width: $bp-smallest) {
+//         width: 90%;
+//     }
+
+//     @media only screen and (min-width: $bp-small) {
+//         max-width: 40rem;
+//     }
+
+//     @media only screen and (min-width: $bp-medium) {
+//         display: none;
+
+//     }
+
+//     //! remove this==---=
+//     // &.weatherPage { 
+//     //     border-radius: none;
+//     //     box-shadow: none;
+//     // }
+//     //!--------------------
+
+//     @media only screen and (min-width: $bp-medium) {
+
+//         &--desktop {
+//             // height: 100vh;
+//             // max-width: 40rem;
+//             min-width: 100%;
+//             display: flex;
+//             // flex-direction: row;
+//             justify-content: center;
+//             align-items: center;
+//             min-height: 100vh;
+//             // margin: 2rem;
+//             // border-radius: $--box-radius;
+//             // box-shadow: $--weather-box-shadow;
+
+//         }
+//     }
+// }
 
 .nav {
     flex: 1 1 -4rem;
@@ -236,25 +203,32 @@ svg, path {
         // width: auto;
         // bottom: 0;
         // z-index: 0;
+        height: 100%;
         display: none;
+        grid-area: menu;
 
     }
 
 
-    &.open {
+    &.is-open {
         transform: translateY(-5rem);
         transition: all ease 300ms;
     }
 
+    
+
     &__toggle {
-        height: 2rem;
+        height: 3rem;
         background-color: $--dark-blue;
         width: 100%;
         position: relative;
-        border-top-right-radius: 10rem;
-        border-top-left-radius: 10rem;
+        // border-top-right-radius: 10rem;
+        // border-top-left-radius: 10rem;
         display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
+
 
         @media only screen and (min-width: $bp-medium) {
             display: none;
@@ -263,24 +237,18 @@ svg, path {
 
 
         &--burger {
-            color: $--white-alt;
-            font-size: 1.4rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            // justify-self: center;
-            align-self: center;
 
-
-
+            &,
             &::before,
             &::after {
                 content: '';
                 position: absolute;
                 // top: 50%;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 3rem;
-                height: .25rem;
+                // top: 50%;
+                // left: 50%;
+                // transform: translateX(-50%);
+                width: 2rem;
+                height: .2rem;
                 background-color: $--purple-lighter;
             }
     
@@ -292,20 +260,13 @@ svg, path {
                 bottom: .5rem;
             }
         }
-        
-        &:hover {
-            // background-color: $--purple-light;
-        }
-
-
-
-       
     }
 
     
 
     &__menu {
         display: flex;
+        flex-direction: row;
         // height: 3rem;
         width: 100%;
         // background-color: green;
@@ -322,29 +283,35 @@ svg, path {
         text-decoration: none;
         color: $--white;
         background-color: $--dark-blue;
-        padding: 1rem 1rem 1rem 1rem;
+        padding: 0 1rem;
         position: relative;
         transition: all ease 300ms;
-        // display: flex;
-        // flex-direction: row;
-        // justify-content: center;
-        // align-items: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
         font-size: 2rem;
         width: 100%;
         height: 5rem;
         text-align: center;
         text-shadow: .25rem .25rem .5rem black;
+        border: 1px solid $--white-lightest;
         // margin-top: 1rem;
         // box-shadow: 0 0 1rem black;
+
+        @media only screen and (min-width: $bp-medium) {
+            border: none;
+        }
+
 
         &.search__link,
         &.saved__link,
         &.info__link {
             font-size: 1.4rem;
-            // display: flex;
+            display: flex;
             // flex-direction: row;
-            // justify-content: center;
-            // align-items: center;
+            justify-content: center;
+            align-items: center;
 
             @media only screen and (min-width: $bp-small) {
                 font-size: 1.6rem;
@@ -355,10 +322,10 @@ svg, path {
                 // font-size: 1.5rem;
                 // text-shadow: .25rem .25rem .5rem black;
                 // background-color: transparent;
-                color: $--white;
-                font-weight: 600;
-                border-radius: 1rem;
-                padding: 1rem 1rem 0 1rem;
+                // color: $--white;
+                // font-weight: 600;
+                // border-radius: 1rem;
+                // padding: 0 1rem;
 
                 &:hover > svg {
                     fill: $--purple-lighter;
@@ -404,95 +371,6 @@ svg, path {
             justify-self: center;
 
         }
-        
-        // &::before,
-        // &::after {
-        //     content: '';
-        //     position: absolute;
-        //     // left: 0;
-        //     height: .25rem;
-        //     width: 1rem;
-        //     background-color: $--purple-lighter;
-        //     filter: drop-shadow(.25rem .25rem .5rem black);
-
-        //     @media only screen and (min-width: $bp-small) {
-        //         width: 1.5rem;
-        //     }
-
-        //     @media only screen and (min-width: $bp-medium) {
-        //         display: none;
-        
-        //     }
-        // }
-    
-        // &:first-child:before {
-        //     top: 2rem;
-        //     left: 1rem;
-        //     transform: rotate(135deg);
-        //     transition: all ease 300ms;
-        //     @media only screen and (min-width: $bp-small) {
-                
-        //     }
-    
-        // }
-    
-        // &:first-child:after {
-        //     top: 3rem;
-        //     left: 1rem;
-        //     transform: rotate(45deg);
-        //     transition: all ease 300ms;
-    
-        // }
-
-        // &:last-child::before {
-        //     top: 2rem;
-        //     right: 1rem;
-        //     transform: rotate(45deg);
-        //     transition: all ease 300ms;
-        // }
-
-        // &:last-child::after {
-        //     top: 3rem;
-        //     right: 1rem;
-        //     transform: rotate(135deg);
-        //     transition: all ease 300ms;
-    
-        // }
-
-        // &:nth-child(2)::before,
-        // &:nth-child(2)::after {
-        //     display: none;
-        // }
-
-        // &:hover {
-        //     color: $--black;
-        //     background-color: $--gradient-1;
-        //     transition: all ease 300ms;
-        //     // border-radius: 1rem;
-        
-        //     &::before,
-        //     &::after {
-        //         color: $--greenish;
-        //         background-color: magenta;
-        //         transition: all ease 300ms;
-    
-        // }
-        
-        // }
-        
-        
-
-        // & .search--link::before,
-        // & .saved--link::after {
-        //     content: '';
-        //     position: absolute;
-        //     left: 0;
-        //     height: .25rem;
-        //     width: 1.5rem;
-        //     background-color: $--greenish;
-        // }
-
-
     }
 }
 

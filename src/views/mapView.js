@@ -170,8 +170,7 @@ let { OWM_APIKEY } = process.env;
 
         })
             .addLayer(osmLayer)
-        // .addLayer(weatherLayer)
-        //* ^ add back for production
+        // .addLayer(weatherLayer) //? keep this, displays rain on map => add back for production
 
         // const bounds = L.bounds([lat, lon]).getCenter()
         // console.log('bounds: ', bounds)

@@ -9,7 +9,7 @@ export const addHandlerToggleNav = function(searchLink, savedLink) {
         if(e.target.closest('.nav__toggle')) {
             console.log('nav toggled')
 
-            e.target.closest('.nav').classList.toggle('open');
+            e.target.closest('.nav').classList.toggle('is-open');
 
         }
 
@@ -34,13 +34,13 @@ export const addHandlerToggleNav = function(searchLink, savedLink) {
             e.preventDefault();
             console.log('clicked the search link!!!!!!!!!!!!')
             searchLink();
-            e.target.closest('.nav').classList.toggle('open');
+            e.target.closest('.nav').classList.toggle('is-open');
         };
 
         if(e.target.closest('.saved__link')) {
             e.preventDefault();
             savedLink();
-            e.target.closest('.nav').classList.toggle('open');
+            e.target.closest('.nav').classList.toggle('is-open');
         };
 
         if(e.target.closest('.info__link')) {
