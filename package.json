@@ -2,11 +2,11 @@
   "name": "weather-app",
   "version": "1.0.0",
   "description": "User Stories:",
-  "default": "index.html",
+  "source": "./src/index.html",
   "scripts": {
     "watch:sass": "sass public/scss/main.scss public/css/style.css -w",
-    "start": "parcel index.html",
-    "build": "parcel build index.html --dist-dir ./dist"
+    "start": "parcel",
+    "build": "parcel build"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     "core-js": "^3.20.2"
   },
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.4.1",
-    "parcel": "^2.4.1"
+    "@parcel/transformer-sass": "^2.5.0",
+    "parcel": "^2.5.0"
   }
 }

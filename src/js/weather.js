@@ -10,17 +10,17 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 import * as model from './model.js';
-import * as maps from './views/mapView.js';
+import * as maps from '../views/mapView.js';
 import * as geoLoc from './geoLocation.js';
 import * as storage from './localStorage.js';
-import weatherView from './views/weatherView.js';
-import savedView from './views/savedView.js';
-import searchView from './views/searchView.js';
+import weatherView from '../views/weatherView.js';
+import savedView from '../views/savedView.js';
+import searchView from '../views/searchView.js';
 import * as layout from './layout.js';
-import infoView from './views/infoView.js';
-import message from './views/errorView.js';
-import * as search  from './search.js';
-import Nav from './views/navigationView.js';
+import infoView from '../views/infoView.js';
+import message from '../views/errorView.js';
+import * as search  from './js/search.js';
+import Nav from '../views/navigationView.js';
 
 //* ========== app start controller ==========
 const controlAppStart = async function() {
@@ -251,7 +251,7 @@ const init = async function() {
     })
 }
 
-init();
+// init();
 
 
 
