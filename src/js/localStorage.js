@@ -1,3 +1,4 @@
+'use strict';
 
 
 
@@ -35,7 +36,7 @@ export const addStoredLocation = function(location) {
                 lat: saveLoc.lat,
                 lon: saveLoc.lon,
                 id: saveLoc.id,
-                bookmarked: true,
+                saved: true,
                 clicks: 1,
                 created: new Date()
             }
@@ -49,7 +50,7 @@ export const addStoredLocation = function(location) {
         localStorage.setItem('loc', JSON.stringify(loc));
         // console.log(loc)
     } catch(err) {
-        console.log('unable to add location to bookmark storage', err)
+        console.log('unable to add location to storage', err)
         throw err;
     }
 

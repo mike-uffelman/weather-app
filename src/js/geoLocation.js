@@ -1,3 +1,6 @@
+'use strict';
+
+
 export const coords = {
     latitude: 0,
     longitude: 0
@@ -19,12 +22,12 @@ export const getGeolocation = async function() {
                 console.log(coords);
                
             } catch(err) { // if blocked
-                await _randomCoords();
-                console.log(err);
-                console.log(coords);
-                console.log(navigator.permissions);
-                console.log(`failed - random: ${err}`, coords);
-                throw err;
+                const coords = await _randomCoords();
+                if(coords) {
+                    return coords;
+                } else {
+                    throw err;
+                }
             }
                             
         }
@@ -33,7 +36,7 @@ export const getGeolocation = async function() {
             await _randomCoords();
         }
     } catch(err) {
-        console.error(err);
+        throw err;
     }
 };
 

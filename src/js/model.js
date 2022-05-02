@@ -1,3 +1,6 @@
+'use strict';
+
+
 import {FORECAST_URL, GEOCODE_REVERSE_URL, GEOCODE_DIRECT_URL} from './config.js';
 let { OWM_APIKEY } = process.env;
 
@@ -17,25 +20,34 @@ export let searchResults = [];
 
 
 //Get the city data, including lat/lon
-export const getCity = async function (city, state, country) {
+export const getCity = async function (loc) {
     try {
+        console.log(loc);
+        const [city, ...region] = loc;
+        console.log(city, ...region);
+
         if(!city) return;
-
-        const res = await fetch(`${GEOCODE_DIRECT_URL}?q=${city}${!state? '' : ','+country}${!country? '' : ','+country}&limit=5&appid=${OWM_APIKEY}`)
-
+        console.log(`${GEOCODE_DIRECT_URL}?q=${city}${region.map(place => ','+place).join('')}&limit=5&appid=${OWM_APIKEY}`)
+        const res = await fetch(`${GEOCODE_DIRECT_URL}?q=${city}${region.map(place => ','+place).join('')}&limit=5&appid=${OWM_APIKEY}`)
         const data = await res.json();
         console.log(data);
+
+        if(data.length === 0) throw new Error('Unable to find this location, please make sure it is entered correctly.')
+
+        
+
+
         const locHeader = data[0];
         const coords = {
             latitude: locHeader.lat,
             longitude: locHeader.lon, 
         }
-
+        console.log('before get forecast...');
         await getForecast(coords);
-
+        console.log('after get forecast');
     } catch(err) {
-        console.error('cannot get city', err.message);
-        throw new Error('Cannot get city, please try again.');
+        console.error(err.message);
+        throw err;
     }
 }
 
@@ -43,7 +55,7 @@ export const getCity = async function (city, state, country) {
 //Get the forecast for the lat/lon provided
 export const getForecast = async function(coords) {
     try {
-        const { latitude: lat, longitude: lon, bookmarked = false, id } = coords;
+        const { latitude: lat, longitude: lon, saved = false, id } = coords;
         // if(!check) return; // if a random location i.e. false, return //? NOT SURE IF REALLY NEEDED...
         if(!lat || !lon) return; // if lat or lon is undefined, return 
 
@@ -61,7 +73,7 @@ export const getForecast = async function(coords) {
         let locationObj = {
             ...locHeader,
             ...forecastData,
-            bookmarked
+            saved
         }
 
         const location = new Location(locationObj);
@@ -78,12 +90,12 @@ export const getForecast = async function(coords) {
     }
 }
 
-export const updateBookmark = async function() {
+export const updateSaved = async function() {
     try {
-        store.at(-1).data.bookmarked = !store.at(-1).data.bookmarked;
+        store.at(-1).data.saved = !store.at(-1).data.saved;
 
     } catch(err) {
-        console.log('unable to toggle bookmark property', err);
+        console.log('unable to toggle saved property', err);
         throw err;
     }
 

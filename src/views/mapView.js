@@ -1,3 +1,6 @@
+'use strict';
+
+
 let { OWM_APIKEY } = process.env;
 
 
@@ -8,10 +11,7 @@ let { OWM_APIKEY } = process.env;
     // export let mapEvent;
     export let mapClick;
     // export let _data;
-    export let eCoords = {
-        latitude: null,
-        longitude: null
-    };
+    export let eCoords = {};
     // let mapEnabled = false;
 
     
@@ -30,8 +30,8 @@ let { OWM_APIKEY } = process.env;
 
         mapBox.addEventListener('click', (e) => {
             console.log(e.target);
-            const mapOverlay = document.querySelector('.map--overlay');
-            if(e.target.classList.contains('map--overlay')) {
+            const mapOverlay = document.querySelector('.search__form-map--overlay');
+            if(e.target.closest('.search__form-map--overlay')) {
                 console.log('this is the search map')
                 // mapBox.classList.remove('map--overlay');
                 mapOverlay.style.opacity = '0';
@@ -49,18 +49,19 @@ let { OWM_APIKEY } = process.env;
             }
         }, {once: true}) // only allow this event once
 
-        form.addEventListener('submit', (e) => {
-            const mapRadio = form.elements.mapRadio.checked;
-            e.preventDefault();
-            if(!mapRadio || mapRadio && eCoords.latitude === null || eCoords.longitude === null) return;
-            gotoLocation();
-            console.log('eCoords before submit: ', eCoords);
-            eCoords = {}; //clear coordinates each form submit
-            // searchMapObj = '';
-            console.log('eCoords after submit: ', eCoords)
+        // form.addEventListener('submit', (e) => {
+        //     e.preventDefault();
 
-            clearMarkers();
-        });
+        //     const mapRadio = form.elements.mapRadio.checked;
+        //     if(mapRadio && eCoords.latitude !== null && eCoords.longitude !== null) return;
+        //     gotoLocation();
+        //     console.log('eCoords before submit: ', eCoords);
+        //     eCoords = {}; //clear coordinates each form submit
+        //     // searchMapObj = '';
+        //     console.log('eCoords after submit: ', eCoords)
+
+        //     clearMarkers();
+        // });
         
         
         
@@ -78,34 +79,70 @@ let { OWM_APIKEY } = process.env;
         );
         let mapOptions = {
             zoomControl: true,
-            worldCopyJump: true
+            worldCopyJump: true,
+            keyboard: true
         };
+
+        let myicon = L.icon({
+            iconUrl: `../../public/images/dot1.svg`,
+            iconSize: [12.5, 12.5],
+            iconAnchor: [50, 50]
+        })
+
+        // const centerIcon = 
+
+        // L.marker([lat, lon], {icon: myicon})
+        //     .addTo(map)
 
         searchMapObj = L.map('searchMap', mapOptions)
             .setView(new L.LatLng(lat, lon), zoom)
             .addLayer(osmLayer)
         
         searchMapObj.on({
+            // remove keyboard map crosshair on mouse drag
+            drag: (e) => {
+                if(document.querySelector('.crosshair')) document.querySelector('.crosshair').classList.remove('show');
+            },
+
+            // set marker on map mouse click
             click: (e) => {
-                clearMarkers();
+                if(document.querySelector('.crosshair')) document.querySelector('.crosshair').classList.remove('show');
+                
+                eCoords = {
+                    latitude: e.latlng.wrap().lat, 
+                    longitude: e.latlng.wrap().lng
+                };
+                setMarker(eCoords);
+            },
+            // enable keyboard map navigation, add crosshair for map center
+            keydown: (e) => {
+                console.log(e.originalEvent)
+                if(!document.querySelector('.crosshair show')) {
+                    document.querySelector('.crosshair').classList.add('show');
+                }
 
-                // document.querySelector('.map--overlay').style.display = 'none';
-
-                console.log(eCoords);
-                if(!marker) document.querySelector('.leaflet-marker-icon').remove();
-
-                const searchMarker = L.marker([e.latlng.lat, e.latlng.lng])
-                const {lat, lng} = e.latlng;
-                eCoords.latitude = lat;
-                eCoords.longitude = lng;
-                console.log(eCoords);
-                searchMarker.addTo(searchMapObj)
-                console.log(searchMapObj);
-
+                if(e.originalEvent.code === "Space") {
+                    const center = searchMapObj.getBounds().getCenter().wrap();
+                    eCoords = {
+                        latitude: center.lat,
+                        longitude: center.lng
+                    }
+                    setMarker(eCoords);
+                }
             }
+            
         })
+            
+        
     }
 
+    const setMarker = function(coords) {
+        clearMarkers();
+        const searchMarker = L.marker([coords.latitude, coords.longitude])
+        searchMarker.addTo(searchMapObj)
+    }
+
+    // remove map marker and shadow on click
     const clearMarkers = function () {
         document.querySelectorAll('.leaflet-marker-pane img').forEach(mark => mark.remove());
         document.querySelectorAll('.leaflet-shadow-pane img').forEach(shadow => shadow.remove());
@@ -144,11 +181,7 @@ let { OWM_APIKEY } = process.env;
             iconAnchor: [50, 50]
         })
 
-        // let myicon = L.icon({
-        //     iconUrl: `./public/images/dot1.svg`,
-        //     iconSize: [12.5, 12.5],
-        //     iconAnchor: [50, 50]
-        // })
+        
         const layerName = 'precipitation_new'
         const weatherUrl = await `https://tile.openweathermap.org/map/${layerName}/{z}/{x}/{y}.png?appid=${OWM_APIKEY}`
 
@@ -159,8 +192,7 @@ let { OWM_APIKEY } = process.env;
 
         })
             .addLayer(osmLayer)
-        // .addLayer(weatherLayer)
-        //* ^ add back for production
+        // .addLayer(weatherLayer) //? keep this, displays rain on map => add back for production
 
         // const bounds = L.bounds([lat, lon]).getCenter()
         // console.log('bounds: ', bounds)
