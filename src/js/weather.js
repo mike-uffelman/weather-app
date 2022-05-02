@@ -19,7 +19,7 @@ import searchView from '../views/searchView.js';
 import * as layout from './layout.js';
 import infoView from '../views/infoView.js';
 import message from '../views/errorView.js';
-import * as search  from './js/search.js';
+import * as search  from './search.js';
 import Nav from '../views/navigationView.js';
 
 //* ========== app start controller ==========
@@ -27,7 +27,7 @@ const controlAppStart = async function() {
     try {
         infoView.render(); // display app instructions modal
         
-        savedView.render(await storage.getStoredLocations()); // retrieve and render bookmarked locations from local storage
+        savedView.render(await storage.getStoredLocations()); // retrieve and render saved locations from local storage
 
         await geoLoc.getGeolocation(); // get current (browser location allowed) or random location(browser location blocked)
         // Nav._render();
@@ -57,23 +57,23 @@ const controlAppStart = async function() {
 //* ========== Current weather page controller ==========
 const controlCurrentLocation = async function(loc) {
     
-    const { bookmarked, id } = loc.at(-1).data;
+    const { saved, id } = loc.at(-1).data;
 
     try {
-        if(!bookmarked) {
-            await model.updateBookmark();
+        if(!saved) {
+            await model.updateSaved();
             storage.addStoredLocation(loc);
             savedView.render(storage.getStoredLocations())
             message.renderMessage('Location successfully saved!', 'success');
 
         }
 
-        if(bookmarked) { 
+        if(saved) { 
             storage.removeStoredLocation(id); //*
-            await model.updateBookmark(); //*
+            await model.updateSaved(); //*
             savedView.removeEl(id);
             savedView.render(storage.getStoredLocations());
-            message.renderMessage('Bookmark removed!', 'info');
+            message.renderMessage('Save removed!', 'info');
         }
         
     } catch(err) {
@@ -94,19 +94,15 @@ const controlCallSaved = async function(id) {
                 const coords = { 
                     latitude: place.data.lat,
                     longitude: place.data.lon,
-                    bookmarked: true, 
+                    saved: true, 
                     id: place.data.id
                 };
                 
                 await model.getForecast(coords);
                 weatherView.render(model.store)
-                // const weatherMap = new Map();
                 maps.weatherMap(coords);
-                // message.renderMessage('Location successfully loaded!', 'success');
-
             }
         })
-        // console.log(storage.getStoredLocations());
 
     } catch(err) {
         console.error('saved location error!!!', err);
@@ -120,7 +116,7 @@ const controlRemoveSaved = async function(id) {
     try {
         storage.removeStoredLocation(Number(id));
         await savedView.render(storage.getStoredLocations());
-        weatherView.toggleBookmarkIcon(Number(id));
+        weatherView.toggleSaveIcon(Number(id));
         message.renderMessage('Location successfully removed', 'info');
 
     } catch(err) {
@@ -129,58 +125,12 @@ const controlRemoveSaved = async function(id) {
     }
 }
 
-//* ========== Location search controller ==========
-const controlSearch = async function(loc) {
-    // try {
-    //     const [city, ...region] = loc
-    
-    //     console.log(city, region);
-    //     await model.getCity(city, region);
-
-    //     // cities.forEach(city => console.log(city.name, city.state, city.country))
-
-
-    //     const coords = { 
-    //         latitude: model.store.at(-1).data.lat, 
-    //         longitude: model.store.at(-1).data.lon
-    //     }
-    //     console.log(model.store);
-    //     // weatherView.dismissMessage();
-    //     weatherView.render(model.store);
-    //     await maps.weatherMap(coords)
-    //     message.renderMessage('Location successfully loaded!', 'success');
-
-    // } catch(err) {
-    //     console.log('unable to find searched location', err);
-    //     message.renderMessage(err, 'error');
-    // }
-
-}
-    //? favorites get forecast
-
 //* ========== Remove search map overlay ==========
 const enableSearchMap = function() {
     // console.log('enabling search map!')
     maps.searchMap(geoLoc.coords, 9);
 }
 
-const controlMapClickSearch = async function() {
-    // try {
-    //     const coords = maps.eCoords;
-    //     // coords.push(true);
-    //     console.log(coords);
-
-    //     await model.getForecast(coords);
-
-    //     weatherView.render(model.store);
-    //     await maps.weatherMap(coords);
-    //     message.renderMessage('Location successfully loaded!', 'success');
-
-    // } catch(err) {
-    //     console.log('an error has occured');
-    //     message.renderMessage(err);
-    // }
-}
 
 const searchLink = () => searchView.moveToSearch();
 const savedLink = () => savedView.moveToSaved();
@@ -197,47 +147,50 @@ const sortSaved = async function(sort) {
 const errorHandled = (message, type) => message.renderMessage(message, type)
 
 const controlLocationSearch = async function (e) {
-    const loc = searchView.getInputs();
-    const [city, ...region] = loc;
-    if(maps.eCoords.latitude === null && maps.eCoords.longitude === null && !loc) return;
+    try {
+        const params = searchView.getInputs();
 
-    // const mapLoc = maps.eCoords;
-    // console.log(inputs);
-    // console.log(mapLoc);
-    if(loc) await model.getCity(city, ...region);
-    console.log(maps.eCoords);
-    if(maps.eCoords) await model.getForecast(maps.eCoords);
-    const coords = { 
-        latitude: model.store.at(-1).data.lat, 
-        longitude: model.store.at(-1).data.lon
+        console.log('getInputs(): ', params);
+        if(params.searchType === 'text') {
+            await model.getCity(Object.values(params.locParams));
+        }
+
+        console.log('MAPS ECOORDS: ', maps.eCoords);
+        if(params.searchType === 'map') {
+            if(!maps.eCoords.hasOwnProperty('latitude') || !maps.eCoords.hasOwnProperty('longitude')) throw new Error('Please enter or select a location.', 'info');
+            
+            await model.getForecast(maps.eCoords);    
+        }
+
+        const coords = { 
+            latitude: model.store.at(-1).data.lat, 
+            longitude: model.store.at(-1).data.lon
+        }
+        weatherView.render(model.store);
+        await maps.weatherMap(coords);
+        
+        searchView.toggleSearchViewBlockedGeoLoc();
+        searchView._clearForm();
+        message._autoClear();
+        
+        console.log('FORM SEARCH...: ', e)
+    } catch(err) {
+        message.renderMessage(err);
     }
-    weatherView.render(model.store);
-    await maps.weatherMap(coords);
-    
-    searchView.toggleSearchViewBlockedGeoLoc();
-    searchView._clearForm();
-
-    
-    console.log('FORM SEARCH...: ', e)
 }
 
 const init = async function() {
     
     await controlAppStart();
-    searchView.addHandlerSearch(controlSearch);
+    searchView.addHandlerSearch();
     savedView.addHandlerSaved(controlCallSaved, controlRemoveSaved, sortSaved);
     weatherView.addHandlerCurrent(controlCurrentLocation);
-    maps.addHandlerMapClick(enableSearchMap, controlMapClickSearch);
+    maps.addHandlerMapClick(enableSearchMap);
     layout.addHandlerToggleNav(searchLink, savedLink, infoLink);
     search.addHandlerSearchForm(controlLocationSearch);
 
 
     if (module.hot) module.hot.accept();
-
-    // window.onerror = (e) => console.log(e)
-    // window.onerror = function(error) {
-    //     console.log(error);
-    //  };
 
     window.addEventListener('error', function(e) {
         console.log(e)
@@ -251,7 +204,7 @@ const init = async function() {
     })
 }
 
-// init();
+init();
 
 
 
@@ -265,26 +218,3 @@ const init = async function() {
         
         // storageDeleteItem(0);
 
-
-        // clear timeout example from mdn------------------------------------------
-// const alarm = {
-//     remind(aMessage) {
-//       alert(aMessage);
-//       this.timeoutID = undefined;
-//     },
-    
-//     setup() {
-//       if (typeof this.timeoutID === 'number') {
-//         this.cancel();
-//       }
-    
-//       this.timeoutID = setTimeout(function(msg) {
-//         this.remind(msg);
-//       }.bind(this), 1000, 'Wake up!');
-//     },
-    
-//     cancel() {
-//       clearTimeout(this.timeoutID);
-//     }
-//   };
-//   window.addEventListener('click', () => alarm.setup() );

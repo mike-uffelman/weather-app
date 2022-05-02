@@ -1,3 +1,6 @@
+'use strict';
+
+
 let { OWM_APIKEY } = process.env;
 
 
@@ -8,10 +11,7 @@ let { OWM_APIKEY } = process.env;
     // export let mapEvent;
     export let mapClick;
     // export let _data;
-    export let eCoords = {
-        latitude: null,
-        longitude: null
-    };
+    export let eCoords = {};
     // let mapEnabled = false;
 
     
@@ -83,20 +83,44 @@ let { OWM_APIKEY } = process.env;
             keyboard: true
         };
 
+        let myicon = L.icon({
+            iconUrl: `../../public/images/dot1.svg`,
+            iconSize: [12.5, 12.5],
+            iconAnchor: [50, 50]
+        })
+
+        // const centerIcon = 
+
+        // L.marker([lat, lon], {icon: myicon})
+        //     .addTo(map)
+
         searchMapObj = L.map('searchMap', mapOptions)
             .setView(new L.LatLng(lat, lon), zoom)
             .addLayer(osmLayer)
         
         searchMapObj.on({
+            // remove keyboard map crosshair on mouse drag
+            drag: (e) => {
+                if(document.querySelector('.crosshair')) document.querySelector('.crosshair').classList.remove('show');
+            },
+
+            // set marker on map mouse click
             click: (e) => {
+                if(document.querySelector('.crosshair')) document.querySelector('.crosshair').classList.remove('show');
+                
                 eCoords = {
                     latitude: e.latlng.wrap().lat, 
                     longitude: e.latlng.wrap().lng
                 };
                 setMarker(eCoords);
             },
-            // enable keyboard map navigation
+            // enable keyboard map navigation, add crosshair for map center
             keydown: (e) => {
+                console.log(e.originalEvent)
+                if(!document.querySelector('.crosshair show')) {
+                    document.querySelector('.crosshair').classList.add('show');
+                }
+
                 if(e.originalEvent.code === "Space") {
                     const center = searchMapObj.getBounds().getCenter().wrap();
                     eCoords = {
@@ -106,6 +130,7 @@ let { OWM_APIKEY } = process.env;
                     setMarker(eCoords);
                 }
             }
+            
         })
             
         
@@ -117,6 +142,7 @@ let { OWM_APIKEY } = process.env;
         searchMarker.addTo(searchMapObj)
     }
 
+    // remove map marker and shadow on click
     const clearMarkers = function () {
         document.querySelectorAll('.leaflet-marker-pane img').forEach(mark => mark.remove());
         document.querySelectorAll('.leaflet-shadow-pane img').forEach(shadow => shadow.remove());
@@ -155,11 +181,7 @@ let { OWM_APIKEY } = process.env;
             iconAnchor: [50, 50]
         })
 
-        // let myicon = L.icon({
-        //     iconUrl: `./public/images/dot1.svg`,
-        //     iconSize: [12.5, 12.5],
-        //     iconAnchor: [50, 50]
-        // })
+        
         const layerName = 'precipitation_new'
         const weatherUrl = await `https://tile.openweathermap.org/map/${layerName}/{z}/{x}/{y}.png?appid=${OWM_APIKEY}`
 

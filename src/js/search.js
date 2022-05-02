@@ -1,3 +1,4 @@
+'use strict';
 
 
 export const addHandlerSearchForm = function(handler) {

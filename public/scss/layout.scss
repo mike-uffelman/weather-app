@@ -65,7 +65,6 @@ svg, path {
 
     @media only screen and (min-width: $bp-medium) {
         // display: none;
-        
     }
 
 
@@ -76,12 +75,9 @@ svg, path {
         // max-height: 40rem;
         border-radius: $--box-radius;
         box-shadow: $--weather-box-shadow;
-        
-        
-
 
         @media only screen and (min-width: $bp-smallest) { //keeps search and saved width 
-            width: 90%;
+            width: 100%;
         }
     
         @media only screen and (min-width: $bp-small) { 
@@ -95,16 +91,16 @@ svg, path {
             &.saved {
                 display: none;
             }
-    
-        }
-    
-        @media only screen and (min-width: $bp-medium) {
-    
+            
             &--medium {
+                // margin: 5rem;
                 display: flex;
+                // flex: 0 0 auto;
                 justify-content: center;
-
+                overflow-y: scroll;
                 min-width: 100%;
+                // height: 100%;
+                // max-height: auto;
             }
         }
     }
@@ -112,19 +108,18 @@ svg, path {
 }
 
 
-#search {
-    grid-area: search;
-}
+// #search {
+//     grid-area: search;
+// }
 
 
-#current-weather-box {
-    grid-area: current;
-    border: 1px solid rgb(255, 0, 0);
-}
+// #current-weather-box {
+//     grid-area: current;
+// }
 
-#saved {
-    grid-area: saved;
-}
+// #saved {
+//     grid-area: saved;
+// }
 //! Remove this======
 // .weatherPage {
 //     display: none;
@@ -188,11 +183,13 @@ svg, path {
     z-index: 9999;
     bottom: -5rem;
     width: 100%;
+    max-width: 40rem;
     // height: 100%;
     // padding: 1rem;
     margin-top: auto;
     display: flex;
     flex-direction: column;
+    justify-self: center;
     background-color: transparent;
     transition: all ease 300ms;
 
@@ -219,11 +216,11 @@ svg, path {
 
     &__toggle {
         height: 3rem;
-        background-color: $--dark-blue;
+        background-color: rgb(78, 78, 78);
         width: 100%;
         position: relative;
-        // border-top-right-radius: 10rem;
-        // border-top-left-radius: 10rem;
+        border-top-right-radius: 10rem;
+        border-top-left-radius: 10rem;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -282,7 +279,7 @@ svg, path {
     &__link {
         text-decoration: none;
         color: $--white;
-        background-color: $--dark-blue;
+        background-color: $--card-heading;
         padding: 0 1rem;
         position: relative;
         transition: all ease 300ms;
@@ -295,9 +292,13 @@ svg, path {
         height: 5rem;
         text-align: center;
         text-shadow: .25rem .25rem .5rem black;
-        border: 1px solid $--white-lightest;
+        border: none;
         // margin-top: 1rem;
         // box-shadow: 0 0 1rem black;
+
+        &:active {
+            color: $--purple-lighter;
+        }
 
         @media only screen and (min-width: $bp-medium) {
             border: none;

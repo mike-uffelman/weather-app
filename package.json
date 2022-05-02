@@ -2,7 +2,8 @@
   "name": "weather-app",
   "version": "1.0.0",
   "description": "User Stories:",
-  "source": "./src/index.html",
+  "source": "src/index.html",
+  "type": "module",
   "scripts": {
     "watch:sass": "sass public/scss/main.scss public/css/style.css -w",
     "start": "parcel",

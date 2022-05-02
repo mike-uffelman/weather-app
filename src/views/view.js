@@ -1,9 +1,3 @@
+'use strict';
 
 
-
-export default class View {
-    _data;
-
-
-
-}

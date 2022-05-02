@@ -1,3 +1,6 @@
+'use strict';
+
+
 import {FORECAST_URL, GEOCODE_REVERSE_URL, GEOCODE_DIRECT_URL} from './config.js';
 let { OWM_APIKEY } = process.env;
 
@@ -17,8 +20,12 @@ export let searchResults = [];
 
 
 //Get the city data, including lat/lon
-export const getCity = async function (city, ...region) {
+export const getCity = async function (loc) {
     try {
+        console.log(loc);
+        const [city, ...region] = loc;
+        console.log(city, ...region);
+
         if(!city) return;
         console.log(`${GEOCODE_DIRECT_URL}?q=${city}${region.map(place => ','+place).join('')}&limit=5&appid=${OWM_APIKEY}`)
         const res = await fetch(`${GEOCODE_DIRECT_URL}?q=${city}${region.map(place => ','+place).join('')}&limit=5&appid=${OWM_APIKEY}`)
@@ -48,7 +55,7 @@ export const getCity = async function (city, ...region) {
 //Get the forecast for the lat/lon provided
 export const getForecast = async function(coords) {
     try {
-        const { latitude: lat, longitude: lon, bookmarked = false, id } = coords;
+        const { latitude: lat, longitude: lon, saved = false, id } = coords;
         // if(!check) return; // if a random location i.e. false, return //? NOT SURE IF REALLY NEEDED...
         if(!lat || !lon) return; // if lat or lon is undefined, return 
 
@@ -66,7 +73,7 @@ export const getForecast = async function(coords) {
         let locationObj = {
             ...locHeader,
             ...forecastData,
-            bookmarked
+            saved
         }
 
         const location = new Location(locationObj);
@@ -83,12 +90,12 @@ export const getForecast = async function(coords) {
     }
 }
 
-export const updateBookmark = async function() {
+export const updateSaved = async function() {
     try {
-        store.at(-1).data.bookmarked = !store.at(-1).data.bookmarked;
+        store.at(-1).data.saved = !store.at(-1).data.saved;
 
     } catch(err) {
-        console.log('unable to toggle bookmark property', err);
+        console.log('unable to toggle saved property', err);
         throw err;
     }
 

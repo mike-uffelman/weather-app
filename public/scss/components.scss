@@ -15,41 +15,104 @@ input[type=text]::placeholder {
 
 @mixin btn {
     padding: .75rem 1rem .5rem 1rem ;
-    border-radius: $--box-radius;
 
     color: $--white;
+    background-color: transparent;
     font-size: 2rem;
+
+    border-radius: $--box-radius;
+    border: none;
+
     transition: all ease 150ms;
 
-    .btn {
-        @include btn;
+    svg {
+        fill: $--white-alt;
+    }
 
-    
-    
-        &:hover {
-            cursor: pointer;
-            background-color: $--purple-lighter;
-            transition: all ease 150ms;
+    &:hover {
+        cursor: pointer;
+        transition: all ease 150ms;
+        
+        svg {
+            fill: $--mustard;
         }
+    }
+
+    &:active {
+        background-color: $--mustard;
+    }
+
+    &:focus {
+        border: 2px solid magenta;
     }
 
     
 }
 
+
+.btn {
+    @include btn;
+
+    
+}
+
+// position: relative;
+// align-self: center;
+// justify-self: stretch;
+
+// display: flex;
+// flex-direction: column;
+
+
+// @media only screen and (min-width: $bp-smallest) {
+//     justify-self: center;
+// }
+
+// @media only screen and (min-width: $bp-medium) {
+//     height: 100%;
+//     background-color: $--black-lighter;
+//     top: 0;
+//     display: none;
+
+//     padding: 5rem;
+
+//     border-radius: 1rem;
+
+    
+//     &.show {
+//         position: absolute;
+//         z-index: 9999;
+//         overflow-x: hidden;
+
+//         display: flex;
+//         min-height: 100%;
+//         min-width: 100%;
+//         padding: 0;
+//         margin-top: 0;
+
+//         background-color: $--black-light;
+        
+//     }
+// }
 .search {
-    grid-area: search;
+    // grid-area: search;
 
     
     position: relative;
 
     // grid-column: 1;
     align-self: center;
-    justify-self: stretch;
+    // justify-self: stretch;
     display: flex;
-    flex-direction: column;
+    flex: 1 1 60rem;
+    justify-content: center;
+    align-items: center;
 
-    min-height: 75%;
-    max-height: 100%;
+    flex-direction: column;
+    
+    // height: 60rem;
+    min-height: 50rem;
+    max-height: 60rem;
     margin: 0;
     padding: 0;
 
@@ -69,44 +132,119 @@ input[type=text]::placeholder {
 
     }
 
-
-
     @media only screen and (min-width: $bp-medium) {
-        transition: all ease 300ms;
-        // max-width: 80rem;
-        // border: 5px solid $--white; 
+        // height: 80%;
+        // background-color: $--black-lighter;
+        // top: 0;
         display: none;
+
+        // padding: 5rem;
+
+        // border-radius: 1rem;
+        // scrollbar-width: .01rem;
+
         
         &.show {
             position: absolute;
-
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            transition: all ease 300ms;
+            z-index: 9999;
+            // top: 50%;
+            // left: 50%;
+            // transform: translate(-50%, -50%);
+            overflow-x: hidden;
 
             display: flex;
-            z-index: 99999;
-
-            
-            // max-height: 0;
-            min-height: 90%;
-            // min-width: 90%;
-            max-width: 40rem;
-            width: 100%;
-            
-            background-color: $--white;
-            // padding: .5rem;
+            min-height: 100%;
+            min-width: 100%;
+            padding: 0;
             margin-top: 0;
 
+            background-color: $--black-light;
             
         }
+
     }
 
-    &__btn {
-        @include btn;
-    }
+    // @media only screen and (min-width: $bp-medium) {
+    //     // height: 100%;
+    //     // background-color: $--black-lighter;
+    //     // top: 0;
+    //     display: none;
+
+    //     // padding: 5rem;
+
+    //     // border-radius: 1rem;
+
+        
+    //     &.show {
+    //         position: absolute;
+    //         z-index: 9999;
+    //         overflow-x: hidden;
+
+    //         display: flex;
+    //         min-height: 100%;
+    //         min-width: 100%;
+    //         padding: 0;
+    //         margin-top: 0;
+
+    //         background-color: $--black-light;
+            
+    //     }
+        
+        // transition: all ease 300ms;
+        // // max-width: 80rem;
+        // // border: 5px solid $--white; 
+        // display: none;
+        
+        // &.show {
+        //     position: absolute;
+
+        //     top: 50%;
+        //     left: 50%;
+        //     transform: translate(-50%, -50%);
+        //     transition: all ease 300ms;
+
+        //     display: flex;
+        //     z-index: 99999;
+
+            
+        //     // max-height: 0;
+        //     min-height: 90%;
+        //     // min-width: 90%;
+        //     max-width: 40rem;
+        //     width: 100%;
+            
+        //     background-color: $--white;
+        //     // padding: .5rem;
+        //     margin-top: 0;
+
+            
+        // }
+    // }
     
+    &__box {
+        // position: relative;
+
+
+        position: absolute;
+        z-index: 9999;
+        // top: 50%;
+        // left: 50%;
+        // transform: translate(-50%, -50%);
+        // height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        flex: 1 1;
+        // align-items: flex-start;
+        overflow-y: scroll;
+        scrollbar-width: none;
+        max-height: 60rem;
+        max-width: 40rem;
+
+        border-radius: $--box-radius;
+        box-shadow: $--weather-box-shadow;
+        background-color: $--white-alt;
+    }
 
     &__heading {
         // position: relative;
@@ -130,7 +268,7 @@ input[type=text]::placeholder {
         
     }
     
-    @media only screen and (min-width: $bp-medium) {
+    // @media only screen and (min-width: $bp-medium) {
         // & > .close {
             
 
@@ -169,7 +307,7 @@ input[type=text]::placeholder {
         //     transform: rotate(45deg);
         // }
         
-    }
+    // }
 
 
     &__header {
@@ -211,9 +349,11 @@ input[type=text]::placeholder {
         display: flex;
         flex-direction: column;
         flex: 1;
+        height: 100%;
         // margin: .5rem;
         width: 100%;
         padding: 0 1rem 1rem 1rem;
+        margin: 0;
         // padding: 1rem 1rem 2rem 1rem;
         // min-height: 100%;
 
@@ -226,47 +366,67 @@ input[type=text]::placeholder {
             
         // }
 
+        & > label {
+            text-transform: uppercase;
+            align-self: center;
+            margin: 0;
+        }
+
+        .required {
+            border: 2px solid magenta;
+            font-weight: bold;
+        }
+
+
         &.radio__box {
             display: flex;
             flex-direction: column;
             flex: 0;
+            // align-items: center;
             padding: .5rem 0;
+            // padding: 0;
 
             &--select {
                 display: flex;
                 flex: 0;
                 flex-direction: row;
                 align-items: center;
+                padding: 0;
 
+                & input[type=radio] {
+                    margin: 1rem 1rem;
+                    transform: scale(1.5);
+                    accent-color: $--purple-lighter;
+                    display: flex;
+    
+                    
+
+                    &:checked + label[class=text] {
+                        color: black;
+                        text-shadow: 0 0 1rem $--black-lighter;
+                    }
+                }
+
+                & > label[class=text] {
+                    color: $--black-lighter;
+                }
+    
+                & input[type=radio]:focus {
+                    outline: 1px solid magenta;
+                }
             }
 
             &--map {
                 flex: 1;
+
+                
             }
+            
+            
 
             
 
-            & input[type=radio] {
-                margin-right: 1rem;
-                transform: scale(1.5);
-                accent-color: $--purple-lighter;
-
-                &:checked ~ label {
-                    font-weight: bold;
-                    // color: $--black;
-                }
-            }
-
-            & input[type=radio]:focus {
-                outline: 1px solid magenta;
-            }
-
-
-            &.map-select {
-                display: flex;
-                flex-direction: row;
-                border: 1px solid $--purple-lighter;
-            }
+            
 
         }
 
@@ -308,24 +468,45 @@ input[type=text]::placeholder {
             overflow: hidden;
             border: none;
             transition: all ease 300ms;
+            border: 2px solid transparent;
+
+            .crosshair {
+                position: absolute;
+                display: none;
+                z-index: 9999;
+                background-color:  $--purple-lighter;
+                height: 1rem;
+                width: 1rem;
+                border-radius: 50%;
+                top: 50%;
+                left: 50%;
+                transform: translate( -50%, -50%);
+
+                &.show {
+                    // position: absolute;
+                    display: block;
+                }
+                
+            }
 
             &:focus {
-                border: .5rem solid $--purple-lighter;
+                border: 2px solid $--purple-lighter;
                 // padding: 1rem;
                 transition: all ease 300ms;
             }
 
-            &::before {
-                content: '';
+            // &::before {
+            //     content: '';
 
-                position: absolute;
-                z-index: 99999;
-                top: -1rem;
-                left: 0;
-                width: 3rem;
-                height: 1rem;
-                background-color: $--black;
-            }
+            //     position: absolute;
+            //     z-index: 9999999;
+            //     top: 50%;
+            //     left: 50%;
+            //     transform: translate(-50% -50%);
+            //     width: 3rem;
+            //     height: 1rem;
+            //     background-color: magenta;
+            // }
 
             &--overlay {
                 position: absolute;
@@ -351,16 +532,16 @@ input[type=text]::placeholder {
             }
         }
 
-        & button {
-            @include btn;
-            // flex: 0;
-            width: 100%;
-            // align-self: center;
-            background-color: $pistachio;
-        }
+        
     }
 
-    
+    .btn--submit {
+        @include btn;
+        // flex: 0;
+        width: 100%;
+        // align-self: center;
+        background-color: $pistachio;
+    }
 }
 
 
@@ -369,7 +550,9 @@ input[type=text]::placeholder {
     position: relative;
 
     display: flex;
-    max-height: 100%;
+    // flex: 1;
+    flex-basis: 100%;
+    // max-height: 100%;
     flex-direction: column;
     overflow-x: hidden; //prevents y scroll on search and saved pages
     padding: .5rem;
@@ -391,8 +574,11 @@ input[type=text]::placeholder {
     }
 
     @media only screen and (min-width: $bp-medium) {
+        overflow-y: scroll;
+
+
         justify-self: center;
-        align-self: center;
+        align-self: flex-start; // keeps weather at top
 
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -404,10 +590,13 @@ input[type=text]::placeholder {
             "alert alert";
         grid-gap: 2rem;
         max-width: 80rem;
-        // height: 100%;
-        padding-bottom: 0;
+        // min-height: 60rem;
+        // max-height: 100%;
+        // padding-bottom: 0;
+        // overflow: scroll;
         padding: 2rem;
-        margin: 5rem;
+        margin: auto;
+
 
         background-color: $--black-lightest;
         border-radius: $--box-radius;
@@ -514,7 +703,7 @@ input[type=text]::placeholder {
         padding: .5rem 1rem 1rem 1rem;
 
         display: flex;
-        flex: 1 1 100%;
+        flex: 0 1 50rem;
         flex-direction: column;
         justify-content: space-between;
     }
@@ -537,7 +726,7 @@ input[type=text]::placeholder {
             cursor: pointer;
             text-shadow: 0 0 1rem $--white;
 
-            .c-location__bookmark--icon:not(.bookmarked)  {
+            .c-location__save--icon:not(.saved)  {
                 fill: $--purple-lighter;
                 stroke: $--black-lighter;
                 stroke-width: 1;
@@ -609,13 +798,13 @@ input[type=text]::placeholder {
         }
     }
 
-    &__bookmark--icon { //* cw location header bookmark icon
+    &__save--icon { //* cw location header save icon
         position: relative;
         z-index: 5;
         top: .5rem;
         right: 0;
 
-        display: grid;
+        // display: grid;
         height: 3rem;
 
         fill: transparent;
@@ -626,7 +815,8 @@ input[type=text]::placeholder {
         transform: scale(1.25);
         transition: all ease 300ms;
 
-        &.bookmarked { //* bookmarked state styling
+        &.is-saved { //* saved state styling
+            // display: flex;
             fill: $--purple-lighter;
         }
 
@@ -938,6 +1128,8 @@ input[type=text]::placeholder {
 
 .forecast {
     display: flex;
+    // flex: 1 0 auto;
+    height: 100%;
     flex-direction: column;
     padding: 1rem 0;
     background-color: transparent;
@@ -946,11 +1138,11 @@ input[type=text]::placeholder {
         grid-area: forecast;
         justify-self: center;
 
-        flex: 2 2;
-        height: 100%;
-        padding: 0;
+        // flex: 1;
+        // height: 100%;
+        padding: 0; 
         // max-width: 35rem;
-        width: 100%;
+        // width: 100%;
     }
 }
 
@@ -958,7 +1150,7 @@ input[type=text]::placeholder {
     position: relative;
     display: flex;
     flex-direction: column;
-    flex: 1 0;
+    flex: 1 1;
     overflow: hidden;
     width: 100%;
 
@@ -967,9 +1159,6 @@ input[type=text]::placeholder {
     box-shadow: $--weather-box-shadow;
     border-radius: $--box-radius;
 
-    &__cw {
-
-    }
 
     &__map {
         position: relative;
@@ -979,7 +1168,7 @@ input[type=text]::placeholder {
         flex: 1 0 20rem;
         border-radius: $--box-radius;
         // padding: 0 0 1rem 0;
-        margin: 0 0 1rem 0;
+        margin: 0 0 2rem 0;
             
         @media only screen and (min-width: $bp-medium) {
             grid-area: map;
@@ -1032,7 +1221,7 @@ input[type=text]::placeholder {
 
     &__header {
         padding: .25rem .25rem .25rem 1rem;
-        font-size: 1.25rem;
+        // font-size: 1.25rem;
         color: if($--dark-mode, $--white, $--black);
     
         display: flex;
@@ -1041,7 +1230,8 @@ input[type=text]::placeholder {
 
         text-shadow: 0 0 .5rem $--black;
 
-        background-color: if($--dark-mode, rgb(78, 78, 78), white);
+        width: 100%;
+        background-color: if($--dark-mode, $--card-heading, white);
         font-weight: 400;
         letter-spacing: .15rem;
         text-transform: uppercase;
@@ -1060,8 +1250,15 @@ input[type=text]::placeholder {
         }
 
         &--modals {
-            font-size: 1.6rem;
-            padding: 1rem;
+            font-size: 1.4rem;
+            font-weight: 400;
+            // padding: 1rem;
+            align-self: center;
+
+            @media only screen and (min-width: $bp-medium) {
+                font-size: 1.8rem;
+                // padding: .5rem 0
+            }
         }
 
     }
@@ -1093,11 +1290,11 @@ input[type=text]::placeholder {
                 content: '';
     
                 position: absolute;
-                top: .75rem;;
+                top: .5rem;
                 left: .75rem;                    
                 
-                height: 1rem;
-                width: 1rem;
+                height: .75rem;
+                width: .75rem;
                 border-radius: 50%;
                 
                 background-color: $--white-alt;
@@ -1106,6 +1303,13 @@ input[type=text]::placeholder {
                 animation-name: pulse;
                 animation-duration: 3s;
                 animation-iteration-count: infinite;
+
+
+                @media only screen and (min-width: $bp-smallest) {
+                    top: .75rem;
+                    height: 1rem;
+                    width: 1rem;
+                }
             }
         
             &::after {
@@ -1142,17 +1346,17 @@ input[type=text]::placeholder {
         // position: relative;
         display: flex;
         // flex-direction: column;
-        flex: 1 1;
+        flex: 1 0 auto; //?
     }
 
     &--hourly { //layout
         margin-bottom: 1rem;
-        flex: 1;
+        flex: 1 0 ; //?
         // min-height: 0;
 
         @media only screen and (min-width: $bp-medium) {
             margin-bottom: 2rem;
-            flex: 1 0;
+            flex: 1 0 auto;
         }
     }
 
@@ -1160,7 +1364,7 @@ input[type=text]::placeholder {
         flex: 2 1;
 
         @media only screen and (min-width: $bp-medium) {
-            flex: 2 1;
+            flex: 2 0 auto;
         }
     }
 
@@ -1223,12 +1427,12 @@ input[type=text]::placeholder {
     &__content { //layout
         display: flex;
         border: .5px solid lightgray;
-        flex: 1 1 auto;
+        flex: 1 1 30rem;
             
         
 
         &--current {
-            flex: 1;
+            flex: 1 0 15rem;
             border: none;
             background-color: $--white-alt;
             display: grid;
@@ -1243,7 +1447,7 @@ input[type=text]::placeholder {
         }
 
         &--hourly {
-            flex: 1 0 6rem;
+            flex: 1; // leave without basis to fit all columns
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
@@ -1252,7 +1456,7 @@ input[type=text]::placeholder {
         }
 
         &--weekly {
-            flex: 2 1;
+            flex: 2 1 auto;
 
             display: grid;
             grid-template-columns: 3fr 2fr 3fr;
@@ -1280,14 +1484,16 @@ input[type=text]::placeholder {
 
 .l-current {
     position: relative;
-    padding: .5rem 1rem;
+    padding: 0 1rem;
     
     &__content {
         display: flex;
         flex-direction: column;
+        flex: 1 1 3rem;
         align-items: center;
+        height: 100%;
         justify-content: center;
-        margin: 1rem 0;
+        // margin: 1rem 0;
         
         &--icons {
             display: flex;
@@ -1312,13 +1518,16 @@ input[type=text]::placeholder {
 
     &__extras {
         grid-column: 1 / 3;
-        grid-row: 2 / 2;
+        grid-row: 2 / 3;
         // grid-area: extras;
         width: 100%;
+        height: 5rem;
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        // padding: 0 2rem;
+        // flex-direction: row;
+        // justify-content: center;
+        // flex: 0 0 3rem;
+        padding: 0;
+        
         
 
 
@@ -1418,6 +1627,10 @@ input[type=text]::placeholder {
     &--extras {
         font-size: 1rem;
         margin-top: 0;
+
+        @media only screen and (min-width: $bp-medium) {
+            font-size: 1.4rem;
+        }
     }
 
     &__uv {
@@ -1596,9 +1809,16 @@ input[type=text]::placeholder {
 .alert {
     position: relative;
 
-    // flex-direction: column;
+    display: flex;
+    // flex-direction: row;
+    // height: 100%;
+    // align-items: center;
     flex: 1 0 auto;
-    overflow: hidden;
+    width: 100%;
+    // flex-grow: 1;
+    // flex-shrink: 0;
+    // flex-basis: 1rem;
+    // overflow: hidden;
     margin: 0 0 3rem 0;
 
     box-shadow: $--weather-box-shadow;
@@ -1616,7 +1836,6 @@ input[type=text]::placeholder {
         margin: 0;
         width: 100%;
     }
-
 
     &__header {
         // padding: 5rem .25rem .25rem 1rem;
@@ -1641,12 +1860,16 @@ input[type=text]::placeholder {
 
     &__box {
         position: relative;
-
-        flex: 1 1;
-        overflow: hidden;
-
+        // align-self: flex-start;
+        // display: flex;
+        // width: 100%;
+        // flex-direction: row;
+        // flex: 1 1 auto;
+        // overflow: hidden;
+        // height: 100%;
         border-bottom: 1px solid $--black-lightest;
         background-color: $--white-alt;
+
 
         transition: all ease 500ms;
     }
@@ -1666,12 +1889,13 @@ input[type=text]::placeholder {
         transition: all ease 500ms;
 
         &.active {
-            background-color: $--black-lightest;
+            color: $--black;
+            background-color: $--black-lightest2;
         }
 
         &--icon {
             transition: all ease 500ms;
-            fill: $--black-lighter;
+            fill: $--reddish-alerts;
 
             &:hover {
                 cursor: pointer;
@@ -1684,7 +1908,7 @@ input[type=text]::placeholder {
         }
 
         &:hover {
-            background-color: $--black-lightest;
+            background-color: $--black-lightest2;
             cursor: pointer;
 
             .alert__heading--link {
@@ -1695,11 +1919,14 @@ input[type=text]::placeholder {
         &--link {
             width: 100%;
             padding: 0 1rem;
-
+            border: none;
+            text-align: left;
             text-decoration: none;
+            cursor: pointer;
             font-weight: bold;
             color: $--reddish;
-            font-size: 1.4rem;    
+            font-size: 1.4rem;   
+            background-color: transparent; 
 
             .tip {
                 font-size: 1rem;
@@ -1709,24 +1936,29 @@ input[type=text]::placeholder {
 
     &__detail {
         position: relative;
-
-        display: flex;
-        flex-direction: column;
-        max-height: 0;
-        margin: 0;
-
-        font-size: 1.4rem;
+        display: none;
+        transform: scale(1, 0);
+        transform-origin: top;
         transition: all ease 500ms;
         opacity: 0;
         
         &.expand {
-            margin: 1rem;
-
+            padding: .5rem;
+            display: flex;
+            flex-direction: column;
+            transform: scale(1, 1);
+            transform-origin: top;
             opacity: 1;
             transition: all ease 500ms;
         }
 
         &--time {
+            font-weight: normal;
+
+            & > .time--heading {
+                font-weight: bold;
+            }
+
             & span {
                 color: $--black;
                 font-weight: bold;
@@ -1734,7 +1966,7 @@ input[type=text]::placeholder {
         }
 
         &--text {
-            padding: 1rem 0;
+            font-weight: normal;
         }
     }
 }
@@ -1755,19 +1987,17 @@ input[type=text]::placeholder {
     background-color: $--dark-blue;
 }
 
-//* ===== Saved/Bookmarks elements =====
+//* ===== Saved elements =====
 .saved {
-    grid-area: saved;
     position: relative;
     align-self: center;
     justify-self: stretch;
 
-    display: flex;
+    // display: flex;
     flex-direction: column;
-    overflow-x: hidden;
-    height: 40rem;
+    // height: 100%;
+    // width: 100vw;
     // scrollbar-width: .01rem;
-
 
     //? delete unless found to be needed =============
     // &.show-mobile {
@@ -1779,8 +2009,8 @@ input[type=text]::placeholder {
     }
 
     @media only screen and (min-width: $bp-medium) {
-        position: absolute;
-        right: -40rem;
+        height: 100%;
+        background-color: $--black-lighter;
         top: 0;
         display: none;
 
@@ -1793,59 +2023,72 @@ input[type=text]::placeholder {
         &.show {
             position: absolute;
             z-index: 9999;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            // top: 50%;
+            // left: 50%;
+            // transform: translate(-50%, -50%);
+            overflow-x: hidden;
 
             display: flex;
-            max-height: 0;
-            min-height: 60vh;
+            min-height: 100%;
+            min-width: 100%;
             padding: 0;
             margin-top: 0;
 
-            background-color: transparent;
+            background-color: $--black-light;
+            
         }
     }
 
     &__box {
-        position: relative;
+        // position: relative;
+
+        position: absolute;
+        z-index: 9999;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
 
         display: flex;
         flex-direction: column;
         flex: 1 1 30rem;
         align-items: flex-start;
-        width: 100%;
         overflow-y: scroll;
         scrollbar-width: none;
+        min-height: 15rem;
+        max-width: 40rem;
 
         border-radius: $--box-radius;
         box-shadow: $--weather-box-shadow;
-        border-bottom: 2rem solid $queen-blue;
+        // border-bottom: 2rem solid $--card-heading;
         background-color: $--white-alt;
     }
     
     &__header {
         position: sticky;
+
         top: 0;
+        height: auto;
 
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+        // flex-direction: row;
+        // justify-content: space-between;
         align-items: center;
         width: 100%;
         // padding: 1rem;
-
-        background-color: $queen-blue;
-        color: $--white;
-        font-size: 1.4rem;
-        text-transform: uppercase;
-        font-size: 1.25rem;
+        // background-color: $queen-blue;
+        // color: $--white;
+        // font-size: 1.4rem;
+        padding-left: .5rem;
+        // font-size: 1.25rem;
         
         &--heading {
             // align-self: center;
-            font-size: inherit;
-            width: auto;
-            padding: 1rem;
+            // position: absolute;
+            // font-size: inherit;
+            // top: 50%;
+            // width: auto;
+            // padding: 1rem;
         }
 
         @media only screen and (min-width: $bp-smallest) {
@@ -1857,69 +2100,69 @@ input[type=text]::placeholder {
         &--icons {
             display: flex;
             flex-direction: row;
-            // width: auto;
+            width: auto;
             // align-items: center;
             justify-content: flex-end;
             height: 100%;
-            border: 1px solid magenta;
+
+            @media only screen and (min-width: $bp-medium) {
+                justify-content: space-between;       
+            }
+            
             
 
-            & > .close {
-                display: none;
 
-                @media only screen and (min-width: $bp-medium) {
-                    display: flex;
-                    background-color: transparent;
-                    border: none;
+            // & > .btn--close {
+            //     @include btn;
+            //     display: none;
+            //     padding: 0;
+            //     margin-left: 1rem;
 
-                    &:hover,
-                    &:hover > .close__btn--icon {
-                        fill: $--mustard;
-                        cursor: pointer;
-                    }
+            //     @media only screen and (min-width: $bp-medium) {
+            //         display: flex;
+            //         background-color: transparent;
+            //         border: none;
 
-                    & > .close__btn {
-                        position: relative;
-                        border: none;
-                        display: flex;
-                        background-color: transparent;
+            //         &:hover,
+            //         &:hover > .close__btn--icon {
+            //             fill: $--mustard;
+            //             cursor: pointer;
+            //         }
 
+            //         & > .close__btn--icon path {
+            //             // display: flex;
+            //             // stroke: $--purple-lighter;
 
-                        
-                        
-                        & > .close__btn--icon {
-                            // display: flex;
-                            fill: $--purple-lighter;
-
-                        }
-                    }
+                    
+            //         }
                 
                     
-                }
+            //     }
                     
             
-            }
+            // }
 
             .sort {
                 position: relative;
                 
-                width: 6rem;
+                width: 8rem;
                 display: flex;
                 justify-content: center;
-                color: $--greenish;
+                // color: $--greenish;
                 height: 100%;
     
                 &:hover .sort__box {
                     color: black;
                 
                     transform: scale(1, 1);
-                    transform-origin: top ;
+                    transform-origin: top right;
                     transition: all ease 300ms;
                 }
 
                 
                 
-                .sort__header { //button
+                
+                &__header { //button
                     background-color: transparent;
                     position: relative;
                     text-transform: uppercase;
@@ -1927,13 +2170,13 @@ input[type=text]::placeholder {
                     width: 100%;
                     height: 100%;
                     display: flex;
-                    flex-direction: column;
-                    // justify-content: center;
+                    flex-direction: row;
+                    justify-content: flex-end;
                     align-items: center;
                     color: inherit;
                     border: none;
 
-                    padding: 1rem;
+                    // padding: 1rem;
 
                     
 
@@ -1941,37 +2184,40 @@ input[type=text]::placeholder {
                         position: relative;
                         // top: .25rem;
                         font-size: 1.2rem;
-                        color: inherit;
-                        height: auto;
+                        // height: 100%;
                         justify-self: center;
+                        color: $--white-alt;
+
                         // padding-top: .5rem;
+                        // transform: translateY(25%);
 
                     }
 
-                    & svg {
+                    &--icon {
                         position: relative;
                         // top: .25rem;
                         fill: $--purple-lighter;
                         // height: 1rem;
+                        // transform: translateY(-25%);
                     }
                     
                 }
 
-                .saved__box {
+                &__box {
                     position: absolute;
-                    top: 2.5rem;
-                    right: 1.25rem;
+                    top: 3rem;
+                    right: 0;
                     background-color: $--white;
                     border-radius: 1rem;
-                    // overflow: hidden;
+                    overflow: hidden;
                     height: auto;
 
                     display: flex;
                     flex-direction: column;
 
-                    transform: scale(0, 0);
-                    transform-origin: top right;
-                    transition: all ease 300ms;
+                    transform: scale(1, 0);
+                    transform-origin: top;
+                    transition: all ease 500ms;
 
                     &--button-item {
 
@@ -1989,12 +2235,12 @@ input[type=text]::placeholder {
 
                         &:focus,
                         &:hover {
-                            background-color: $--gradient-2;
+                            background-color: $--purple-lighter;
                             // border-radius: .5rem;
                             cursor: pointer;
                             color:  $--white;
 
-                            transition: all ease 250ms;
+                            transition: all ease 500ms;
                         }
 
 
@@ -2005,6 +2251,21 @@ input[type=text]::placeholder {
         }
     }
 
+    
+
+    // &__content {
+    //     position: relative;
+    //     display: flex;
+
+    //     margin-top: 3rem;
+    //     height: 100%;
+    //     width: 100%;
+    //     padding: 1rem;
+    //     border: 2px solid magenta;
+    //     background-color: orange;
+    //     overflow: hidden;
+    // }
+
     &__card {
         overflow: hidden;
         display: flex;
@@ -2012,6 +2273,7 @@ input[type=text]::placeholder {
         flex: 0 0 3rem;
         width: 100%;
         scrollbar-width: none;
+        
 
         background-color: $--white-alt;
         box-shadow: 0 0 1px $--black-light;
@@ -2025,6 +2287,7 @@ input[type=text]::placeholder {
             height: 100%;
             width: 100%;
 
+            flex: 1;
             font-size: 2rem;
             text-align: center;
             font-weight: bold;
@@ -2033,7 +2296,11 @@ input[type=text]::placeholder {
             background-color: $--black-lightest;
 
             > span {
-                width: 80%;
+                // width: 80%;
+            }
+
+            @media only screen and (min-width: $bp-small) {
+                font-size: 1.4rem;              
             }
         }
 
@@ -2131,6 +2398,27 @@ input[type=text]::placeholder {
             }
         }
     }
+}
+
+.btn--close {
+    display: none;
+
+    @media only screen and (min-width: $bp-medium) {
+
+        @include btn;
+        padding: 0;
+        display: flex;
+        // width: 100%;
+        justify-self: flex-end;
+        // background-color: blue;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+
+
 }
 
 // .c-card__info {
@@ -2243,7 +2531,7 @@ input[type=text]::placeholder {
 //                         transform: scale(1.25);
 //                     }
 
-//                     .info__icon--bookmark {
+//                     .info__icon--save {
 //                         stroke: $--black-light;
 //                         stroke-width: 2;
 //                         fill: transparent;
@@ -2340,6 +2628,7 @@ input[type=text]::placeholder {
 
         display: flex;
         flex-direction: row;
+        align-items: center;
         margin: 1rem 0;
         flex: 1 1 auto;
         font-size: 1.2rem;
@@ -2358,7 +2647,7 @@ input[type=text]::placeholder {
         //     background-color: $--black-lighter;
         // }
 
-        span {
+        div {
             justify-self: center;
             align-self: center;
             margin: 1rem 2rem 1rem 1rem;
@@ -2369,9 +2658,10 @@ input[type=text]::placeholder {
                 transform: scale(1.25);
             }
 
-            .info__icon--bookmark {
+            .info__icon--save {
                 stroke: $--black-light;
-                stroke-width: 2;
+                stroke-width: 1.5;
+                border: none;
                 fill: transparent;
             }
         }
@@ -2379,17 +2669,7 @@ input[type=text]::placeholder {
     
 
     &__btn {
-        @include btn;
-        // justify-self: stretch;
-        align-self: stretch;
-
-
-        text-align: center;
         background-color: $--bluish;
-
-        &:active {
-            background-color: $--purple-lighter;
-        }
     }
 }
 
@@ -2401,7 +2681,7 @@ input[type=text]::placeholder {
     display: flex;
     align-items: center;
     text-shadow: 0 0 .5rem $--black;
-    background-color: rgb(78, 78, 78);
+    background-color: $--card-heading;
     font-weight: 400;
     letter-spacing: .15rem;
     text-transform: uppercase;
@@ -2493,6 +2773,10 @@ input[type=text]::placeholder {
 
     &__info {
         background-color: $--dark-blue-alt;
+    }
+
+    &__warning {
+        background-color: $--mustard;
     }
 
     // &.remove {

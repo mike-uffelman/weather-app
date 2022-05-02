@@ -1,3 +1,6 @@
+'use strict';
+
+
 import * as Message from './errorView'
 import Nav from './navigationView.js';
 
@@ -28,8 +31,8 @@ class WeatherView {
             this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
             this._tempBars();
             this._windDirection();
-            if(this._data.at(-1).data.bookmarked === true) {
-                document.querySelector('.c-location__bookmark--icon').classList.add('bookmarked');
+            if(this._data.at(-1).data.saved === true) {
+                document.querySelector('.c-location__save--icon').classList.add('is-saved');
             }
             
             // this.#currentWeather.style.opacity = 1;
@@ -120,7 +123,7 @@ class WeatherView {
     addHandlerCurrent(handler) {       
         this.#currentWeather.addEventListener('click', (e) => {
             if(e.target.closest('.c-cw__location')) {
-                document.querySelector('.c-location__bookmark--icon').classList.toggle('bookmarked');
+                document.querySelector('.c-location__save--icon').classList.toggle('is-saved');
                 handler(this._data);
             };
 
@@ -171,15 +174,15 @@ class WeatherView {
 
     
 
-    toggleBookmarkIcon(id) {
+    toggleSaveIcon(id) {
         console.log(this._data);
         const currentId = this._data.at(-1).data.id;
         console.log(id, currentId)
 
         if(id !== currentId) return;   
         
-        const currentLocationBookmark = document.querySelector('#bookmarkIcon');
-        currentLocationBookmark.classList.toggle('bookmarked');
+        const currentLocationSave = document.querySelector('#saveIcon');
+        currentLocationSave.classList.toggle('saved');
     }
 
 
@@ -212,7 +215,7 @@ class WeatherView {
                                     <p class='c-location__date'>${date}</p>
                                 </header>
 
-                                <svg id='bookmarkIcon' class='c-location__bookmark--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                                <svg id='saveIcon' class='c-location__save--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
                                     <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
                                 </svg>
                             </section>
@@ -247,15 +250,15 @@ class WeatherView {
                                             <div class='l-current__content'>
                                                 
                                                 <p class='text text--extras'>Precip</p>
-                                            <p class='text text--extras'>${(daily[0].pop * 100).toFixed(0)}%</p>
+                                                <p class='text text--extras'>${(daily[0].pop * 100).toFixed(0)}%</p>
                                             </div>
                                             <div class='l-current__content'>
-                                                    <p class='text text--extras'>UV Index</p>
-                                            <p class='text text--extras'>${this._uvIndexRating(current.uvi)}</p>
+                                                <p class='text text--extras'>UV Index</p>
+                                                <p class='text text--extras'>${this._uvIndexRating(current.uvi)}</p>
                                             </div>
                                             <div class='l-current__content' >
                                                       
-                                                    <p class='text text--extras'>Humidity</p>
+                                                <p class='text text--extras'>Humidity</p>
                                                 <p class='text text--extras'>${(current.humidity).toFixed(0)}%</p>
                                                 
                                             </div>
@@ -289,7 +292,7 @@ class WeatherView {
                         <div id='mapid' class='weather__map' ></div>
                             
                     </section>
-                    <section id='alerts' class='c-card ${alerts ? "alert" : "hide"}'>
+                    <section id='alerts' class='c-card c-card--alert ${alerts ? "alert" : "hide"}'>
                         <h3 class='c-card__header c-card__cw-alerts c-card__cw-alerts--header'>Weather Alerts</h3>
                         ${alerts ? this._generateWeatherAlert(alerts) : ''}
                     </section>                        
@@ -361,22 +364,13 @@ class WeatherView {
                         <svg class='alert__heading--icon' xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 24 24" width="36px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
                     </h3>
                     <div class='alert__detail'>
-                        <p class='alert__detail--time'><span class=''>Beginning:</span> ${this._getHourTime(alert.start)}<span class=''> | Ending:</span> ${this._getHourTime(alert.end)}</p>
+                        <p class='alert__detail--time text'><span class='time--heading'>Beginning:</span> ${this._getHourTime(alert.start)}<span class='time--heading'> | Ending:</span> ${this._getHourTime(alert.end)}</p>
 
                         <p class='alert__detail--text text'>${this._alertDescription(alert.description)}</p>
                     </div>
                 </div>`
         })
 
-        // this.#alerts =  document.querySelector('#alerts');
-
-        // this.#alerts.addEventListener('click', (e) => {
-        //     if(e.target.closest('.alert__heading')) {
-        //         console.log(e.target);
-                
-        //     }
-        // })
-        // this.#alerts?.addEventListener('click', this._weatherAlertToggle.bind(this))
         return alertHTML;
     };
 
@@ -393,21 +387,27 @@ class WeatherView {
     _weatherAlertToggle() {
         const alerts = document.querySelectorAll('.alert__heading');
         alerts.forEach((alert, i) => {
-            alert.addEventListener('click', () => {
-                const alertDetail = alert.nextElementSibling;                
-                const icon = alert.querySelector('.alert__heading--icon');
-
-                icon.classList.toggle('open');
-                alertDetail.classList.toggle('expand');
-                // alertDetail.style.display = 'flex';
-                alert.classList.toggle('active');
-
-                if(alertDetail.style.maxHeight) {
-                    alertDetail.style.maxHeight = null;
-                } else {
-                    const scrollableHeight = alertDetail.scrollHeight;
-                    alertDetail.style.maxHeight = scrollableHeight + 'px';
-                };
+            alert.addEventListener('click', (e) => {
+                console.log(e.target);
+                if(e.target.closest('.alert__heading')) {
+                    
+                    const alertDetail = alert.nextElementSibling;                
+                    const icon = alert.querySelector('.alert__heading--icon');
+    
+                    icon.classList.toggle('open');
+                    alertDetail.classList.toggle('expand');
+                    // alertDetail.style.display = 'flex';
+                    alert.classList.toggle('active');
+    
+                    // sets the detail box height to the height of the content
+                    if(alertDetail.style.maxHeight) {
+                        alertDetail.style.maxHeight = null;
+                    } else {
+                        const scrollableHeight = alertDetail.scrollHeight;
+                        alertDetail.style.maxHeight = scrollableHeight + 'px';
+                    };
+                }
+                
             });
         });
     };
@@ -558,21 +558,6 @@ class WeatherView {
         return dailyHTML;
 
     }
-
-    // static displayHelp() {
-    //     const banner = document.createElement('div');
-    //     banner.style.height = '2rem';
-    //     banner.innerText = 'test text';
-    //     banner.style.backgroundColor = 'blue';
-    //     banner.style.color = 'white';
-
-    //     const main = document.querySelector('main');
-    //     main.append(banner);
-    // }
-   
-    
-    
-    
 }
 
 export default new WeatherView();
