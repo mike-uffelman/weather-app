@@ -174,6 +174,7 @@ class DisplaySaved {
         sortHeading.innerText = this._sort;
     }
 
+    // sort the saved location data array depending on the sort selection, return the newly sorted array
     sortSavedView(data, sort) {
         try {
             if(!sort) return;

@@ -143,7 +143,7 @@ let { OWM_APIKEY } = process.env;
     }
 
     // remove map marker and shadow on click
-    const clearMarkers = function () {
+    export const clearMarkers = function () {
         document.querySelectorAll('.leaflet-marker-pane img').forEach(mark => mark.remove());
         document.querySelectorAll('.leaflet-shadow-pane img').forEach(shadow => shadow.remove());
     }
