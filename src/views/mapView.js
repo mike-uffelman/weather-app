@@ -6,123 +6,95 @@ let { OWM_APIKEY } = process.env;
 
 // class Map {
 
+    // module variables
     export let map;
     export let searchMapObj;
-    // export let mapEvent;
     export let mapClick;
-    // export let _data;
     export let eCoords = {};
-    // let mapEnabled = false;
 
     
-
+    // event handler for the map overlay
     export const addHandlerMapClick = function(enableAndBuild, gotoLocation) {
-        const form = document.querySelector('form');
-        const button = document.querySelector('#search-btn');
         const mapBox = document.querySelector('#searchMap');
-        // eCoords.addEventListener('change', () => {
-        //     console.log('eCoords has changed')
-        // })
-        // if(eCoords.length > 0) {
-        //     console.log(eCoords);
-        //     button.disabled = false;
-        // }
 
+        // click event to remove map overlay and build the search map
         mapBox.addEventListener('click', (e) => {
-            console.log(e.target);
             const mapOverlay = document.querySelector('.search__form-map--overlay');
+
             if(e.target.closest('.search__form-map--overlay')) {
-                console.log('this is the search map')
-                // mapBox.classList.remove('map--overlay');
+
+                // remove opacity then display none on timeout
                 mapOverlay.style.opacity = '0';
     
                 mapOverlay.style.transition = 'all ease 1000ms';
                 setTimeout(() => {
                     mapOverlay.style.display = 'none';
-
                 }, 3000)
 
-                if(searchMapObj) return;
-                enableAndBuild(); // build the search map if not already, i.e. for permission allowed search map, this is already done for permission blocked search map
+                // if the searchMap has already been rendered, then return
+                // if(searchMapObj) return;
 
-                // mapEnabled = true;
+                enableAndBuild(); // build the search map if not already, i.e. for permission allowed search map, this is already done for permission blocked search map
             }
         }, {once: true}) // only allow this event once
-
-        // form.addEventListener('submit', (e) => {
-        //     e.preventDefault();
-
-        //     const mapRadio = form.elements.mapRadio.checked;
-        //     if(mapRadio && eCoords.latitude !== null && eCoords.longitude !== null) return;
-        //     gotoLocation();
-        //     console.log('eCoords before submit: ', eCoords);
-        //     eCoords = {}; //clear coordinates each form submit
-        //     // searchMapObj = '';
-        //     console.log('eCoords after submit: ', eCoords)
-
-        //     clearMarkers();
-        // });
-        
-        
-        
-        
-        
-  
     }
 
+    // search view map build function
+    // takes the coordinates and a zoom level
     export const searchMap = async function(coords, zoom, ...marker) {
-        console.log(coords);
+        // re-set coordinates variables as lat, lon
         const { latitude: lat, longitude: lon } = coords;
+
+        // tile layer using openstreetmap
         let osmURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         let osmAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+
+        // create new variable for the tile layer
         let osmLayer = new L.tileLayer(osmURL, {attribution: osmAttribution}
         );
+        
+        // map options
         let mapOptions = {
-            zoomControl: true,
-            worldCopyJump: true,
-            keyboard: true
+            zoomControl: true, // allow +/- zoom controls on map
+            worldCopyJump: true, // infinite map, i.e. normalizes coordinates instead of incrementing beyond +/- 90 and  +/- 180
+            keyboard: true // allow keyboard events on map
         };
 
-        let myicon = L.icon({
-            iconUrl: `../../public/images/dot1.svg`,
-            iconSize: [12.5, 12.5],
-            iconAnchor: [50, 50]
-        })
-
-        // const centerIcon = 
-
-        // L.marker([lat, lon], {icon: myicon})
-        //     .addTo(map)
-
+        // map initializer
         searchMapObj = L.map('searchMap', mapOptions)
             .setView(new L.LatLng(lat, lon), zoom)
             .addLayer(osmLayer)
         
+        // map event handler for drag, click, and keyboard
         searchMapObj.on({
-            // remove keyboard map crosshair on mouse drag
+            // if map cross hair visible, hide it
             drag: (e) => {
                 if(document.querySelector('.crosshair')) document.querySelector('.crosshair').classList.remove('show');
             },
 
-            // set marker on map mouse click
+            // set marker on map mouse click and set eCoords
             click: (e) => {
+                // if map cross hair visible, hide it
                 if(document.querySelector('.crosshair')) document.querySelector('.crosshair').classList.remove('show');
                 
                 eCoords = {
-                    latitude: e.latlng.wrap().lat, 
-                    longitude: e.latlng.wrap().lng
+                    latitude: e.latlng.wrap().lat,
+                    longitude: e.latlng.wrap().lng // keeps longitude between -180 and +180
                 };
                 setMarker(eCoords);
             },
             // enable keyboard map navigation, add crosshair for map center
             keydown: (e) => {
-                console.log(e.originalEvent)
+                // if map cross hair not visible, show it
                 if(!document.querySelector('.crosshair show')) {
                     document.querySelector('.crosshair').classList.add('show');
                 }
-
-                if(e.originalEvent.code === "Space") {
+                
+                // add a map marker on spacebar press
+                if(e.originalEvent.code === "Space" || e.originalEvent.code === "Enter") {
                     const center = searchMapObj.getBounds().getCenter().wrap();
+
+                    // sets the eCoords object to the center of the current map placement
                     eCoords = {
                         latitude: center.lat,
                         longitude: center.lng
@@ -136,6 +108,7 @@ let { OWM_APIKEY } = process.env;
         
     }
 
+    // function sets the map marker
     const setMarker = function(coords) {
         clearMarkers();
         const searchMarker = L.marker([coords.latitude, coords.longitude])
@@ -148,21 +121,14 @@ let { OWM_APIKEY } = process.env;
         document.querySelectorAll('.leaflet-shadow-pane img').forEach(shadow => shadow.remove());
     }
 
-    export const returnCoords = async function() {
-        return eCoords;
-    }
-
+    // function to build weather amp at current weather location
     export const weatherMap = async function (coords, zoom = 9) {     
         // console.log(this.map);
-    const mapid = document.querySelector('#mapid');
+        const mapid = document.querySelector('#mapid');
 
         mapid.innerHTML = "<div id='map' class='search__modal--map--map'></div>";
 
         const { latitude: lat, longitude: lon } =  coords;
-        
-
-        // mapid.style.transition = 'opacity ease 1000ms'
-        // mapid.style.opacity = 0;
 
         //for the tiler
         let osmURL = await 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -182,53 +148,28 @@ let { OWM_APIKEY } = process.env;
         })
 
         
+        // weather layer setup==================
         const layerName = 'precipitation_new'
         const weatherUrl = await `https://tile.openweathermap.org/map/${layerName}/{z}/{x}/{y}.png?appid=${OWM_APIKEY}`
 
         let weatherLayer = new L.tileLayer(weatherUrl)
+        // ======================================
+
+
+        // build map ===========================
         map = new L.Map('map', {
             zoomControl: true
             // layers: [osmLayer, weatherLayer] //add back for weather layer 
 
         })
-            .addLayer(osmLayer)
+        .addLayer(osmLayer)
         // .addLayer(weatherLayer) //? keep this, displays rain on map => add back for production
+        .setView(new L.LatLng(lat, lon), 6)
 
-        // const bounds = L.bounds([lat, lon]).getCenter()
-        // console.log('bounds: ', bounds)
-        //     .bindPopup(L.popup({
-        //         maxWidth: 250,
-        //         minWidth: 100,
-        //         autoClose: false,
-        //         closeOnClick: true, 
-        //         className: ''  //define a class to style the popup
-        // }))
-        // .setPopupContent(`this is a popup`)
-        // .openPopup();    
-        
-            .setView(new L.LatLng(lat, lon), 6)
-            .flyTo(new L.LatLng(lat, lon), 9) 
-        // setTimeout(()=> {
-        //     map.panBy([0, 125], {duration: 1})
-            
-        // }, 1000)
 
+        // adds pin to weather 
         L.marker([lat, lon], {icon: myDivIcon})
             .addTo(map)
-        
-
-        // setTimeout(() => {
-        //     // console.log('map loaded')
-        //     mapid.style.opacity = 1;
-        //     mapid.style.transition = 'opacity ease 2000ms'
-
-        // },2000)    
-        // map.dragging.disable();
-
-        // console.log(map);
-    
-        
-        
     }        
     
 

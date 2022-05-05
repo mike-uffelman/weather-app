@@ -10,18 +10,20 @@ if (process.env.NODE_ENV === 'development') {
 import 'core-js/stable';
 import 'regenerator-runtime/runtime'; 
 
-// module imports
+// logic module imports
 import * as model from './model.js';
-import * as maps from '../views/mapView.js';
 import * as geoLoc from './geoLocation.js';
 import * as storage from './localStorage.js';
+import * as layout from './layout.js';
+import * as search  from './search.js';
+
+// view module imports
+import * as maps from '../views/mapView.js';
 import weatherView from '../views/weatherView.js';
 import savedView from '../views/savedView.js';
 import searchView from '../views/searchView.js';
-import * as layout from './layout.js';
 import infoView from '../views/infoView.js';
 import message from '../views/errorView.js';
-import * as search  from './search.js';
 
 //* ========== app start controller ==========
 const controlAppStart = async function() {
@@ -55,25 +57,25 @@ const controlAppStart = async function() {
 // save toggle for current location
 const controlCurrentLocation = async function(loc) {
     
-    const { saved, id } = loc.at(-1).data; // retrieve properties from 
+    const { saved, id } = loc.at(-1).data; // retrieve properties from the latest location added to the current location array
 
     try {
         // if current location is not saved, update model to saved: true, refresh local storage, re-render saved view, and display a success message
         if(!saved) { 
-            await model.updateSaved();
-            storage.addStoredLocation(loc);
-            savedView.render(storage.getStoredLocations())
+            await model.updateSaved(); // update 'saved' property to true
+            storage.addStoredLocation(loc); // add location to local storage
+            savedView.render(storage.getStoredLocations()); // re-render the saved view
             message.renderMessage('Location successfully saved!', 'success');
 
         }
 
         // if current location is already saved, update to saved: false, remove saved item from saved view, re-render saved view, display a message
         if(saved) { 
-            storage.removeStoredLocation(id); //*
-            await model.updateSaved(); //*
-            savedView.removeEl(id);
-            savedView.render(storage.getStoredLocations());
-            message.renderMessage('Save removed!', 'info');
+            storage.removeStoredLocation(id); // remove saved location from local storage 
+            await model.updateSaved(); // update 'saved' property of location model
+            savedView.removeEl(id); // remove saved DOM element
+            savedView.render(storage.getStoredLocations()); // re-render the saved view
+            message.renderMessage('Save removed!', 'info'); 
         }
         
     } catch(err) {
@@ -186,7 +188,7 @@ const controlLocationSearch = async function (e) {
         weatherView.render(model.store);
         await maps.weatherMap(coords);
         
-        // searchView.toggleSearchViewBlockedGeoLoc();
+        searchView.toggleSearchViewBlockedGeoLoc(); // hides searchView after submit
         searchView._clearForm(); // clear form details
         maps.clearMarkers(); // clear map markers
         message._autoClear(); // remove messages

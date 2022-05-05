@@ -1,41 +1,39 @@
 'use strict';
 
+// savedView class
 class DisplaySaved {
 
-    _data;
+    // savedView variables
+    _data; 
     _sort;
-    // _store;
     _parentElement = document.querySelector('#saved');
-    // _sort = document.querySelector('#sort')
 
 
-    // render the saved locations view, 
+    // render the saved locations view
     render(data, ...sort){
-        // console.log(sort);
-        // const sortType = sort.flat();
-        // console.log(sort);
-
         this._clear(); // clear the saved locations container
-        // this._store = store;
         this._data = data; // set data to _data private variable
-        // console.log('saved array length: ', this._data.length);        
 
-        this.sortSavedView(this._data, sort); // sort the Saved by the sort type
+        this.sortSavedView(this._data, sort); // sort the saved locations by the sort type
         sort ? this._sort = sort : undefined; // if sort is defined set _sort, otherwise undefined
-        
+
+        // assign markup variable and insert to HTML
         const markup = this._generateMarkup();
         this._parentElement.insertAdjacentHTML('afterbegin', markup);
         
-        if(!sort) return; // if sort is not defined return, do not proceed
+        // if sort is not defined, then return; i.e. if this is the initial page load the saved sort of the savedView is the default (chronological)
+        // if sort is defined then call sortSaved passing in the sort type
+        if(!sort) return; 
 
-        this.sortSaved(sort); // if sort is defined sort the Saved and return
-        // console.log(this._sort);
+        this.sortSaved(sort); // if sort is defined sort the Saved and return, //TODO refactor this
     }
 
+    // clear savedView html for re-rendering
     _clear() {
         this._parentElement.innerHTML = '';
     }
 
+    // savedView html markup
     _generateMarkup() {
         return `
             <div class='c-card saved__box'>
@@ -63,9 +61,7 @@ class DisplaySaved {
         `
     }      
 
-
-
-
+    // if no locations are saved, display this in the savedView
     _generateEmptyMessage() {
         return `
         <div class='saved__card--empty'>
@@ -75,9 +71,8 @@ class DisplaySaved {
     }
     
 
+    // html markup for the locations saved
     _generateMarkupList(result) {
-        // if(!result) document.querySelector('.saved__card--empty').classList.toggle('empty');
-        // console.log('markup data', result)
         return `
                 <div class='saved__card' data-id='${result.data.id}'> 
                     <div class='saved__card--detail'>
@@ -97,7 +92,8 @@ class DisplaySaved {
     }
 
 
-    // saved locations sort function
+    // saved locations sort function, when the user selects a sort, this function removes all the items from the DOM, passes 
+    // TODO refactor
     sortSaved(sort) {
         // console.log(this._data, sort);
         const previousList = document.querySelectorAll('.saved__card')
@@ -105,15 +101,14 @@ class DisplaySaved {
 
         const sortedLocationList = this._data.map(this._generateMarkupList).join(''); // each saved location in the new sorted _data will be added to the markup and joined together 
 
+        // renders the newly sorted and built saved locations list
         document.querySelector('.saved__box').insertAdjacentHTML('beforeend', sortedLocationList);
-        this.updateSortHeading(sort); // set the sort type header in saved view
+
+        // set the sort type header in the saved view dropdown
+        this.updateSortHeading(sort);
     }
 
-    //remove UI favorite item, e is defined in the calling event
-    removeFavoriteUI(e) {
-        e.remove();
-    }
-
+    // remove DOM element if the id paramter matches the 
     removeEl(id) {
         const saved = document.querySelectorAll('.saved__card');
         saved.forEach(save => {
@@ -121,10 +116,12 @@ class DisplaySaved {
         })
     }
 
-
+    // event handers and subscriber
     addHandlerSaved(handler, removeSaved, sortSaved) {
+
         this._parentElement.addEventListener('click', (e) => {
             // console.log(e.target);
+            // if the remove saved button is clicked, call handler and pass id to controller, then remove the target from the DOM
             if(e.target.closest('.remove-favorite')) {
                 const div = e.target.closest('.saved__card');
                 const id = div.dataset.id;
@@ -132,6 +129,7 @@ class DisplaySaved {
                 div.remove();
             }
 
+            // if user clicks on the location in the card, call the handler and pass id to the controller, then toggle the savedView to hide it
             if(e.target.classList.contains('call-favorite')) {
                 console.log('call favorite: ', e.target);
                 const id = e.target.closest('.saved__card').dataset.id;
@@ -141,19 +139,20 @@ class DisplaySaved {
                 };
             }
 
+            // close button, toggle show
             if(e.target.closest('.btn--close')) {
                 this._parentElement.classList.toggle('show');
             }
 
+            // sort button, call sortSaved and pass sort type to controller
             if(e.target.classList.contains('sort__box--button-item')) {
-                console.log(e.target);
                 const sort = e.target.innerText;
-                console.log(typeof sort);
-                console.log(this._data);
-                sortSaved(sort); //? what was this for again?
+                sortSaved(sort); 
             }
 
         })
+
+        // event handler for keypress to open sort dropdown
         this._parentElement.addEventListener('keypress', (e) => {
             if(e.code === 'Space') {
                 console.log('keypress sort')
@@ -163,6 +162,7 @@ class DisplaySaved {
         })
     }
 
+    // move to saved view 
     moveToSaved() {
         this._parentElement.scrollIntoView({behavior: 'smooth'});
     }

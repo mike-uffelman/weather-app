@@ -1,11 +1,13 @@
 'use strict';
 
+// search view class
 class searchView {
     _parentElement = document.querySelector('#search');
-    _searchInput;
-    _textRadio;
-    _mapRadio;
+    _searchInput; // search text box input
+    _textRadio; // text box radio
+    _mapRadio; // map radio
 
+    // on render, build the markup and assign elements to the class variables
     render() {
         this._clear();
 
@@ -17,6 +19,7 @@ class searchView {
         this._mapRadio = document.querySelector('#mapRadio');
     }
 
+    // html markup for the search module
     _generateHTML() {
             return  `
             <div class='c-card search__box'>
@@ -66,10 +69,12 @@ class searchView {
             </div>`
     }
 
+    // clears the html for re-rendering 
     _clear() {
         this._parentElement.innerHTML = '';
     }
 
+    // event handler for the close button in desktop view
     addHandlerSearch() {
         this._parentElement.addEventListener('click', (e) => {
             if(e.target.closest('.btn--close')) {
@@ -79,57 +84,70 @@ class searchView {
         })
     };
 
+    // retrieves the form inputs on submit, event for the submit is in search.js however to prevent having an event listener in searchView and mapView
     getInputs() {
             const form = document.querySelector('form');
             const cityRadio = form.elements.textRadio.checked;
             const mapRadio = form.elements.mapRadio.checked;
 
-            if(!cityRadio && !mapRadio) throw new Error('Please select a search type');
-
+            // the search params object passed returned to the controller
             let searchObj = {
                 searchType: '',
                 locParams: {}
             };
 
+            // if neither radio are selected throw error notifying the user to select a search type
+            if(!cityRadio && !mapRadio) throw new Error('Please select a search type');
+
+
+            // if searching by text input
             if(cityRadio) {
+                
+                // split the location text into an array and trim excess spaces
                 const city = form.elements.city.value.split(',').map(place => place.trim());
                 
+                // if the first index of the city array is an empty string or the city array contains 1 index, throw an error to be more specific for the geocoder
                 if(city[0] === '' || city.length === 1) throw new Error('Unable to find location, please include city, state(US only), and country');
 
-                searchObj.searchType = 'text';
-                searchObj.locParams.city = city[0];
                 
+                searchObj.searchType = 'text'; // assign the search type in our params
+                searchObj.locParams.city = city[0]; // assign the first index to city
+                
+                // if city array length is greater than 2, only USA requires states
                 if(city.length > 2) {
-                    searchObj.locParams.state = city[1];
-                    searchObj.locParams.country = city[2];
+                    searchObj.locParams.state = city[1]; // assign second index to state
+                    searchObj.locParams.country = city[2]; // assign third index to country
                 }
+
+                // if city array is equal to 2, for international (non-USA), major USA cities work here with just city, country too
                 if(city.length === 2) {
                     searchObj.locParams.country = city[1];
                 }
-                console.log(city);
-                console.log(searchObj)
+
+                // return the searchObj parameters to the search controller
                 return searchObj;
             }
 
+            // if map radio selected
             if(mapRadio) {
-                searchObj.searchType = 'map';
-                console.log(searchObj);
+                searchObj.searchType = 'map'; // assign map to the searchType
+
+                // return the searchObj parameters to the search controller
                 return searchObj;
             }
     }
 
+    // function moves screen to the search view
     moveToSearch() {
         this._parentElement.scrollIntoView({behavior: 'smooth'})
     }
 
+    // function toggles the display for the searchView if location is blocked
     toggleSearchViewBlockedGeoLoc() {
         document.querySelector('#search').classList.toggle('show');
     }
 
-    _toggleSearchView() {
-        document.querySelector('#search').classList.toggle('show');
-    }
-
+    // clear form inputs
     _clearForm() {
         this._searchInput.value = '';
         this._textRadio.checked = false;
