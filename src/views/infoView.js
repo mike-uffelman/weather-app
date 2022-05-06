@@ -1,24 +1,28 @@
 'use strict';
 
-
+// info/help view class
 class InfoView {
+    // class variables
     _data;
     _sort;
     _parentElement = document.querySelector('#info');
 
+    // rendering instructions
     render(){
-        this._clear();
-        const markup = this._generateMarkup();
+        this._clear(); // clear parent on re-render
+        const markup = this._generateMarkup(); // build the markup 
         // this._element = markup.querySelector('#info');
-        this._parentElement.insertAdjacentHTML('beforeend', markup);
-        this.toggleInfoView();
+        this._parentElement.insertAdjacentHTML('beforeend', markup); // add markup to DOM
+        this.toggleInfoView(); // on render show info view
         
     }
 
+    // function to clear parent element
     _clear() {
         this._parentElement.innerHTML = '';
     }
 
+    // function to generate info view markup
     _generateMarkup() {
         return `
         <section class='c-card c-card__info'>
@@ -72,21 +76,16 @@ class InfoView {
         </section>
 
         `
-    }      
+    };      
 
+    // function toggles the info view show/hide
     toggleInfoView() {
         this._parentElement.addEventListener('click', (e) => {
             if(e.target.classList.contains('info__btn')) {
-                console.log('closing info modal...')
-                console.log('toggling info view')
                 this._parentElement.classList.toggle('show');
-
-            }
-
-        })
-
-    }
- 
-}
+            };
+        });
+    };
+};
 
 export default new InfoView();

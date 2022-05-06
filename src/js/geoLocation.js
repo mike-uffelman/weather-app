@@ -14,12 +14,10 @@ export const getGeolocation = async function() {
         if(navigator.geolocation) { //if allowed
             try {
                 const res = await _getPosition();
-                console.log(res);
                 const { latitude, longitude } = res.coords;
                 coords.latitude = latitude,
                 coords.longitude = longitude; // push lat/lon to coords array and true boolean indicating a user location
                 coords.locPermission = true;
-                console.log(coords);
                
             } catch(err) { // if blocked
                 const coords = await _randomCoords();
@@ -31,16 +29,16 @@ export const getGeolocation = async function() {
             }
                             
         }
-        if (!navigator.geolocation) {
+        if (!navigator.geolocation) { // if blocked
             console.log('geolocation failure...')
-            await _randomCoords();
+            await _randomCoords(); // get a random latitude/longitude for searchMap render
         }
     } catch(err) {
         throw err;
     }
 };
 
-
+// return new promise with geolocation object
 function _getPosition() {
     return new Promise(function(resolve, reject) {
         navigator.geolocation.getCurrentPosition(resolve, reject);    
@@ -48,10 +46,10 @@ function _getPosition() {
 }
  
 // get random lat, lon and push to coord array, indicate false for random
-async function _randomCoords() {
+function _randomCoords() {
     try {
-        coords.latitude = await Math.random() * (50 - (-50)) + (-50); 
-        coords.longitude = await Math.random() * (180 - (-180)) + (-180);
+        coords.latitude = Math.random() * (50 - (-50)) + (-50); 
+        coords.longitude = Math.random() * (120 - (-120)) + (-120);
         coords.locPermission = false;
         return coords;
     } catch(err) {

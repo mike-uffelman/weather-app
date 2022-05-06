@@ -40,21 +40,16 @@ export const addStoredLocation = function(location) {
                 clicks: 1,
                 created: new Date()
             }
-            
-        }
-    
-        console.log(newLocObj);
+        };
     
         let loc =  getStoredLocations();
         loc.push(newLocObj);
         localStorage.setItem('loc', JSON.stringify(loc));
-        // console.log(loc)
     } catch(err) {
         console.log('unable to add location to storage', err)
         throw err;
-    }
-
-}
+    };
+};
 
 //this is to remove locations from the local storage
 //to remove from the local storage we pass in the city id which serves as a unique identifier
@@ -63,14 +58,13 @@ export const removeStoredLocation = function(id) {
     try {
         //retrieve local storage
         let loc = getStoredLocations();
-        // console.log(loc);
 
         //iterate through LS elements looking for a match by id, then remove the match
         loc.forEach((place, index) => {
             if(place.data.id === id) {
                 loc.splice(index, 1)
-            }
-        })
+            };
+        });
 
         //re-set LS with modified object
         localStorage.setItem('loc',JSON.stringify(loc))
@@ -78,9 +72,8 @@ export const removeStoredLocation = function(id) {
     } catch(err) {
         console.log('unable to remove location from storage', err);
         throw err;
-    }
-    
-}
+    };
+};
 
 export const incrementViewCount = function(id) {
     try {
@@ -89,14 +82,14 @@ export const incrementViewCount = function(id) {
         loc.forEach(place => {
             if(Number(place.data.id) === Number(id)) {
                 ++place.data.clicks;
-            }
-        })
+            };
+        });
 
         localStorage.setItem('loc',JSON.stringify(loc))
 
     } catch(err) {
         console.log('unable to increment location view count', err);
         throw err;
-    }
+    };
     
-}
+};

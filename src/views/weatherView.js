@@ -130,7 +130,6 @@ class WeatherView {
         
         const { alerts, current, daily, hourly } = location.at(-1).data;
         const today = location.at(-1).data.daily.at(-1).temp;
-        console.log(today);
 
         const todaysDate = new Date(daily[0].dt * 1000)
         const date = todaysDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'});
