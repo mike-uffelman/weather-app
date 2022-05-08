@@ -146,6 +146,7 @@ const enableSearchMap = function() {
 const searchLink = () => searchView.moveToSearch();
 const savedLink = () => savedView.moveToSaved();
 const infoLink = () => infoView.toggleInfoView();
+const currentWeatherLink = () => weatherView._moveToCurrentWeather();
     
 // sort savedView locations
 const sortSaved = async function(sort) {
@@ -207,7 +208,7 @@ const init = async function() {
     savedView.addHandlerSaved(controlCallSaved, controlRemoveSaved, sortSaved);
     weatherView.addHandlerCurrent(controlCurrentLocation);
     maps.addHandlerMapClick(enableSearchMap);
-    layout.addHandlerToggleNav(searchLink, savedLink, infoLink);
+    layout.addHandlerToggleNav(searchLink, savedLink, infoLink, currentWeatherLink);
     search.addHandlerSearchForm(controlLocationSearch);
 
     // parcel hot module for development

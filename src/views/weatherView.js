@@ -284,6 +284,10 @@ class WeatherView {
         return uvIndex;
     };
 
+    _moveToCurrentWeather() {
+        this.#currentWeather.scrollIntoView({behavior: 'smooth'});
+    }
+
     // build all weather alerts
     _generateWeatherAlert(alerts) {
         let alertHTML= ''; 
