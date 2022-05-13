@@ -7,7 +7,15 @@ class WeatherView {
     // rendering controller for weatherView
     render(data) {
         try {
-            
+
+            console.log('data check: ', data);
+            if(!data) {
+                const markup = this._buildNav();
+                this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
+                
+                return;
+            }
+
             this._loadStyles(); // render specific stylings - display, opacity, scroll transitions
             this._clear(); // clear
             this._data = data;
@@ -24,6 +32,11 @@ class WeatherView {
             this.#currentWeather.style.display = 'flex';
             this._weatherAlertToggle();
 
+            setTimeout(() => {
+                this.#currentWeather.scrollIntoView({behavior: 'smooth'})
+
+            }, 1000)
+
         } catch(err) {
             console.log('error rendering location forecast!!!', err);
             throw err;
@@ -32,10 +45,10 @@ class WeatherView {
     }
 
     _loadStyles() {
+
         this.#currentWeather.classList.toggle('show');
         this.#currentWeather.style.opacity = 0;
         this.#currentWeather.style.transition = 'opacity ease 500ms';
-        this.#currentWeather.scrollIntoView({behavior: 'smooth'})
         this.#currentWeather.style.opacity = 1;
     }
 
@@ -127,10 +140,10 @@ class WeatherView {
 
     //* view=====================================================================================
     _generateMarkup(location) {
+        console.log('location markup data: ', location.at(-1).data);
         
-        const { alerts, current, daily, hourly } = location.at(-1).data;
+        const { alerts, current, daily, hourly, id, name, state, country } = location.at(-1).data;
         const today = location.at(-1).data.daily.at(-1).temp;
-
         const todaysDate = new Date(daily[0].dt * 1000)
         const date = todaysDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'});
 
@@ -138,13 +151,13 @@ class WeatherView {
             
             <div class='l-weather'>
                 <section class='l-cw'>
-                    <div class='l-cw__container' data-id='${location.at(-1).data.id}'>
+                    <div class='l-cw__container' data-id='${id}'>
                         <section class='c-cw__location'>
                             <header class='c-location'>
                                 <h3 id='city-display' class='c-location__header'>
-                                    <button class='c-location__header--link'>${location.at(-1).data.name}</button>
+                                    <button class='c-location__header--link'>${name}</button>
                                 </h3>
-                                <h5 class='c-location__header--sub'>${(!location.at(-1).data.state) ? '' : location.at(-1).data.state + ', '} ${location.at(-1).data.country}</h5>
+                                <h5 class='c-location__header--sub'>${(!state) ? '' : state + ', '} ${country}</h5>
                                 <p class='c-location__date'>${date}</p>
                             </header>
 
@@ -230,24 +243,25 @@ class WeatherView {
                     ${alerts ? this._generateWeatherAlert(alerts) : ''}
                 </section>                        
             
+                
                 <section class="nav__large">
                         <h3 class='date'>${date}</h3>
                         <div class='nav__links'> 
-                            <a href='#' class='nav__link links info__link'>
+                            <button class='nav__link links info__link'>
                                 <svg class='info__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/>
                                     <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
                                 </svg>
-                            </a>
-                            <a href='#' class='nav__link links search__link'>
+                            </button>
+                            <button class='nav__link links search__link'>
                                 <svg class='search__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
                                     <path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
                                 </svg>
-                            </a>
-                            <a href='#' class='nav__link links saved__link'>
+                            </button>
+                            <button class='nav__link links saved__link'>
                                 <svg class='saved__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/>
                                     <path d="M15 7v12.97l-4.21-1.81-.79-.34-.79.34L5 19.97V7h10m4-6H8.99C7.89 1 7 1.9 7 3h10c1.1 0 2 .9 2 2v13l2 1V3c0-1.1-.9-2-2-2zm-4 4H5c-1.1 0-2 .9-2 2v16l7-3 7 3V7c0-1.1-.9-2-2-2z"/>
                                 </svg>
-                            </a>
+                            </button>
                         </div>
                 </section>
             </div>
@@ -255,6 +269,34 @@ class WeatherView {
     };
 
     // <p class='weather-icon--description'>${current.weather[0].description}</p>
+
+    _buildNav() {
+        const todaysDate = new Date();
+        console.log(todaysDate.getMilliseconds());
+        const date = todaysDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'});
+
+        return `
+            <section class="nav__large nav__large--blocked">
+                <h3 class='date'>${date}</h3>
+                <div class='nav__links nav__links--blocked'> 
+                    <button class='nav__link links info__link'>
+                        <svg class='info__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/>
+                            <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                        </svg>
+                    </button>
+                    <button class='nav__link links search__link'>
+                        <svg class='search__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                            <path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                        </svg>
+                    </button>
+                    <button class='nav__link links saved__link'>
+                        <svg class='saved__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/>
+                            <path d="M15 7v12.97l-4.21-1.81-.79-.34-.79.34L5 19.97V7h10m4-6H8.99C7.89 1 7 1.9 7 3h10c1.1 0 2 .9 2 2v13l2 1V3c0-1.1-.9-2-2-2zm-4 4H5c-1.1 0-2 .9-2 2v16l7-3 7 3V7c0-1.1-.9-2-2-2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </section>`
+    }
 
     // set UV index level
     _uvIndexRating(n) {

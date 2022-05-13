@@ -1,5 +1,8 @@
 'use strict';
 
+ // parcel hot module for development
+ if (module.hot) module.hot.accept();
+
 // not needed - just a console notification that we're in the development branch - based on the npm script (i.e. start or build(production) it will change the )
 if (process.env.NODE_ENV === 'development') {
     console.log('Happy developing!');
@@ -33,19 +36,23 @@ const controlAppStart = async function() {
         savedView.render(await storage.getStoredLocations()); // retrieve and render saved locations from local storage
 
         await geoLoc.getGeolocation(); // get current (browser location allowed) or random location(browser location blocked)
+        searchView.render() // render search element
 
         // if location allowed
         if(geoLoc.coords.locPermission) {
             await model.getForecast(geoLoc.coords); // retrieve current location forecast
             weatherView.render(model.store) // render current weather
             maps.weatherMap(geoLoc.coords); // render weatherView map to current location
-            searchView.render() // render search element
+            // searchView.render() // render search element
         }
 
         // if location blocked
         if(!geoLoc.coords.locPermission) {
-            searchView.render(); // render search element
-            searchView.moveToSearch(); // auto navigate to search view
+            console.log(geoLoc.coords)
+            // document.querySelector('#current-weather-box').style.display = 'none'; //hide current weather if location blocked
+            weatherView.render();
+            // searchView.render(); // render search element
+            // await searchView.toggleSearchViewBlockedGeoLoc();
         } 
     } catch(err) {
         console.error('app start error!!!', err);
@@ -200,7 +207,6 @@ const controlLocationSearch = async function (e) {
 
 // app load controller
 const init = async function() {
-    
     await controlAppStart(); // initial application load/render
 
     // event handler publishers
@@ -210,9 +216,6 @@ const init = async function() {
     maps.addHandlerMapClick(enableSearchMap);
     layout.addHandlerToggleNav(searchLink, savedLink, infoLink, currentWeatherLink);
     search.addHandlerSearchForm(controlLocationSearch);
-
-    // parcel hot module for development
-    if (module.hot) module.hot.accept();
 
     // global event listener for errors
     window.addEventListener('error', function(e) {

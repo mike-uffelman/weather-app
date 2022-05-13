@@ -11,7 +11,7 @@ export const coords = {
 // get current user location (allow location) or return random lat/lon (block location)
 export const getGeolocation = async function() {
     try{
-        if(navigator.geolocation) { //if allowed
+        if(await navigator.geolocation) { //if allowed
             try {
                 const res = await _getPosition();
                 const { latitude, longitude } = res.coords;
@@ -29,7 +29,7 @@ export const getGeolocation = async function() {
             }
                             
         }
-        if (!navigator.geolocation) { // if blocked
+        if (await !navigator.geolocation) { // if blocked
             console.log('geolocation failure...')
             await _randomCoords(); // get a random latitude/longitude for searchMap render
         }

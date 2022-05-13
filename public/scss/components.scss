@@ -1,3 +1,6 @@
+
+// utilities ============================================
+
 input[type=text]:focus {
     background-color: rgb(247, 240, 181);
     // border: 1px solid $--dark-blue;
@@ -34,25 +37,50 @@ input[type=text]::placeholder {
         transition: all ease 150ms;
         
         svg {
-            fill: $--mustard;
+            fill: $--btn-active;
         }
     }
 
     &:active {
-        background-color: $--mustard;
+        background-color: $--btn-active;
     }
 
     &:focus {
-        border: 2px solid magenta;
+        outline: 2px solid magenta;
     }
 
     
 }
 
-
 .btn {
     @include btn;
+
+    &--submit {
+        // flex: 0;
+        width: 100%;
+        // align-self: center;
+        background-color: $pistachio;
+    }
+
+    &--close {
+        display: none;
+
+        @media only screen and (min-width: $bp-medium) {
+
+            padding: 0;
+            display: flex;
+            justify-self: flex-end;
+
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
 }
+//============================================================
+
+
 
 .search {
     position: relative;
@@ -181,7 +209,7 @@ input[type=text]::placeholder {
                 & input[type=radio] {
                     margin: 1rem 1rem;
                     transform: scale(1.5);
-                    accent-color: $--purple-lighter;
+                    accent-color: $--accent;
                     display: flex;
 
                     &:checked + label[class=text] {
@@ -225,7 +253,7 @@ input[type=text]::placeholder {
             width: 100%;
 
             border-radius: $--box-radius;
-            box-shadow: 0 0 .25rem black;
+            box-shadow: 0 0 .5rem black;
             opacity: 1;
             margin-bottom: 2rem;
             overflow: hidden;
@@ -237,7 +265,7 @@ input[type=text]::placeholder {
                 position: absolute;
                 display: none;
                 z-index: 9999;
-                background-color:  $--purple-lighter;
+                background-color:  $--accent;
                 height: 1rem;
                 width: 1rem;
                 border-radius: 50%;
@@ -251,8 +279,11 @@ input[type=text]::placeholder {
             }
 
             &:focus {
-                border: 2px solid $--purple-lighter;
+                border: 2px solid $--accent;
                 transition: all ease 300ms;
+            
+                // border-radius: $--box-radius;
+                // box-shadow: 0 0 .25rem black;
             }
 
             &--overlay {
@@ -280,13 +311,12 @@ input[type=text]::placeholder {
         }
     }
 
-    .btn--submit {
-        @include btn;
-        // flex: 0;
-        width: 100%;
-        // align-self: center;
-        background-color: $pistachio;
-    }
+    
+}
+
+.current-weather {
+    // border: 1px solid red;
+
 }
 
 .l-weather {
@@ -296,9 +326,9 @@ input[type=text]::placeholder {
     flex-basis: 100%;
     flex-direction: column;
     overflow-x: hidden; //prevents y scroll on search and saved pages
-    padding: .5rem;
-    scrollbar-width: 0rem;
-    margin: 1rem;
+    // padding: .5rem;
+    scrollbar-width: none;
+    padding: 1rem;
     width: 100%;
 
     animation-name: fadeIn;
@@ -327,9 +357,9 @@ input[type=text]::placeholder {
         padding: 2rem;
         margin: auto;
 
-        background-color: $--black-lightest;
-        border-radius: $--box-radius;
-        box-shadow: $--weather-box-shadow;
+        // background-color: $--black-lightest;
+        // border-radius: $--box-radius;
+        // box-shadow: $--weather-box-shadow;
         
         transition: all ease 300ms;
     }
@@ -354,12 +384,29 @@ input[type=text]::placeholder {
     @media only screen and (min-width: $bp-medium) {
         grid-area: menu;
         justify-self: flex-end;
-
+        align-self: flex-end;
         display: flex;
         flex-direction: column;
         width: 100%;
 
-         .date {
+        &--blocked {
+            grid-area: none;
+
+            background-color: transparent;
+            border-radius: 0;
+            box-shadow: none;
+
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            // justify-content: flex-end;
+            // align-items: flex-end;
+        }
+
+
+        .date {
             display: flex;
             flex: 1 1;
             justify-content: flex-end;
@@ -385,9 +432,22 @@ input[type=text]::placeholder {
                 font-size: 1.6rem;
                 box-shadow: none;
                 height: auto;
+
+                &:hover {
+                    cursor: pointer;
+                }
             }
+
+            &--blocked {
+                display: flex;
+                flex-direction: row;
+            }
+
+            
         }
     }
+
+    
 }
 
 .l-cw { //layout-current weather
@@ -434,7 +494,7 @@ input[type=text]::placeholder {
             text-shadow: 0 0 1rem $--white;
 
             .c-location__save--icon:not(.saved)  {
-                fill: $--purple-lighter;
+                fill: $--accent;
                 stroke: $--black-lighter;
                 stroke-width: 1;
 
@@ -520,7 +580,7 @@ input[type=text]::placeholder {
         transition: all ease 300ms;
 
         &.is-saved { //* saved state styling
-            fill: $--purple-lighter;
+            fill: $--accent;
         }
     }
 
@@ -852,6 +912,7 @@ input[type=text]::placeholder {
         &--row {
             flex-direction: row;
             justify-content: space-between;
+
         }
     
         @media only screen and (min-width: $bp-smallest) {
@@ -859,13 +920,13 @@ input[type=text]::placeholder {
         }
 
         &--modals {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: 400;
             // padding: 1rem;
             align-self: center;
 
             @media only screen and (min-width: $bp-medium) {
-                font-size: 1.8rem;
+                font-size: 2rem;
                 // padding: .5rem 0
             }
         }
@@ -905,7 +966,7 @@ input[type=text]::placeholder {
                 border-radius: 50%;
                 
                 background-color: $--white-alt;
-                filter: drop-shadow(0 0 .5rem $--black);
+                // filter: drop-shadow(0 0 .5rem $--black);
     
                 animation-name: pulse;
                 animation-duration: 3s;
@@ -933,17 +994,18 @@ input[type=text]::placeholder {
             &:hover {
                 background-color:  $--mustard;
                 color: $--reddish-alerts;
+                font-weight: bold;
                 text-shadow: 0 0 .5rem $--white;
     
-                ::before {
-                    background-color: $--white;
+                &::before {
+                    background-color: $--reddish-alerts;
                 }
             }
         }
         
     
         &:active {
-            background-color: $--mustard;
+            background-color: $--btn-active;
         }
     
     }
@@ -1578,7 +1640,7 @@ input[type=text]::placeholder {
                 justify-content: center;
                 // color: $--greenish;
                 height: 100%;
-    
+                
                 &:hover .sort__box {
                     color: black;
                 
@@ -1598,19 +1660,18 @@ input[type=text]::placeholder {
                     flex-direction: row;
                     justify-content: flex-end;
                     align-items: center;
+
                     color: inherit;
-                    border: none;
+                    border: 1px solid transparent;
 
                     &--heading {
                         position: relative;
                         font-size: 1.2rem;
-                        justify-self: center;
-                        color: $--white-alt;
                     }
 
                     &--icon {
                         position: relative;
-                        fill: $--purple-lighter;
+                        fill: $--accent;
                     }
                     
                 }
@@ -1647,7 +1708,7 @@ input[type=text]::placeholder {
 
                         &:focus,
                         &:hover {
-                            background-color: $--purple-lighter;
+                            background-color: $--accent;
                             cursor: pointer;
                             color:  $--white;
                             transition: all ease 500ms;
@@ -1679,14 +1740,14 @@ input[type=text]::placeholder {
             width: 100%;
 
             flex: 1;
-            font-size: 2rem;
+            font-size: 1.4rem;
             text-align: center;
             font-weight: bold;
-            color: $--white-alt;
-            background-color: $--black-lightest;
+            background-color: $--white-alt;
+            color: $--black-light;
 
             @media only screen and (min-width: $bp-small) {
-                font-size: 1.4rem;              
+                font-size: 1.8rem;              
             }
         }
 
@@ -1769,25 +1830,6 @@ input[type=text]::placeholder {
             }
         }
     }
-}
-
-.btn--close {
-    display: none;
-
-    @media only screen and (min-width: $bp-medium) {
-
-        @include btn;
-        padding: 0;
-        display: flex;
-        justify-self: flex-end;
-
-        &:hover {
-            cursor: pointer;
-        }
-    }
-
-
-
 }
 
 // ----- Info/Instructions Modal -----
@@ -2061,23 +2103,23 @@ input[type=text]::placeholder {
 
 @keyframes favs {
     0% {
-        fill: $--purple-lighter;
+        fill: $--accent;
         fill-opacity: 0;
     }
     50% {
-        fill: $--purple-lighter;
+        fill: $--accent;
         fill-opacity: .5;
     }
     50% {
-        fill: $--purple-lighter;
+        fill: $--accent;
         fill-opacity: 1;
     }
     50% {
-        fill: $--purple-lighter;
+        fill: $--accent;
         fill-opacity: .5;
     }
     100% {
-        fill: $--purple-lighter;
+        fill: $--accent;
         fill-opacity: 0;
     }
 }
