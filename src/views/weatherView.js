@@ -1,41 +1,64 @@
 'use strict';
 
+import navigationView from "./navigationView";
+import * as utility from "../js/utility.js"
+
 class WeatherView {
     #currentWeather = document.querySelector('#current-weather-box');
     _data;
 
     // rendering controller for weatherView
-    render(data) {
+    async render(data, permission) {
         try {
-
-            console.log('data check: ', data);
-            if(!data) {
-                const markup = this._buildNav();
-                this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
-                
-                return;
-            }
+            navigationView.clear();
+            console.log('data check: ', data, permission);
 
             this._loadStyles(); // render specific stylings - display, opacity, scroll transitions
             this._clear(); // clear
             this._data = data;
-            
-            const markup = this._generateMarkup(this._data);
-            this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
-            this._tempBars(); // build color temperature bars
-            this._windDirection(); // build wind direction arrow
+            console.log(this._data)
 
-            if(this._data.at(-1).data.saved === true) {
+            const bottomNav = document.querySelector('.nav__main');
+
+            if(permission === 'blocked') {
+                // build mobile and blocked large nav
+
+                const navMain = await navigationView.render(permission);
+                bottomNav.classList.add('blocked');
+                bottomNav.insertAdjacentHTML('afterbegin', navMain);
+            }
+            
+            if(permission === 'allowed') {
+                console.log('RENDERING WEATHER!!!!!!!!!!!!');
+                // build mobile and blocked large nav
+                const navMain = await navigationView.render(permission);
+                await bottomNav.insertAdjacentHTML('afterbegin', navMain);
+
+                // generate weather markup and add to DOM
+                const weatherMarkup = await this._generateMarkup(this._data, permission);
+                this.#currentWeather.insertAdjacentHTML('afterbegin', weatherMarkup);
+                
+                // generate weather nav and add to DOM
+                const weatherNav = document.querySelector('.nav__weather');
+
+                const navMarkup = await navigationView.render(permission);
+                await weatherNav.insertAdjacentHTML('afterbegin', navMarkup);
+                
+                this._tempBars(); // build color temperature bars
+                this._windDirection(); // build wind direction arrow
+            }            
+
+            if(this._data.at(-1)?.data.saved === true) {
                 document.querySelector('.c-location__save--icon').classList.add('is-saved');
             }
             
             this.#currentWeather.style.display = 'flex';
-            this._weatherAlertToggle();
+            // this._weatherAlertToggle();
 
             setTimeout(() => {
                 this.#currentWeather.scrollIntoView({behavior: 'smooth'})
+            }, 1000) 
 
-            }, 1000)
 
         } catch(err) {
             console.log('error rendering location forecast!!!', err);
@@ -52,46 +75,11 @@ class WeatherView {
         this.#currentWeather.style.opacity = 1;
     }
 
-    // dismissMessage() {
-    //     const message = document.querySelector('.message');
-    //     if(!message) return;
-    //     message.style.transform = 'translateY(-8rem)';
-    //     message.style.transformOrigin = 'top';
-    // }
-
-    renderMessage(message, quality) {
-        const markup = `
-            <div class='message message__${quality}'>
-                <div class='message__header'>
-                    <h3 class='message__header--type'>${message === 'err' ? 'err.message' : message}</h3>
-                    <p class='message__message'></p>
-                </div>    
-                <a href='#' class='message__close'><span class='message__close'></span></a>
-            </div>
-        `
-
-        document.querySelector('.l-main').insertAdjacentHTML('afterbegin', markup);
-        
-        const messageEl = document.querySelector('.message');
-        setTimeout(() => { messageEl.classList.toggle('show') }, 0);
-
-        document.querySelector('.message').addEventListener('click', (e) => {
-            console.log(e.target);
-            if(e.target.classList.contains('message__close')) {
-                document.querySelector('.message').classList.toggle('show');
-                // document.querySelector('.message').style.transform = 'translateY(-8rem)';
-                // document.querySelector('.message').style.transformOrigin = 'top';
-                setTimeout(() => document.querySelector('.message').remove(), 1000);
-
-
-
-            }
-        })
-    }
-
     // clear the weatherView
     _clear() {
         this.#currentWeather.innerHTML = '';
+
+        document.querySelectorAll('nav')?.forEach(n => n.innerHTML = '');
     }
 
     // weatherView event handler and subscriber
@@ -103,24 +91,6 @@ class WeatherView {
                 document.querySelector('.c-location__save--icon').classList.toggle('is-saved');
                 handler(this._data);
             };
-
-            // toggle search view
-            if(e.target.closest('.search__link')) {
-                console.log('search link clicked');
-                document.querySelector('#search').classList.toggle('show');
-            }
-
-            // toggle saved view
-            if(e.target.closest('.saved__link')) {
-                console.log('saved link clicked');
-                document.querySelector('#saved').classList.toggle('show');
-            }
-
-            // toggle info view
-            if(e.target.closest('.info__link')) {
-                console.log('info link clicked');
-                document.querySelector('.info').classList.toggle('show');
-            }
 
             // link to weather alerts
             if(e.target.classList.contains('details__header--alerts')) {
@@ -137,18 +107,19 @@ class WeatherView {
         currentLocationSave.classList.toggle('saved');
     }
 
+    buildNavContainer() {
+        return `<nav id='nav' class='nav nav__main'></nav>`
+    }
 
     //* view=====================================================================================
-    _generateMarkup(location) {
-        console.log('location markup data: ', location.at(-1).data);
+    _generateMarkup(location, permission) {
+
+        const type = 'large';
         
-        const { alerts, current, daily, hourly, id, name, state, country } = location.at(-1).data;
-        const today = location.at(-1).data.daily.at(-1).temp;
-        const todaysDate = new Date(daily[0].dt * 1000)
-        const date = todaysDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'});
+        const { alerts, current, daily, hourly, id, name, state, country } = location.at(-1)?.data;
+        const today = location.at(-1).data.daily[0].temp;
 
         return `
-            
             <div class='l-weather'>
                 <section class='l-cw'>
                     <div class='l-cw__container' data-id='${id}'>
@@ -158,7 +129,7 @@ class WeatherView {
                                     <button class='c-location__header--link'>${name}</button>
                                 </h3>
                                 <h5 class='c-location__header--sub'>${(!state) ? '' : state + ', '} ${country}</h5>
-                                <p class='c-location__date'>${date}</p>
+                                <p class='c-location__date'>${utility.getTodaysDate()}</p>
                             </header>
 
                             <svg id='saveIcon' class='c-location__save--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
@@ -242,61 +213,11 @@ class WeatherView {
                     <h3 class='c-card__header c-card__cw-alerts c-card__cw-alerts--header'>Weather Alerts</h3>
                     ${alerts ? this._generateWeatherAlert(alerts) : ''}
                 </section>                        
-            
-                
-                <section class="nav__large">
-                        <h3 class='date'>${date}</h3>
-                        <div class='nav__links'> 
-                            <button class='nav__link links info__link'>
-                                <svg class='info__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/>
-                                    <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                                </svg>
-                            </button>
-                            <button class='nav__link links search__link'>
-                                <svg class='search__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
-                                    <path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                                </svg>
-                            </button>
-                            <button class='nav__link links saved__link'>
-                                <svg class='saved__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/>
-                                    <path d="M15 7v12.97l-4.21-1.81-.79-.34-.79.34L5 19.97V7h10m4-6H8.99C7.89 1 7 1.9 7 3h10c1.1 0 2 .9 2 2v13l2 1V3c0-1.1-.9-2-2-2zm-4 4H5c-1.1 0-2 .9-2 2v16l7-3 7 3V7c0-1.1-.9-2-2-2z"/>
-                                </svg>
-                            </button>
-                        </div>
-                </section>
+
+                <nav class='nav__current--large nav__weather'></nav>
             </div>
         `;
     };
-
-    // <p class='weather-icon--description'>${current.weather[0].description}</p>
-
-    _buildNav() {
-        const todaysDate = new Date();
-        console.log(todaysDate.getMilliseconds());
-        const date = todaysDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'});
-
-        return `
-            <section class="nav__large nav__large--blocked">
-                <h3 class='date'>${date}</h3>
-                <div class='nav__links nav__links--blocked'> 
-                    <button class='nav__link links info__link'>
-                        <svg class='info__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/>
-                            <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                        </svg>
-                    </button>
-                    <button class='nav__link links search__link'>
-                        <svg class='search__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
-                            <path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                        </svg>
-                    </button>
-                    <button class='nav__link links saved__link'>
-                        <svg class='saved__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/>
-                            <path d="M15 7v12.97l-4.21-1.81-.79-.34-.79.34L5 19.97V7h10m4-6H8.99C7.89 1 7 1.9 7 3h10c1.1 0 2 .9 2 2v13l2 1V3c0-1.1-.9-2-2-2zm-4 4H5c-1.1 0-2 .9-2 2v16l7-3 7 3V7c0-1.1-.9-2-2-2z"/>
-                        </svg>
-                    </button>
-                </div>
-            </section>`
-    }
 
     // set UV index level
     _uvIndexRating(n) {

@@ -23,7 +23,7 @@ export let store = []; // array to store current session locations
 export const getCity = async function (loc) {
     try {
         const [city, ...region] = loc;
-
+        console.log(city);
         // if city is not defined, return
         if(!city) return;
 
@@ -61,6 +61,8 @@ export const getCity = async function (loc) {
 //Get the forecast for the lat/lon provided
 export const getForecast = async function(coords) {
     try {
+        console.log('coords: ', coords)
+        if(coords.locPermission === 'blocked') return;
         const { latitude: lat, longitude: lon, saved = false, id } = coords;
         // if(!check) return; // if a random location i.e. false, return //? NOT SURE IF REALLY NEEDED...
         if(!lat || !lon) return; // if lat or lon is undefined, return 

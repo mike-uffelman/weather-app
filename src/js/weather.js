@@ -1,8 +1,9 @@
 'use strict';
 
  // parcel hot module for development
- if (module.hot) module.hot.accept();
-
+ if (module.hot) {
+     module.hot.accept();
+ };
 // not needed - just a console notification that we're in the development branch - based on the npm script (i.e. start or build(production) it will change the )
 if (process.env.NODE_ENV === 'development') {
     console.log('Happy developing!');
@@ -27,33 +28,28 @@ import savedView from '../views/savedView.js';
 import searchView from '../views/searchView.js';
 import infoView from '../views/infoView.js';
 import message from '../views/errorView.js';
+import navigationView from '../views/navigationView.js';
 
 //* ========== app start controller ==========
 const controlAppStart = async function() {
     try {
-        infoView.render(); // display app instructions modal
-        
         savedView.render(await storage.getStoredLocations()); // retrieve and render saved locations from local storage
+        
+        infoView.render(); // display app instructions modal
 
-        await geoLoc.getGeolocation(); // get current (browser location allowed) or random location(browser location blocked)
         searchView.render() // render search element
 
-        // if location allowed
-        if(geoLoc.coords.locPermission) {
-            await model.getForecast(geoLoc.coords); // retrieve current location forecast
-            weatherView.render(model.store) // render current weather
-            maps.weatherMap(geoLoc.coords); // render weatherView map to current location
-            // searchView.render() // render search element
-        }
+        await geoLoc.getGeolocation(); // get current (browser location allowed) or random location(browser location blocked)
 
-        // if location blocked
-        if(!geoLoc.coords.locPermission) {
-            console.log(geoLoc.coords)
-            // document.querySelector('#current-weather-box').style.display = 'none'; //hide current weather if location blocked
-            weatherView.render();
-            // searchView.render(); // render search element
-            // await searchView.toggleSearchViewBlockedGeoLoc();
-        } 
+        await model.getForecast(geoLoc.coords); // retrieve current location forecast
+
+        await weatherView.render(model.store, geoLoc.coords.locPermission) // render current weather
+        maps.weatherMap(geoLoc.coords); // render weatherView map to current location
+
+        navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
+
+        // infoView.toggleInfoView();
+
     } catch(err) {
         console.error('app start error!!!', err);
         message.renderMessage(err, 'error');
@@ -104,6 +100,7 @@ const controlCallSaved = async function(id) {
         // when forecast retrieved render the weatherview and the weather map
         loc.forEach(async (place) => {
             if(place.data.id === Number(id)) {
+                const permission = 'allowed';
                 const coords = { 
                     latitude: place.data.lat,
                     longitude: place.data.lon,
@@ -112,8 +109,11 @@ const controlCallSaved = async function(id) {
                 };
                 
                 await model.getForecast(coords);
-                weatherView.render(model.store)
+                await weatherView.render(model.store, permission)
                 maps.weatherMap(coords);
+                
+                navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
+
             }
         })
 
@@ -146,11 +146,11 @@ const controlRemoveSaved = async function(id) {
 //* ========== Remove search map overlay ==========
 const enableSearchMap = function() {
     // console.log('enabling search map!')
-    maps.searchMap(geoLoc.coords, 9);
+    maps.searchMap(geoLoc.coords, 2);
 }
 
 // toggle navigation items
-const searchLink = () => searchView.moveToSearch();
+const searchLink = () => searchView.toggleSearch();
 const savedLink = () => savedView.moveToSaved();
 const infoLink = () => infoView.toggleInfoView();
 const currentWeatherLink = () => weatherView._moveToCurrentWeather();
@@ -171,6 +171,7 @@ const errorHandled = (message, type) => message.renderMessage(message, type)
 // search controller
 const controlLocationSearch = async function (e) {
     try {
+        const permission = 'allowed';
         // retrieve search inputs from submit
         const params = searchView.getInputs();
 
@@ -193,13 +194,17 @@ const controlLocationSearch = async function (e) {
             longitude: model.store.at(-1).data.lon
         }
         // render weatherView and map
-        weatherView.render(model.store);
-        await maps.weatherMap(coords);
         
-        searchView.toggleSearchViewBlockedGeoLoc(); // hides searchView after submit
+        await weatherView.render(model.store, permission);
+        maps.weatherMap(coords);
+        
+        searchView.toggleSearch(); // hides searchView after submit
         searchView._clearForm(); // clear form details
         maps.clearMarkers(); // clear map markers
         message._autoClear(); // remove messages
+
+        navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
+
     } catch(err) {
         message.renderMessage(err);
     }
@@ -214,8 +219,8 @@ const init = async function() {
     savedView.addHandlerSaved(controlCallSaved, controlRemoveSaved, sortSaved);
     weatherView.addHandlerCurrent(controlCurrentLocation);
     maps.addHandlerMapClick(enableSearchMap);
-    layout.addHandlerToggleNav(searchLink, savedLink, infoLink, currentWeatherLink);
     search.addHandlerSearchForm(controlLocationSearch);
+    // navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
 
     // global event listener for errors
     window.addEventListener('error', function(e) {

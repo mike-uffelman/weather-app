@@ -143,7 +143,7 @@ class DisplaySaved {
             }
 
             // close button, toggle show
-            if(e.target.closest('.btn--close')) {
+            if(e.target.closest('.btn--close') || e.target.id === 'saved') {
                 this._parentElement.classList.toggle('show');
             }
 
@@ -167,6 +167,8 @@ class DisplaySaved {
 
     // move to saved view 
     moveToSaved() {
+        this._parentElement.classList.toggle('show');
+
         this._parentElement.scrollIntoView({behavior: 'smooth'});
     }
 

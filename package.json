@@ -2,12 +2,11 @@
   "name": "weather-app",
   "version": "1.0.0",
   "description": "User Stories:",
-  "source": "src/index.html",
   "type": "module",
   "scripts": {
     "watch:sass": "sass public/scss/main.scss public/css/style.css -w",
-    "start": "parcel",
-    "build": "parcel build"
+    "start": "parcel src/index.html && parcel watch src/index.html",
+    "build": "parcel build src/index.html"
   },
   "repository": {
     "type": "git",
@@ -21,10 +20,11 @@
   },
   "homepage": "https://github.com/mike-uffelman/weather-app#readme",
   "dependencies": {
-    "core-js": "^3.20.2"
+    "core-js": "^3.22.7",
+    "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.5.0",
-    "parcel": "^2.5.0"
+    "@parcel/transformer-sass": "^2.6.0",
+    "parcel": "^2.6.0"
   }
 }

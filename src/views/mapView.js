@@ -124,6 +124,8 @@ let { OWM_APIKEY } = process.env;
     // function to build weather amp at current weather location
     export const weatherMap = async function (coords, zoom = 9) {     
         // console.log(this.map);
+        console.log('map coords parameter: ', coords);
+        if(coords.locPermission === 'blocked') return;
         const mapid = document.querySelector('#mapid');
 
         mapid.innerHTML = "<div id='map' class='search__modal--map--map'></div>";

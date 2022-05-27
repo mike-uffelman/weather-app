@@ -108,5 +108,13 @@ $bp-tiny: 18.75em; //300/16
     box-sizing: border-box;
 }
 
+* {
+    scrollbar-width: none;
+    scrollbar-color: $--dark-blue ;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
 
 //----- 

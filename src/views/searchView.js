@@ -77,8 +77,7 @@ class searchView {
     // event handler for the close button in desktop view
     addHandlerSearch() {
         this._parentElement.addEventListener('click', (e) => {
-            if(e.target.closest('.btn--close')) {
-                console.log(e.target);
+            if(e.target.closest('.btn--close') || e.target.id === 'search') {
                 this._parentElement.classList.toggle('show');
             }
         })
@@ -138,8 +137,11 @@ class searchView {
     }
 
     // function moves screen to the search view
-    moveToSearch() {
+    toggleSearch() {
+        this._parentElement.classList.toggle('show');
+        
         this._parentElement.scrollIntoView({behavior: 'smooth'})
+
     }
 
     // function toggles the display for the searchView if location is blocked

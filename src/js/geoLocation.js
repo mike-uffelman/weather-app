@@ -17,7 +17,7 @@ export const getGeolocation = async function() {
                 const { latitude, longitude } = res.coords;
                 coords.latitude = latitude,
                 coords.longitude = longitude; // push lat/lon to coords array and true boolean indicating a user location
-                coords.locPermission = true;
+                coords.locPermission = 'allowed';
                
             } catch(err) { // if blocked
                 const coords = await _randomCoords();
@@ -48,9 +48,9 @@ function _getPosition() {
 // get random lat, lon and push to coord array, indicate false for random
 function _randomCoords() {
     try {
-        coords.latitude = Math.random() * (50 - (-50)) + (-50); 
-        coords.longitude = Math.random() * (120 - (-120)) + (-120);
-        coords.locPermission = false;
+        coords.latitude = Math.random() * (90 - (-90)) + (-90); 
+        coords.longitude = Math.random() * (180 - (-180)) + (-180);
+        coords.locPermission = 'blocked';
         return coords;
     } catch(err) {
         throw new Error('Unable to get random location');
