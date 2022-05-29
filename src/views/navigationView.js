@@ -5,11 +5,15 @@ import * as utility from "../js/utility.js";
 import weatherView from "./weatherView.js";
 
 class Nav {
-    _parentElement;
-    _navElement;
+    _search = document.querySelector('#search');
+    _saved = document.querySelector('#saved');
+    _info = document.querySelector('#info');
 
     render(permission) {
-        return this._generateMarkup(permission);
+        const navMarkup = this._generateMarkup(permission);
+        this._navMenu = document.querySelectorAll('.nav__menu');
+
+        return navMarkup
     }
 
     clear() {
@@ -21,110 +25,50 @@ class Nav {
     addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink) {
         console.log('starting navigation handler..........')
 
-        // document.querySelector('main').addEventListener('resize', (e) => {
-            // if(window.visualViewport.width < 700) {
-        //         console.log('windows is greater than 700px and the weather box has a child')
-                // this._parentElement.classList.add('nav__current--large');
-        //     //     this._parentElement.classList.add('hide');
-        //     // } else {
-        //     //     console.log('this is the small nav view');
-        //     //     this._parentElement.classList.remove('hide');
-                // document.querySelector('.nav.nav__current--large').style.display = 'none';
-                // console.log('++++ is this shit working +++', e)
-            // }
-        // })
-        
-
-        // document.querySelector('main').addEventListener('resize', (e) => {
-        //     if(window.visualViewport.width >= 700) {
-        //         console.log('this is the large nav view')
-        //         this._parentElement.classList.add('hide');
-
-        //     } else {
-        //         console.log('this is the small nav view');
-        //         this._parentElement.classList.remove('hide');
-        //     }
-        // })
-
-        // const nav = document.querySelector('.nav__handler');
-    
-        // nav.forEach(navbtn => {
-            // mouseover to open small screen nav menu
         document.querySelectorAll('nav').forEach(n => {
             n.addEventListener('click', (e) => {
             // open/close mobile nav on mouseover
-                console.log('clicking the navigation...')
-                console.log(e.target);
-                if(e.target.closest('.nav__toggle')) {
-                    // console.log(e.target)
-                    document.querySelector('.nav__main').classList.toggle('is-open');
-                };
+                if (e.target.closest('.nav__toggle')) {
+                    document.querySelector('.nav').classList.toggle('is-open');
 
-                if (e.target.closest('.nav__toggle--large')) {
                     document.querySelector('.nav__menu').classList.toggle('is-open');
+                    document.querySelector('.nav__toggle--burger').classList.toggle('is-active');
                 };
             });
         });
-
-        // document.querySelector('.nav__weather')?.addEventListener('click', (e) => {
-        //     // open/close mobile nav on mouseover
-        //     console.log('clicking the navigation...')
-        //     console.log(e.target);
-        //     if(e.target.closest('.nav__toggle')) {
-        //         // console.log(e.target)
-        //         document.querySelector('.nav__weather').classList.toggle('is-open');
-        //     };
-
-        //     if (e.target.closest('.nav__toggle--burger')) {
-        //         document.querySelector('.nav__menu').classList.toggle('is-open');
-        //     };
-
-        // });
-        
-               
-        // document.querySelector('.nav__toggle--large')?.addEventListener('click', (e) => {
-        //     // console.log('nav__current--large listening for something...')
-        //     // console.log(e.target);
-        //     if(e.target.closest('.nav__current--large')) {
-        //         console.log('toggling large nav links...')
-        //         // console.log('clicking', e.target);
-        //         document.querySelector('.nav__menu').classList.toggle('is-open');
-        //     }
-        // })
-            
 
         document.querySelectorAll('.nav__menu').forEach(nav => {
             nav.addEventListener('click', (e) => {
                 if(e.target.closest('.search__link')) {
                     console.log('search link click')
                     searchLink();
-                    document.querySelector('#saved').classList.remove('show');
-                    document.querySelector('#info').classList.remove('show');
+                    this._saved.classList.remove('show');
+                    this._info.classList.remove('show');
                 };
 
             // saved locations
                 if(e.target.closest('.saved__link')) {
                     console.log('saved link click');
                     savedLink();
-                    document.querySelector('#search').classList.remove('show');
-                    document.querySelector('#info').classList.remove('show');
+                    this._search.classList.remove('show');
+                    this._info.classList.remove('show');
                 };
 
                 // info/help button
                 if(e.target.closest('.info__link')) {
                     console.log('info link click');
-                    document.querySelector('#info').classList.toggle('show');
-                    document.querySelector('#saved').classList.remove('show');
-                    document.querySelector('#search').classList.remove('show');
+                    this._info.classList.toggle('show');
+                    this._saved.classList.remove('show');
+                    this._search.classList.remove('show');
                 };
 
                 // current weather button
                 if(e.target.closest('.weather__link')) {
                     console.log('weather link click');
                     currentWeatherLink();
-                    document.querySelector('#saved').classList.remove('show');
-                    document.querySelector('#info').classList.remove('show');
-                    document.querySelector('#search').classList.remove('show');
+                    this._saved.classList.remove('show');
+                    this._info.classList.remove('show');
+                    this._search.classList.remove('show');
 
                 }
             });
@@ -139,7 +83,7 @@ class Nav {
         return `
             <h3 class='nav__date date'>${utility.getTodaysDate()}</h3>
             <div class='nav__container'>
-                <header class="nav__toggle nav__toggle--large">
+                <header class="nav__toggle">
                     <svg class='nav__toggle--burger' xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="M6 36V33H42V36ZM6 25.5V22.5H42V25.5ZM6 15V12H42V15Z"/></svg>
                 </header>
                 

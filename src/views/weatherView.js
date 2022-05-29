@@ -10,61 +10,49 @@ class WeatherView {
     // rendering controller for weatherView
     async render(data, permission) {
         try {
-            navigationView.clear();
-            console.log('data check: ', data, permission);
+            // navigationView.clear();
 
             this._loadStyles(); // render specific stylings - display, opacity, scroll transitions
             this._clear(); // clear
             this._data = data;
-            console.log(this._data)
 
+            //build main nav container
+            await this.buildMainNavContainer(permission);
+            //build navigation markup
             const bottomNav = document.querySelector('.nav__main');
 
-            if(permission === 'blocked') {
-                // build mobile and blocked large nav
 
-                const navMain = await navigationView.render(permission);
+            if(permission === 'blocked') {
                 bottomNav.classList.add('blocked');
-                bottomNav.insertAdjacentHTML('afterbegin', navMain);
             }
             
             if(permission === 'allowed') {
-                console.log('RENDERING WEATHER!!!!!!!!!!!!');
-                // build mobile and blocked large nav
-                const navMain = await navigationView.render(permission);
-                await bottomNav.insertAdjacentHTML('afterbegin', navMain);
-
-                // generate weather markup and add to DOM
                 const weatherMarkup = await this._generateMarkup(this._data, permission);
                 this.#currentWeather.insertAdjacentHTML('afterbegin', weatherMarkup);
-                
-                // generate weather nav and add to DOM
-                const weatherNav = document.querySelector('.nav__weather');
 
-                const navMarkup = await navigationView.render(permission);
-                await weatherNav.insertAdjacentHTML('afterbegin', navMarkup);
-                
+                await this.buildWeatherNavContainer(permission);
+                    
                 this._tempBars(); // build color temperature bars
                 this._windDirection(); // build wind direction arrow
-            }            
 
-            if(this._data.at(-1)?.data.saved === true) {
-                document.querySelector('.c-location__save--icon').classList.add('is-saved');
+                if(this._data.at(-1)?.data.saved === true) {
+                    document.querySelector('.c-location__save--icon').classList.add('is-saved');
+                }
+                
+                this.#currentWeather.style.display = 'flex';
+                this._weatherAlertToggle();
+
+                setTimeout(() => {
+                    this.#currentWeather.scrollIntoView({behavior: 'smooth'})
+                }, 1000) 
+
             }
-            
-            this.#currentWeather.style.display = 'flex';
-            // this._weatherAlertToggle();
-
-            setTimeout(() => {
-                this.#currentWeather.scrollIntoView({behavior: 'smooth'})
-            }, 1000) 
-
+            document.querySelectorAll('.nav__toggle').forEach(n => n.classList.add(`${permission}`))
 
         } catch(err) {
             console.log('error rendering location forecast!!!', err);
             throw err;
-        }
-        
+        }   
     }
 
     _loadStyles() {
@@ -79,7 +67,9 @@ class WeatherView {
     _clear() {
         this.#currentWeather.innerHTML = '';
 
-        document.querySelectorAll('nav')?.forEach(n => n.innerHTML = '');
+        // document.querySelectorAll('nav')?.forEach(n => n.innerHTML = '');
+        document.querySelectorAll('nav')?.forEach(n => n.remove());
+
     }
 
     // weatherView event handler and subscriber
@@ -107,8 +97,22 @@ class WeatherView {
         currentLocationSave.classList.toggle('saved');
     }
 
-    buildNavContainer() {
-        return `<nav id='nav' class='nav nav__main'></nav>`
+    async buildMainNavContainer(permission) {
+        const mainNav = `
+            <nav id='nav' class='nav nav__main'>
+                ${await navigationView.render(permission)}
+            </nav>`;
+
+        document.querySelector('main').insertAdjacentHTML('beforeend', mainNav);
+    }
+
+    async buildWeatherNavContainer(permission) {
+        const weatherNav = `
+            <nav class='nav__current--large nav__weather'>
+                ${await navigationView.render(permission)}
+            </nav>`;
+
+        document.querySelector('.l-weather').insertAdjacentHTML('beforeend', weatherNav);
     }
 
     //* view=====================================================================================
@@ -214,7 +218,7 @@ class WeatherView {
                     ${alerts ? this._generateWeatherAlert(alerts) : ''}
                 </section>                        
 
-                <nav class='nav__current--large nav__weather'></nav>
+                
             </div>
         `;
     };
@@ -290,7 +294,6 @@ class WeatherView {
         alerts.forEach((alert, i) => {
             alert.addEventListener('click', (e) => {
                 if(e.target.closest('.alert__heading')) {
-                    
                     const alertDetail = alert.nextElementSibling;                
                     const icon = alert.querySelector('.alert__heading--icon');
     

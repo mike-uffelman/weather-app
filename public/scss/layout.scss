@@ -175,6 +175,8 @@ svg, path {
             width: auto;
             overflow: hidden;
             padding: .5rem 0;
+            // box-shadow: inset 0 0 2rem $--gradient-4;
+
         }
     }
 
@@ -200,17 +202,17 @@ svg, path {
             flex-direction: column;
             width: 100%;
 
-            .allowed {
-                border: 4px dotted magenta;
-                position: absolute;
-                bottom: 0;
-                right: 0;
-                display: none;
+            // .allowed {
+            //     border: 4px dotted magenta;
+            //     position: absolute;
+            //     bottom: 0;
+            //     right: 0;
+            //     display: none;
 
-                justify-self: center;
-                align-self: center;
-                display: flex;
-            }
+            //     justify-self: center;
+            //     align-self: center;
+            //     display: flex;
+            // }
 
             .toggle {
                 order: 2;
@@ -243,6 +245,10 @@ svg, path {
         transform: translateY(-3rem);
         transition: all ease 300ms;
 
+        .nav__toggle--burger {
+            fill: $--accent-active;
+        }
+
         @media only screen and (min-width: $bp-medium) {
             transform: translateY(0); // null vertic
         }
@@ -265,8 +271,16 @@ svg, path {
             cursor: pointer;
 
             svg {
-                fill: $--mustard;
+                fill: $--accent-active;
             }
+        }
+
+        .blocked {
+            border: 1px solid red;
+        }
+
+        .allowed {
+            border: 1px solid green;
         }
 
         @media only screen and (min-width: $bp-medium) {
@@ -290,6 +304,13 @@ svg, path {
             // top: -.75rem;
             z-index: 9999999;
             transform: scale(.75);
+            transition: all ease 1000ms;
+
+
+            &.is-active {
+                fill: $--accent-active;
+                transition: all ease 1000ms;
+            }
 
             @media only screen and (min-width: $bp-medium) {
                 position: relative;
@@ -316,6 +337,15 @@ svg, path {
         flex-direction: row;
         height: 3rem;
         width: 100%;
+
+        // &.is-open {
+        //     transform: translateY(-3rem);
+        //     transition: all ease 300ms;
+    
+        //     @media only screen and (min-width: $bp-medium) {
+        //         transform: translateY(0); // null vertic
+        //     }
+        // }
         
         @media only screen and (min-width: $bp-medium) {
             order: 1;
@@ -327,8 +357,8 @@ svg, path {
                 transform: translateX(0);
                 transition: ease-out 1000ms;
 
-                > .nav__toggle svg {
-                    fill: $--mustard;
+                .nav__toggle--burger {
+                    fill: $--accent-active;
                 }
             }
 
@@ -404,13 +434,13 @@ svg, path {
             }
 
             &:hover svg {
-                fill: $--mustard;
+                fill: $--accent-active;
                 filter: drop-shadow(0 0 .5rem $--black);
                 transition: all ease 300ms;
             }
 
             &:active svg {
-                fill: $--mustard;
+                fill: $--accent-active;
             }
         }  
         

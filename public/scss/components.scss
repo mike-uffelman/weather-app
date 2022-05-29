@@ -1371,7 +1371,7 @@ input[type=text]::placeholder {
 
         &.active {
             color: $--black;
-            background-color: $--black-lightest2;
+            background-color: $--mustard-lighter;
         }
 
         &--icon {
@@ -1389,11 +1389,15 @@ input[type=text]::placeholder {
         }
 
         &:hover {
-            background-color: $--black-lightest2;
+            background-color: $--mustard-lighter;
             cursor: pointer;
 
             .alert__heading--link {
-                text-shadow: 0 0 .5rem $--white;
+                text-shadow: 0 0 .5rem $--white-alt;
+            }
+
+            .alert__heading--icon {
+                fill: $--mustard;
             }
         }
 
@@ -1408,6 +1412,7 @@ input[type=text]::placeholder {
             color: $--reddish;
             font-size: 1.4rem;   
             background-color: transparent; 
+            // text-shadow: .15rem .15rem 0 $--black;
 
             .tip {
                 font-size: 1rem;

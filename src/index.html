@@ -12,7 +12,7 @@
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
         <link rel="stylesheet" href="../public/scss/main.scss" >
         
-        <script type='module' src="./js/weather.js"></script>
+        <script type='module' defer src="./js/weather.js"></script>
         <!-- removed defer from script, need to look into, maybe fixed the parcel hmr issues... -->
      
     </head>
@@ -37,7 +37,7 @@
             <!-- </div> -->
 
             <!-- Page Navigation -->
-            <nav id='nav' class='nav nav__main'></nav>
+            <!-- <nav id='nav' class='nav nav__main'></nav> -->
 
             <!-- Site info/instructions -->
             <dialog id='info' class="info show">

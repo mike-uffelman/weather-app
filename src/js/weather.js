@@ -100,6 +100,7 @@ const controlCallSaved = async function(id) {
         // when forecast retrieved render the weatherview and the weather map
         loc.forEach(async (place) => {
             if(place.data.id === Number(id)) {
+
                 const permission = 'allowed';
                 const coords = { 
                     latitude: place.data.lat,
@@ -110,6 +111,7 @@ const controlCallSaved = async function(id) {
                 
                 await model.getForecast(coords);
                 await weatherView.render(model.store, permission)
+
                 maps.weatherMap(coords);
                 
                 navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
