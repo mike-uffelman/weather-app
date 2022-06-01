@@ -2,7 +2,6 @@
 
 
 import * as utility from "../js/utility.js";
-import weatherView from "./weatherView.js";
 
 class Nav {
     _search = document.querySelector('#search');
@@ -23,11 +22,8 @@ class Nav {
 
     // this handler toggles the .hide class to display the navbar when user location is blocked and screen size is > 700px
     addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink) {
-        console.log('starting navigation handler..........')
-
         document.querySelectorAll('nav').forEach(n => {
             n.addEventListener('click', (e) => {
-            // open/close mobile nav on mouseover
                 if (e.target.closest('.nav__toggle')) {
                     document.querySelector('.nav').classList.toggle('is-open');
 
@@ -37,18 +33,18 @@ class Nav {
             });
         });
 
+        // create event listener for button button clicks on each navigation, selecting a navigation item will close the others if open
         document.querySelectorAll('.nav__menu').forEach(nav => {
             nav.addEventListener('click', (e) => {
+                // search 
                 if(e.target.closest('.search__link')) {
-                    console.log('search link click')
                     searchLink();
                     this._saved.classList.remove('show');
                     this._info.classList.remove('show');
                 };
 
-            // saved locations
+                // saved locations
                 if(e.target.closest('.saved__link')) {
-                    console.log('saved link click');
                     savedLink();
                     this._search.classList.remove('show');
                     this._info.classList.remove('show');
@@ -56,15 +52,13 @@ class Nav {
 
                 // info/help button
                 if(e.target.closest('.info__link')) {
-                    console.log('info link click');
-                    this._info.classList.toggle('show');
+                    infoLink();
                     this._saved.classList.remove('show');
                     this._search.classList.remove('show');
                 };
 
                 // current weather button
                 if(e.target.closest('.weather__link')) {
-                    console.log('weather link click');
                     currentWeatherLink();
                     this._saved.classList.remove('show');
                     this._info.classList.remove('show');
@@ -78,7 +72,6 @@ class Nav {
 
     // navbar markup function for rendering
     _generateMarkup(permission) {
-        // console.log('render type??? blocked???', permission)
         
         return `
             <h3 class='nav__date date'>${utility.getTodaysDate()}</h3>
@@ -87,9 +80,8 @@ class Nav {
                     <svg class='nav__toggle--burger' xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="M6 36V33H42V36ZM6 25.5V22.5H42V25.5ZM6 15V12H42V15Z"/></svg>
                 </header>
                 
-                <!-- nav__links--large ${permission} -->
                 <div class='nav__links nav__links--large'> 
-                    <section class="nav__menu">
+                    <section class="nav__menu ${permission}">
                         <button class='nav__link search__link'>
                             <svg class='search__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
                                 <path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>

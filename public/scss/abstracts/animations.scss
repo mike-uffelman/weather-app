@@ -1,0 +1,83 @@
+@keyframes icon {
+    0% { 
+        transform: scale(2) translateX(40rem);
+    }
+    100% {
+        transform: scale(2) translateX(0rem);
+
+    }
+}
+
+@keyframes days {
+    0% {
+        transform: translateY(5rem);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes favs {
+    0% {
+        fill: $--accent;
+        fill-opacity: 0;
+    }
+    50% {
+        fill: $--accent;
+        fill-opacity: .5;
+    }
+    50% {
+        fill: $--accent;
+        fill-opacity: 1;
+    }
+    50% {
+        fill: $--accent;
+        fill-opacity: .5;
+    }
+    100% {
+        fill: $--accent;
+        fill-opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transition: all ease 300ms;
+    }
+
+    100% {
+        opacity: 1;
+        transition: all ease 300ms;
+    }
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(-60rem);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes menus {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-40rem);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

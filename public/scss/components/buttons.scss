@@ -1,0 +1,28 @@
+
+
+
+
+
+.btn {
+    @include btn;
+
+    &--submit {
+        width: 100%;
+        background-color: $--accent;
+    }
+
+    &--close {
+        display: none;
+
+        @media only screen and (min-width: $bp-medium) {
+
+            padding: 0;
+            display: flex;
+            justify-self: flex-end;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}

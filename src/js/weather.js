@@ -1,15 +1,5 @@
 'use strict';
 
- // parcel hot module for development
- if (module.hot) {
-     module.hot.accept();
- };
-// not needed - just a console notification that we're in the development branch - based on the npm script (i.e. start or build(production) it will change the )
-if (process.env.NODE_ENV === 'development') {
-    console.log('Happy developing!');
-
-}
-
 // package imports - transpiling and polyfilling
 import 'core-js/stable';
 import 'regenerator-runtime/runtime'; 
@@ -30,25 +20,35 @@ import infoView from '../views/infoView.js';
 import message from '../views/errorView.js';
 import navigationView from '../views/navigationView.js';
 
+ // parcel hot module for development
+ if(module.hot) module.hot.accept();
+// not needed - just a console notification that we're in the development branch - based on the npm script (i.e. start or build(production))
+if(process.env.NODE_ENV === 'development') console.log('Happy developing!');
+
 //* ========== app start controller ==========
 const controlAppStart = async function() {
     try {
-        savedView.render(await storage.getStoredLocations()); // retrieve and render saved locations from local storage
-        
-        infoView.render(); // display app instructions modal
+        // render saved, search, info views/modals
+        savedView.render(await storage.getStoredLocations());
+        infoView.render();
+        searchView.render();
 
-        searchView.render() // render search element
+        // get current (location allowed) or random location(location blocked)
+        await geoLoc.getGeolocation();
 
-        await geoLoc.getGeolocation(); // get current (browser location allowed) or random location(browser location blocked)
+        // retrieve current location forecast
+        await model.getForecast(geoLoc.coords); 
 
-        await model.getForecast(geoLoc.coords); // retrieve current location forecast
+        // render current weather
+        await weatherView.render(model.store, geoLoc.coords.locPermission);
 
-        await weatherView.render(model.store, geoLoc.coords.locPermission) // render current weather
-        maps.weatherMap(geoLoc.coords); // render weatherView map to current location
+        // render weather map to current location weather view
+        maps.weatherMap(geoLoc.coords); 
 
+        // start navigation event handlers
         navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
 
-        // infoView.toggleInfoView();
+        infoView.toggleInfo();
 
     } catch(err) {
         console.error('app start error!!!', err);
@@ -146,15 +146,12 @@ const controlRemoveSaved = async function(id) {
 }
 
 //* ========== Remove search map overlay ==========
-const enableSearchMap = function() {
-    // console.log('enabling search map!')
-    maps.searchMap(geoLoc.coords, 2);
-}
+const enableSearchMap = () => maps.searchMap(geoLoc.coords, 2);
 
 // toggle navigation items
 const searchLink = () => searchView.toggleSearch();
 const savedLink = () => savedView.moveToSaved();
-const infoLink = () => infoView.toggleInfoView();
+const infoLink = () => infoView.toggleInfo();
 const currentWeatherLink = () => weatherView._moveToCurrentWeather();
     
 // sort savedView locations
@@ -195,8 +192,8 @@ const controlLocationSearch = async function (e) {
             latitude: model.store.at(-1).data.lat, 
             longitude: model.store.at(-1).data.lon
         }
+
         // render weatherView and map
-        
         await weatherView.render(model.store, permission);
         maps.weatherMap(coords);
         
@@ -222,6 +219,7 @@ const init = async function() {
     weatherView.addHandlerCurrent(controlCurrentLocation);
     maps.addHandlerMapClick(enableSearchMap);
     search.addHandlerSearchForm(controlLocationSearch);
+    infoView.addHandlerInfo();
     // navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
 
     // global event listener for errors

@@ -1,39 +1,5 @@
 
 
-
-// *::-webkit-scrollbar-thumb {
-//     background-color: $--dark-blue;
-//     border-radius: 1rem;
-// }
-
-// button {
-//     margin: 0;
-//     padding: 0;
-//     border: none;
-// }
-
-html {
-    font-size: 62.5%;
-}
-
-body {
-    font-family: 'Open Sans', sans-serif;
-    // width: 100%;
-    min-height: 100vh;
-    // font-size: 1.2rem;
-    background: transparent;
-    
-
-    // @media screen and (min-width: $bp-small) {
-    //     width: 50%;
-    // }
-}
-
-svg, path {
-    pointer-events: stroke;
-  
-}
-
 /* --- scroll snap --- */
 .main { //main
     // position: relative;
@@ -123,7 +89,7 @@ svg, path {
     bottom: -3rem;
     width: 100%;
     max-width: 40rem;
-    // height: 5rem;
+    height: 2.9rem;
     // max-height: auto;
     // padding: 1rem;
     margin-top: auto;
@@ -201,18 +167,6 @@ svg, path {
             display: flex;
             flex-direction: column;
             width: 100%;
-
-            // .allowed {
-            //     border: 4px dotted magenta;
-            //     position: absolute;
-            //     bottom: 0;
-            //     right: 0;
-            //     display: none;
-
-            //     justify-self: center;
-            //     align-self: center;
-            //     display: flex;
-            // }
 
             .toggle {
                 order: 2;
@@ -338,14 +292,11 @@ svg, path {
         height: 3rem;
         width: 100%;
 
-        // &.is-open {
-        //     transform: translateY(-3rem);
-        //     transition: all ease 300ms;
-    
-        //     @media only screen and (min-width: $bp-medium) {
-        //         transform: translateY(0); // null vertic
-        //     }
-        // }
+        &.blocked {
+            .weather__link {
+                display: none;
+            }
+        }
         
         @media only screen and (min-width: $bp-medium) {
             order: 1;
@@ -383,75 +334,54 @@ svg, path {
         padding: 0 1rem;
 
         text-decoration: none;
-        color: $--white;
+        color: $--white-alt;
         background-color: $--card-heading;
         text-shadow: .25rem .25rem .5rem black;
         border: none;
 
         transition: all ease 300ms;
+        cursor: pointer;
 
-        &:active {
-            color: $--purple-lighter;
+        // nav buttons
+        & svg {
+            fill: $--accent;
+            filter: drop-shadow(0 0 .5rem $--black);
+            transition: all ease 300ms;
         }
 
+        // nav buttons hover
+        &:hover svg {
+            fill: $--accent-active;
+            filter: drop-shadow(0 0 .5rem $--black);
+            transition: all ease 300ms;
+        }
+
+        // link active text color
+        &:active {
+            color: $--accent-active;
+
+            svg {
+                fill: $--accent-active;
+
+            }
+        }
+
+        // nav link box styles medium viewport
         @media only screen and (min-width: $bp-medium) {
             width: auto;
             border: none;
             background-color: transparent;
             height: auto;
-        }
 
-        &.search__link,
-        &.saved__link,
-        &.info__link,
-        &.weather__link {
-            font-size: 1.4rem;
-            display: flex;
-            cursor: pointer;
-
-            @media only screen and (min-width: $bp-small) {
-                font-size: 1.6rem;
-                justify-content: center;
-            }
-
-            @media only screen and (min-width: $bp-medium) {
-                grid-area: nav;
-
-                &.blocked {
-                    justify-content: center;
-                }
-            }
-
-            &:hover {
-                cursor: pointer;
-            }
-
-            & svg {
-                fill: $--accent;
-                filter: drop-shadow(0 0 .5rem $--black);
-                transform: scale(1);
-                transition: all ease 300ms;
-            }
-
-            &:hover svg {
-                fill: $--accent-active;
-                filter: drop-shadow(0 0 .5rem $--black);
-                transition: all ease 300ms;
-            }
-
-            &:active svg {
-                fill: $--accent-active;
-            }
-        }  
-        
-        @media only screen and (min-width: $bp-medium) {
             .weather__link {
                 display: none;
             }
         }
 
-        &.info__link {
-            justify-self: center;
-        }
+        
+        // in large view don't display weather toggle button
+        // @media only screen and (min-width: $bp-medium) {
+            
+        // }
     }
 }

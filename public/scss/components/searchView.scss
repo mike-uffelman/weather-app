@@ -1,0 +1,201 @@
+.search {
+    position: relative;
+
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 60rem;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0;
+    padding: 0;
+    min-height: 50rem;
+    max-height: 60rem;
+
+    @media only screen and (min-width: $bp-smallest) {
+        justify-self: center;
+        font-size: 1.5rem;
+
+    }
+
+    @media only screen and (min-width: $bp-medium) {
+        display: none;
+        
+        &.show {
+            position: absolute;
+            z-index: 999999;
+            overflow-x: hidden;
+
+            display: flex;
+            min-height: 100%;
+            min-width: 100%;
+            padding: 0;
+            margin-top: 0;
+
+            background-color: $--black-light;
+        }
+
+    }
+    
+    &__box {
+        position: absolute;
+        z-index: 9999;
+
+        display: flex;
+        flex-direction: column;
+        flex: 1 1;
+
+        overflow-y: scroll;
+        scrollbar-width: none;
+        max-height: 60rem;
+        max-width: 40rem;
+
+        border-radius: $--box-radius;
+        box-shadow: $--weather-box-shadow;
+        background-color: $--white-alt;
+    }
+
+    &__heading {
+        transition: all ease 300ms;
+    }
+
+    &__form {
+        position: relative;
+
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        height: 100%;
+        width: 100%;
+        padding: 0 1rem 1rem 1rem;
+        margin: 0;
+
+        border-radius: $--box-radius;
+
+        & > label {
+            text-transform: uppercase;
+            align-self: center;
+            margin: 0;
+        }
+
+        .required {
+            border: 2px solid magenta;
+            font-weight: bold;
+        }
+
+
+        &.radio__box {
+            display: flex;
+            flex-direction: column;
+            flex: 0;
+            padding: .5rem 0;
+
+            &--select {
+                display: flex;
+                flex: 0;
+                flex-direction: row;
+                align-items: center;
+                padding: 0;
+
+                & input[type=radio] {
+                    margin: 1rem 1rem;
+                    transform: scale(1.5);
+                    accent-color: $--accent;
+                    display: flex;
+
+                    &:checked + label[class=text] {
+                        color: black;
+                        text-shadow: 0 0 1rem $--black-lighter;
+                    }
+                }
+
+                & > label[class=text] {
+                    color: $--black-lighter;
+                }
+    
+                & input[type=radio]:focus {
+                    outline: 1px solid magenta;
+                }
+            }
+
+            &--map {
+                flex: 1;
+            }
+        }
+
+        &-input {
+            padding: .1rem 1rem;
+            border: none;
+            border-radius: .5rem;
+            height: 2rem;
+
+            font-size: 1.5rem;
+            font-weight: bold;
+            transition: all ease 300ms;
+            background-color: $--mustard-lighter;
+        }
+        
+                
+        &-map {
+            position: relative;
+
+            display: flex;
+            flex: 1;
+            width: 100%;
+
+            border-radius: $--box-radius;
+            box-shadow: 0 0 .5rem black;
+            opacity: 1;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            border: none;
+            transition: all ease 300ms;
+            border: 2px solid transparent;
+
+            .crosshair {
+                position: absolute;
+                display: none;
+                z-index: 9999;
+                background-color:  $--accent;
+                height: 1rem;
+                width: 1rem;
+                border-radius: 50%;
+                top: 50%;
+                left: 50%;
+                transform: translate( -50%, -50%);
+
+                &.show {
+                    display: block;
+                }
+            }
+
+            &:focus {
+                border: 2px solid $--accent;
+                transition: all ease 300ms;
+            }
+
+            &--overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 9999;
+            
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+                width: 100%;
+                opacity: 1;
+                overflow: hidden;
+                
+                color: white;
+                font-size: 2rem;
+                background-image: linear-gradient(135deg, $--gradient-4, $--gradient-5);
+                text-align: center;
+                transition: all ease 300ms;
+                text-transform: uppercase;    
+            }
+        }
+    }
+}

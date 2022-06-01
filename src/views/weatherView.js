@@ -10,22 +10,20 @@ class WeatherView {
     // rendering controller for weatherView
     async render(data, permission) {
         try {
-            // navigationView.clear();
-
-            this._loadStyles(); // render specific stylings - display, opacity, scroll transitions
+            this._loadStyles(); // render laod specific styling
             this._clear(); // clear
-            this._data = data;
+            this._data = data; // set data parameter to class variable
 
             //build main nav container
             await this.buildMainNavContainer(permission);
-            //build navigation markup
-            const bottomNav = document.querySelector('.nav__main');
 
-
+            // if user location is blocked, 
             if(permission === 'blocked') {
-                bottomNav.classList.add('blocked');
+                document.querySelector('.nav__main').classList.add('blocked');
+                this.#currentWeather.style.display = 'none';
             }
             
+            // if rendering location weather
             if(permission === 'allowed') {
                 const weatherMarkup = await this._generateMarkup(this._data, permission);
                 this.#currentWeather.insertAdjacentHTML('afterbegin', weatherMarkup);
@@ -35,11 +33,12 @@ class WeatherView {
                 this._tempBars(); // build color temperature bars
                 this._windDirection(); // build wind direction arrow
 
+                // if the latest(current weather) is saveed, fill the bookmark icon
                 if(this._data.at(-1)?.data.saved === true) {
                     document.querySelector('.c-location__save--icon').classList.add('is-saved');
                 }
                 
-                this.#currentWeather.style.display = 'flex';
+                this.#currentWeather.style.display = 'flex'; //prevents mobile view overflow
                 this._weatherAlertToggle();
 
                 setTimeout(() => {
@@ -117,9 +116,6 @@ class WeatherView {
 
     //* view=====================================================================================
     _generateMarkup(location, permission) {
-
-        const type = 'large';
-        
         const { alerts, current, daily, hourly, id, name, state, country } = location.at(-1)?.data;
         const today = location.at(-1).data.daily[0].temp;
 
@@ -195,7 +191,7 @@ class WeatherView {
                 </section>
                 
                     
-                <section class='forecast'>
+                <section class='l-forecast-container'>
                     <div class='c-card c-card--hourly' tabindex=0>
                         <h3 class='c-card__header'>Hourly Forecast</h3>
                         <div class='c-card__detail c-card__detail--hourly' >
@@ -210,7 +206,8 @@ class WeatherView {
                     </div>  
                 </section>
                 <section class='c-card c-card__map'>
-                    <div id='mapid' class='weather__map' ></div>
+                    <h3 class='c-card__header'>Weather Map</h3>
+                    <div id='mapid' class='' ></div>
                         
                 </section>
                 <section id='alerts' class='c-card c-card--alert ${alerts ? "alert" : "hide"}'>
@@ -260,6 +257,7 @@ class WeatherView {
         let alertHTML= ''; 
 
         alerts.map((alert, i) => {
+            console.log(alert);
             alertHTML += `
                 <div class='alert__box'>
                     <h3 class='alert__heading' data-alert-id=${i}>
@@ -269,7 +267,7 @@ class WeatherView {
                         <svg class='alert__heading--icon' xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 24 24" width="36px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
                     </h3>
                     <div class='alert__detail'>
-                        <p class='alert__detail--time text'><span class='time--heading'>Beginning:</span> ${this._getHourTime(alert.start)}<span class='time--heading'> | Ending:</span> ${this._getHourTime(alert.end)}</p>
+                        <p class='alert__detail--time text'><span class='time--heading'>Beginning:</span> ${utility.getHourTime(alert.start)}<span class='time--heading'> | Ending:</span> ${utility.getHourTime(alert.end)}</p>
 
                         <p class='alert__detail--text text'>${this._weatherAlertDescription(alert.description)}</p>
                     </div>
@@ -280,13 +278,7 @@ class WeatherView {
     };
 
     // returns alert date and time period
-    _getHourTime(n) {
-        const time = new Date(n * 1000);
-        const alertDate = time.toLocaleDateString('en-us', {weekday: 'long'});
-        const alertTime = time.toLocaleTimeString('en-us', {hour: 'numeric', hour: '2-digit', minute: '2-digit'});
-
-        return `${alertDate} ${alertTime}`;
-    }
+    
 
     // add event listener to each weather alert item, to toggle/expand details, also set item height based on scrollable height (height of text space)
     _weatherAlertToggle() {

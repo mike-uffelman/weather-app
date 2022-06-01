@@ -9,13 +9,11 @@ class InfoView {
 
     // rendering instructions
     render(){
-        console.log('rendering info view...')
         this._clear(); // clear parent on re-render
         const markup = this._generateMarkup(); // build the markup 
         // this._element = markup.querySelector('#info');
         this._parentElement.insertAdjacentHTML('beforeend', markup); // add markup to DOM
-        this.toggleInfoView(); // on render show info view
-        console.log('info view rendered...')
+        this.toggleInfo(); // on render show info view
     }
 
     // function to clear parent element
@@ -79,11 +77,12 @@ class InfoView {
         `
     };      
 
-    // function toggles the info view show/hide
-    toggleInfoView() {
+    toggleInfo() {
         this._parentElement.classList.toggle('show');
+    };
 
-
+    // function toggles the info view show/hide
+    addHandlerInfo() {
         this._parentElement.addEventListener('click', (e) => {
             if(e.target.classList.contains('info__btn') || e.target.id === 'info') {
                 this._parentElement.classList.toggle('show');

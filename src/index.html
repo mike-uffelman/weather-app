@@ -5,28 +5,21 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>myWeather</title>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-            integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
-            
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
 
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+        <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
         <link rel="stylesheet" href="../public/scss/main.scss" >
         
         <script type='module' defer src="./js/weather.js"></script>
-        <!-- removed defer from script, need to look into, maybe fixed the parcel hmr issues... -->
      
     </head>
   
     <body class=''>
         <!-- Main view -->
         <main class='main'>
-            <!-- Each swipe page, i.e. search, current weather, and saved -->
-            <!-- <div class="l-main l-main__small l-main__large"> -->
-                <!-- Search page -->
-            <article id='search' class='main__page search '> 
-                    
-                
-            </article>    
+
+            <!-- Search page -->
+            <article id='search' class='main__page search '></article>    
 
             <!-- Current Weather Page -->
             <article id='current-weather-box' class='main main__page main__page--weather main__page--medium current-weather'></article>
@@ -34,15 +27,9 @@
             <!-- Saved/Bookmarked View page -->
             <article id='saved' class='main__page saved' focus></article>
                      
-            <!-- </div> -->
-
-            <!-- Page Navigation -->
-            <!-- <nav id='nav' class='nav nav__main'></nav> -->
-
             <!-- Site info/instructions -->
             <dialog id='info' class="info show">
             </dialog>
-            <!-- </div> -->
 
         </main>
     </body>
