@@ -1,0 +1,112 @@
+// ----- Flash Messages -----
+.message {
+    position: absolute;
+    z-index: 99999;
+    top: -8rem;
+
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+
+    color: $--white;
+    font-size: 1.2rem;
+
+    transform: translateY(-rem);
+    transform-origin: top;
+    transition: all linear 800ms;
+
+    &.show {
+        transform: translateY(8rem);
+        transform-origin: top;
+        transition: all linear 800ms;
+    }
+
+    &__success {
+        background-color: $--greenish-alerts;
+    }
+
+    &__error {
+        background-color: $--reddish-alerts;
+    }
+
+    &__info {
+        background-color: $--dark-blue-alt;
+    }
+
+    &__warning {
+        background-color: $--mustard;
+    }
+
+    &__header {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        flex: 2 1 90%;
+        margin-right: 2rem;
+
+        &--type {
+            font-size: 1.6rem;
+        }
+    }
+
+    & span {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1 1 10%;
+        transition: all ease 400ms;
+    
+        &:hover::before,
+        &:hover::after {
+            background-color: $--gradient-4;
+            transition: all ease 400ms;
+        }
+    }
+
+    & span::before,
+    & span::after {
+        content: '';
+        position: relative;
+        // z-index: 99999;
+        // display: flex;
+        justify-self: center;
+        align-self: center;
+        background-color: $--gradient-2;
+        width: 2rem;
+        height: .15rem;
+    }
+
+    & span::before {
+        transform: rotate(45deg);
+        right: -1rem;
+    }
+
+    & span::after {
+        transform: rotate(135deg);
+        right: 1rem;
+    }
+}
+
+.success {
+    position: absolute;
+    z-index: 100;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%);
+
+    height: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+
+    background-color: green;
+    color: white;
+}

@@ -2,56 +2,43 @@
 
 
 
+// event listeners for navigation buttons
+// export const addHandlerToggleNav = function(searchLink, savedLink, infoLink, currentWeatherLink) {
+//     const nav = document.querySelector('.nav');
 
-export const addHandlerToggleNav = function(searchLink, savedLink) {
-    const nav = document.querySelector('.nav');
+//     // mouseover to open small screen nav menu
+//     nav.addEventListener('mouseover', (e) => {
+//         // open/close mobile nav on mouseover
+//         if(e.target.closest('.nav__toggle')) {
+//             e.target.closest('.nav').classList.toggle('is-open');
+//         };
+//     });
 
-    nav.addEventListener('mouseover', (e) => {
-        if(e.target.closest('.nav__toggle')) {
-            console.log('nav toggled')
+//     nav.addEventListener('click', (e) => {
+//         // search
+//         if(e.target.closest('.search__link')) {
+//             console.log('search link click')
+//             searchLink();
+//         };
 
-            e.target.closest('.nav').classList.toggle('is-open');
+//         // saved locations
+//         if(e.target.closest('.saved__link')) {
+//             console.log('saved link click');
+//             savedLink();
+//         };
 
-        }
+//         // info/help button
+//         if(e.target.closest('.info__link')) {
+//             console.log('info link click');
+//             document.querySelector('#info').classList.toggle('show');
+//         };
 
-        
-        // if(document.querySelector('.nav').classList.contains('open')) {
-        //     setTimeout(() => {
-        //         document.querySelector('.nav').classList.toggle('open')
-        //     }, 3000)
-
-        // }
-
-        // if(!document.querySelector('.nav').classList.contains('open')) {
-        //     clearTimeout();
-        // };
-
-        
-
-    })
-
-    nav.addEventListener('click', (e) => {
-        if(e.target.closest('.search__link')) {
-            e.preventDefault();
-            console.log('clicked the search link!!!!!!!!!!!!')
-            searchLink();
-            e.target.closest('.nav').classList.toggle('is-open');
-        };
-
-        if(e.target.closest('.saved__link')) {
-            e.preventDefault();
-            savedLink();
-            e.target.closest('.nav').classList.toggle('is-open');
-        };
-
-        if(e.target.closest('.info__link')) {
-            console.log('opening info modal...')
-            document.querySelector('#info').classList.toggle('show');
-        }
-    
-    })
-
-
-}
+//         // current weather button
+//         if(e.target.closest('.weather__link')) {
+//             console.log('weather link click');
+//             currentWeatherLink();
+//         }
+//     });
+// };
 
 

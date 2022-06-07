@@ -1,0 +1,50 @@
+@mixin respond($breakpoint) {
+    @if $breakpoint == phone {
+        @media only screen and (max-width: 37.5em) { @content; } // 600px
+    }
+    @if $breakpoint == tablet-portrait {
+        @media only screen and (max-width: 56.25em) { @content; } // 900px
+    }
+    @if $breakpoint == tablet-landscape {
+        @media only screen and (max-width: 75em) { @content; } // 1200px
+    }
+    @if $breakpoint == desktop {
+        @media only screen and (min-width: 112.5em) { @content; } //1800px
+    }
+}
+
+@mixin btn {
+    padding: .75rem 1rem .5rem 1rem ;
+
+    color: $--white;
+    background-color: transparent;
+    font-size: 2rem;
+
+    border-radius: $--box-radius;
+    border: none;
+
+    transition: all ease 150ms;
+
+    svg {
+        fill: $--white-alt;
+    }
+
+    &:hover {
+        cursor: pointer;
+        transition: all ease 150ms;
+        
+        svg {
+            fill: $--accent-active;
+        }
+    }
+
+    &:active {
+        background-color: $--accent-active;
+    }
+
+    &:focus {
+        outline: 2px solid magenta;
+    }
+
+    
+}

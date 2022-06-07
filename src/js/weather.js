@@ -1,53 +1,55 @@
 'use strict';
 
-// not needed - just a console notification that we're in the development branch - based on the npm script (i.e. start or build(production) it will change the )
-if (process.env.NODE_ENV === 'development') {
-    console.log('Happy developing!');
-
-}
-
+// package imports - transpiling and polyfilling
 import 'core-js/stable';
-import 'regenerator-runtime/runtime';
+import 'regenerator-runtime/runtime'; 
 
+// logic module imports
 import * as model from './model.js';
-import * as maps from '../views/mapView.js';
 import * as geoLoc from './geoLocation.js';
 import * as storage from './localStorage.js';
+import * as layout from './layout.js';
+import * as search  from './search.js';
+
+// view module imports
+import * as maps from '../views/mapView.js';
 import weatherView from '../views/weatherView.js';
 import savedView from '../views/savedView.js';
 import searchView from '../views/searchView.js';
-import * as layout from './layout.js';
 import infoView from '../views/infoView.js';
 import message from '../views/errorView.js';
-import * as search  from './search.js';
-import Nav from '../views/navigationView.js';
+import navigationView from '../views/navigationView.js';
+
+ // parcel hot module for development
+ if(module.hot) module.hot.accept();
+// not needed - just a console notification that we're in the development branch - based on the npm script (i.e. start or build(production))
+if(process.env.NODE_ENV === 'development') console.log('Happy developing!');
 
 //* ========== app start controller ==========
 const controlAppStart = async function() {
     try {
-        infoView.render(); // display app instructions modal
-        
-        savedView.render(await storage.getStoredLocations()); // retrieve and render saved locations from local storage
+        // render saved, search, info views/modals
+        savedView.render(await storage.getStoredLocations());
+        infoView.render();
+        searchView.render();
 
-        await geoLoc.getGeolocation(); // get current (browser location allowed) or random location(browser location blocked)
-        // Nav._render();
-        // if location allowed
-        if(geoLoc.coords.locPermission) {
-            await model.getForecast(geoLoc.coords); // retrieve current location forecast
-            weatherView.render(model.store) // render current weather
-            maps.weatherMap(geoLoc.coords); // render map to current location
-            searchView.render()
-        }
+        // get current (location allowed) or random location(location blocked)
+        await geoLoc.getGeolocation();
 
-        // if location blocked
-        if(!geoLoc.coords.locPermission) {
-            //! marker comment here---------------------------------------
-            const marker = false;
-            searchView.render();
-            searchView.moveToSearch(); // auto navigate to search view
-            // maps.searchMap(geoLoc.coords, 4, marker); // render map to a random location
-            // return;
-        } 
+        // retrieve current location forecast
+        await model.getForecast(geoLoc.coords); 
+
+        // render current weather
+        await weatherView.render(model.store, geoLoc.coords.locPermission);
+
+        // render weather map to current location weather view
+        maps.weatherMap(geoLoc.coords); 
+
+        // start navigation event handlers
+        navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
+
+        infoView.toggleInfo();
+
     } catch(err) {
         console.error('app start error!!!', err);
         message.renderMessage(err, 'error');
@@ -55,25 +57,28 @@ const controlAppStart = async function() {
 }
 
 //* ========== Current weather page controller ==========
+// save toggle for current location
 const controlCurrentLocation = async function(loc) {
     
-    const { saved, id } = loc.at(-1).data;
+    const { saved, id } = loc.at(-1).data; // retrieve properties from the latest location added to the current location array
 
     try {
-        if(!saved) {
-            await model.updateSaved();
-            storage.addStoredLocation(loc);
-            savedView.render(storage.getStoredLocations())
+        // if current location is not saved, update model to saved: true, refresh local storage, re-render saved view, and display a success message
+        if(!saved) { 
+            await model.updateSaved(); // update 'saved' property to true
+            storage.addStoredLocation(loc); // add location to local storage
+            savedView.render(storage.getStoredLocations()); // re-render the saved view
             message.renderMessage('Location successfully saved!', 'success');
 
         }
 
+        // if current location is already saved, update to saved: false, remove saved item from saved view, re-render saved view, display a message
         if(saved) { 
-            storage.removeStoredLocation(id); //*
-            await model.updateSaved(); //*
-            savedView.removeEl(id);
-            savedView.render(storage.getStoredLocations());
-            message.renderMessage('Save removed!', 'info');
+            storage.removeStoredLocation(id); // remove saved location from local storage 
+            await model.updateSaved(); // update 'saved' property of location model
+            savedView.removeEl(id); // remove saved DOM element
+            savedView.render(storage.getStoredLocations()); // re-render the saved view
+            message.renderMessage('Save removed!', 'info'); 
         }
         
     } catch(err) {
@@ -85,12 +90,18 @@ const controlCurrentLocation = async function(loc) {
 //* ========== Call a saved location controller ==========
 const controlCallSaved = async function(id) {
     try {
-        storage.incrementViewCount(id);
+        storage.incrementViewCount(id); // increment saved location view count for user sorting
 
         //this should probably be abstracted
-        let loc = storage.getStoredLocations();
+        let loc = storage.getStoredLocations(); // get saved locations
+
+        // look for the saved location in the local storage that matches the id of the selected element in the saved view
+        // when found, create a search param object for the model.getforecast
+        // when forecast retrieved render the weatherview and the weather map
         loc.forEach(async (place) => {
             if(place.data.id === Number(id)) {
+
+                const permission = 'allowed';
                 const coords = { 
                     latitude: place.data.lat,
                     longitude: place.data.lon,
@@ -99,8 +110,12 @@ const controlCallSaved = async function(id) {
                 };
                 
                 await model.getForecast(coords);
-                weatherView.render(model.store)
+                await weatherView.render(model.store, permission)
+
                 maps.weatherMap(coords);
+                
+                navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
+
             }
         })
 
@@ -112,86 +127,102 @@ const controlCallSaved = async function(id) {
 }
 
 //* ========== Remove a saved location controller ==========
+// from the saved view remove a location
 const controlRemoveSaved = async function(id) {
     try {
-        storage.removeStoredLocation(Number(id));
+        // removed saved location from local storage if it matches id of selected element
+        storage.removeStoredLocation(Number(id)); 
+        // retrieve updated local storage and re-render savedView
         await savedView.render(storage.getStoredLocations());
+        // if location being removed from saved is also displayed in current  weather, remove saved icon styling
         weatherView.toggleSaveIcon(Number(id));
+        // display message 
         message.renderMessage('Location successfully removed', 'info');
 
     } catch(err) {
         console.error('unable to remove this location', err);
-        message.renderMessage('An error has occured: Unable to remove saved location!')
+        message.renderMessage('Unable to remove saved location!')
     }
 }
 
 //* ========== Remove search map overlay ==========
-const enableSearchMap = function() {
-    // console.log('enabling search map!')
-    maps.searchMap(geoLoc.coords, 9);
-}
+const enableSearchMap = () => maps.searchMap(geoLoc.coords, 2);
 
-
-const searchLink = () => searchView.moveToSearch();
+// toggle navigation items
+const searchLink = () => searchView.toggleSearch();
 const savedLink = () => savedView.moveToSaved();
-const infoLink = () => infoView.toggleInfoView();
+const infoLink = () => infoView.toggleInfo();
+const currentWeatherLink = () => weatherView._moveToCurrentWeather();
     
+// sort savedView locations
 const sortSaved = async function(sort) {
+    // retrieve saved from local storage
     const getSaved = await storage.getStoredLocations();
-    // console.log('stored locations: ', getSaved);
+    // sorts the data array based on sort type
     const sortedData = await savedView.sortSavedView(getSaved, sort);
-    // console.log(sortedData);
+    // re-render savedview based on the newly sorted data array
     savedView.render(sortedData, sort)
 }
 
+// global error/message handler
 const errorHandled = (message, type) => message.renderMessage(message, type)
 
+// search controller
 const controlLocationSearch = async function (e) {
     try {
+        const permission = 'allowed';
+        // retrieve search inputs from submit
         const params = searchView.getInputs();
 
-        console.log('getInputs(): ', params);
+        // if search is a text input location, call getCity
         if(params.searchType === 'text') {
             await model.getCity(Object.values(params.locParams));
         }
 
-        console.log('MAPS ECOORDS: ', maps.eCoords);
+        // if search is from the map, getForecast with the map marker coordinates
         if(params.searchType === 'map') {
+            // throw error if map coords not set
             if(!maps.eCoords.hasOwnProperty('latitude') || !maps.eCoords.hasOwnProperty('longitude')) throw new Error('Please enter or select a location.', 'info');
             
             await model.getForecast(maps.eCoords);    
         }
 
+        // set map coords for weatherMap render
         const coords = { 
             latitude: model.store.at(-1).data.lat, 
             longitude: model.store.at(-1).data.lon
         }
-        weatherView.render(model.store);
-        await maps.weatherMap(coords);
+
+        // render weatherView and map
+        await weatherView.render(model.store, permission);
+        maps.weatherMap(coords);
         
-        searchView.toggleSearchViewBlockedGeoLoc();
-        searchView._clearForm();
-        message._autoClear();
-        
-        console.log('FORM SEARCH...: ', e)
+        searchView.toggleSearch(); // hides searchView after submit
+        searchView._clearForm(); // clear form details
+        maps.clearMarkers(); // clear map markers
+        message._autoClear(); // remove messages
+
+        navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
+
     } catch(err) {
         message.renderMessage(err);
     }
 }
 
+// app load controller
 const init = async function() {
-    
-    await controlAppStart();
+    await controlAppStart(); // initial application load/render
+
+    // event handler publishers
     searchView.addHandlerSearch();
     savedView.addHandlerSaved(controlCallSaved, controlRemoveSaved, sortSaved);
     weatherView.addHandlerCurrent(controlCurrentLocation);
     maps.addHandlerMapClick(enableSearchMap);
-    layout.addHandlerToggleNav(searchLink, savedLink, infoLink);
     search.addHandlerSearchForm(controlLocationSearch);
+    infoView.addHandlerInfo();
+    // navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
 
-
-    if (module.hot) module.hot.accept();
-
+    // global event listener for errors
     window.addEventListener('error', function(e) {
         console.log(e)
         console.log(e.error.stack);
@@ -204,6 +235,7 @@ const init = async function() {
     })
 }
 
+// execute app
 init();
 
 

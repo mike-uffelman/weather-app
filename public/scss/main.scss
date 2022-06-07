@@ -1,5 +1,18 @@
-@import 'abstracts.scss';
-@import 'base.scss';
-@import 'layout.scss';
-@import 'components.scss';
-@import 'typography.scss';
+@import 'abstracts/variables.scss';
+@import 'abstracts/mixins.scss';
+@import 'abstracts/animations.scss';
+@import 'abstracts/helpers.scss';
+
+
+@import 'base/reset.scss';
+@import 'base/typography.scss';
+
+@import 'layout/layout.scss';
+
+@import 'components/searchView.scss';
+@import 'components/buttons.scss';
+@import 'components/components.scss';
+@import 'components/messages.scss';
+@import 'components/infoView.scss';
+@import 'components/savedView.scss';
+@import 'components/weatherAlert.scss';

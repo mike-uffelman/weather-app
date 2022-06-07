@@ -1,0 +1,149 @@
+// ========= Weather alert ====================
+.alert {
+    position: relative;
+
+    display: flex;
+    flex: 1 0 auto;
+    width: 100%;
+    margin: 0 0 3rem 0;
+
+    box-shadow: $--weather-box-shadow;
+    border-radius: $--box-radius;
+    background-color: transparent;
+
+    transition: all ease 300ms;
+
+    @media only screen and (min-width: $bp-medium) {
+        grid-area: alert;
+        justify-self: center;
+
+        flex: 2 1;
+        max-width: 100%;
+        margin: 0;
+        width: 100%;
+    }
+
+    &__header {
+        @media only screen and (min-width: $bp-smallest) {
+            font-size: 1.5rem;
+            transition: all ease 300ms;
+        }
+    }
+
+    &__box {
+        position: relative;
+        border-bottom: 1px solid $--black-lightest;
+        background-color: $--white-alt;
+
+        transition: all ease 500ms;
+    }
+
+    // weather alert header
+    &__heading {
+        position: relative;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        text-align: left;
+        text-transform: uppercase;
+        font-size: 1.2rem;
+
+        transition: all ease 500ms;
+
+        &.active {
+            color: $--black;
+            background-color: $--mustard-lighter;
+
+            .alert__heading--link {
+                color: $--reddish-alerts;
+            }
+            
+        }
+
+        // weather alert drop down arrow
+        &--icon {
+            transition: all ease 500ms;
+            fill: $--reddish-alerts;
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            &.open { // rotate weather alert arrow on toggle
+                transform: rotate(180deg);
+                transition: all ease 500ms;
+            }
+        }
+
+        &:hover {
+            background-color: $--mustard-lighter;
+            cursor: pointer;
+
+            .alert__heading--link {
+                // text-shadow: 0 0 .5rem $--black;
+            }
+
+            .alert__heading--icon {
+                fill: $--mustard;
+            }
+        }
+
+        &--link {
+            width: 100%;
+            padding: 0 1rem;
+            border: none;
+            text-align: left;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+            color: $--reddish;
+            font-size: 1.4rem;   
+            background-color: transparent; 
+            text-transform: uppercase;
+            // font-size: 1.4rem;
+
+            .tip {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    &__detail {
+        position: relative;
+        display: none;
+        transform: scale(1, 0);
+        transform-origin: top;
+        transition: all ease 500ms;
+        opacity: 0;
+        
+        &.expand {
+            padding: .5rem;
+            display: flex;
+            flex-direction: column;
+            transform: scale(1, 1);
+            transform-origin: top;
+            opacity: 1;
+            transition: all ease 500ms;
+        }
+
+        &--time {
+            font-weight: normal;
+
+            & > .time--heading {
+                font-weight: bold;
+            }
+
+            & span {
+                color: $--black;
+                font-weight: bold;
+            }
+        }
+
+        &--text {
+            font-weight: normal;
+        }
+    }
+}

@@ -1,16 +1,13 @@
 'use strict';
 
-import weatherView from "./weatherView";
-import * as maps from './mapView.js';
-
-
+// search view class
 class searchView {
-    
     _parentElement = document.querySelector('#search');
-    _searchInput;
-    _radioInput;
-    
+    _searchInput; // search text box input
+    _textRadio; // text box radio
+    _mapRadio; // map radio
 
+    // on render, build the markup and assign elements to the class variables
     render() {
         this._clear();
 
@@ -18,19 +15,19 @@ class searchView {
         this._parentElement.insertAdjacentHTML('afterbegin', markup);
 
         this._searchInput = document.querySelector('#city-input');
-        this._radioInput = document.querySelector('#textRadio');
-        // this._toggleSearchView();
-
+        this._textRadio = document.querySelector('#textRadio');
+        this._mapRadio = document.querySelector('#mapRadio');
     }
 
+    // html markup for the search module
     _generateHTML() {
             return  `
             <div class='c-card search__box'>
                 <div class='c-card__header c-card__header--row'>
                     <h2 class='c-card__header--modals'>Search</h2>
-                    <button class='btn--close'>
+                    <button class='btn btn--close'>
                         <svg class='' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
-                    </button>       
+                    </button>
                 </div>
                 <!--------------- Search Form -------------->
                 <form action='/somewhere' class='c-card--current search__form' id='form'>
@@ -67,141 +64,99 @@ class searchView {
                     </div>
 
                     <!-- -------- -->
-                    <button id='search-btn' class='btn--submit' tabIndex=6>Search!</button>
+                    <button id='search-btn' class='btn btn--submit' tabIndex=6>Search!</button>
                 </form>
             </div>`
     }
 
+    // clears the html for re-rendering 
     _clear() {
         this._parentElement.innerHTML = '';
     }
 
+    // event handler for the close button in desktop view
     addHandlerSearch() {
-        // const search = document.querySelector('#search')
-        // form.addEventListener('submit', (e) => {
-        //         e.preventDefault();
-        //         const city = this.getInputs();
-        //         this._parentElement.classList.toggle('show');
-
-        //         handler(city);
-        //         this._clearForm();
-        // })        
-        // this._radioInput.addEventListener('change', (e) => {
-            
-        //     const cityRadio = form.elements.textRadio.checked;
-        //     console.log(cityRadio);
-        //     handler(cityRadio)
-        // })
-
         this._parentElement.addEventListener('click', (e) => {
-            if(e.target.closest('.btn--close')) {
-                console.log(e.target);
+            if(e.target.closest('.btn--close') || e.target.id === 'search') {
                 this._parentElement.classList.toggle('show');
-                
-
             }
         })
-
-        //! just testing input required on radio toggle
-        // document.querySelectorAll('input[type=radio]').forEach(r => {
-        //     r.addEventListener('change', e => {
-        //         console.log(e.target);
-        //         if(document.querySelector('#textRadio').checked) {
-        //             // document.querySelector('#city-input').classList.toggle('required');
-        //             document.querySelector('#city-input').autofocus = 'true';
-
-        //             document.querySelector('input[for=').classList.toggle('required');
-
-        //         }
-
-        //         if(document.querySelector('#mapRadio').checked) {
-        //             document.querySelector('#city-input').classList.toggle('required');
-        //             document.querySelector('label[for=mapRadio]').style.backgroundColor = 'blue';
-        //         }
-        //     })
-        // })
     };
 
-    
-
+    // retrieves the form inputs on submit, event for the submit is in search.js however to prevent having an event listener in searchView and mapView
     getInputs() {
             const form = document.querySelector('form');
             const cityRadio = form.elements.textRadio.checked;
             const mapRadio = form.elements.mapRadio.checked;
 
-            // if(form.elements.city.value === '') throw new Error('enter a valid location');
-
-            // const city = form.elements.city.value?.split(',').map(place => place.trim());
-
-
-            //*ok
-            if(!cityRadio && !mapRadio) throw new Error('Please select a search type');
-
-            //*ok
+            // the search params object passed returned to the controller
             let searchObj = {
                 searchType: '',
                 locParams: {}
             };
 
+            // if neither radio are selected throw error notifying the user to select a search type
+            if(!cityRadio && !mapRadio) throw new Error('Please select a search type');
+
+
+            // if searching by text input
             if(cityRadio) {
-                //*ok
+                
+                // split the location text into an array and trim excess spaces
                 const city = form.elements.city.value.split(',').map(place => place.trim());
                 
-                //*ok
+                // if the first index of the city array is an empty string or the city array contains 1 index, throw an error to be more specific for the geocoder
                 if(city[0] === '' || city.length === 1) throw new Error('Unable to find location, please include city, state(US only), and country');
 
-                searchObj.searchType = 'text';
-                searchObj.locParams.city = city[0];
                 
+                searchObj.searchType = 'text'; // assign the search type in our params
+                searchObj.locParams.city = city[0]; // assign the first index to city
+                
+                // if city array length is greater than 2, only USA requires states
                 if(city.length > 2) {
-                    searchObj.locParams.state = city[1];
-                    searchObj.locParams.country = city[2];
+                    searchObj.locParams.state = city[1]; // assign second index to state
+                    searchObj.locParams.country = city[2]; // assign third index to country
                 }
+
+                // if city array is equal to 2, for international (non-USA), major USA cities work here with just city, country too
                 if(city.length === 2) {
                     searchObj.locParams.country = city[1];
                 }
-                console.log(city);
-                console.log(searchObj)
+
+                // return the searchObj parameters to the search controller
                 return searchObj;
             }
 
+            // if map radio selected
             if(mapRadio) {
-                searchObj.searchType = 'map';
-                console.log(searchObj);
+                searchObj.searchType = 'map'; // assign map to the searchType
+
+                // return the searchObj parameters to the search controller
                 return searchObj;
             }
-
-            
-            // if(cityRadio && city) {
-            //     return city;
-            // } else {
-            //     throw new Error('Search Failed! Please select search type and valid city name (city, state(US only), country) or map location.');
-            // }
     }
 
-    moveToSearch() {
+    // function moves screen to the search view
+    toggleSearch() {
+        this._parentElement.classList.toggle('show');
+        
         this._parentElement.scrollIntoView({behavior: 'smooth'})
+
     }
 
+    // function toggles the display for the searchView if location is blocked
     toggleSearchViewBlockedGeoLoc() {
-        document.querySelector('#search').classList.toggle('show');
+        this._parentElement.classList.toggle('show');
     }
 
-    _toggleSearchView() {
-        document.querySelector('#search').classList.toggle('show');
-    }
-
+    // clear form inputs
     _clearForm() {
         this._searchInput.value = '';
-        this._radioInput.checked = false;
-    }
-
-    _showResults(cities) {
-        const form = document.querySelector('#form');
-
-        
+        this._textRadio.checked = false;
+        this._mapRadio.checked = false;
     }
 }
+
 export default new searchView();
 
 

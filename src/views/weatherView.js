@@ -1,328 +1,226 @@
 'use strict';
 
-
-import * as Message from './errorView'
-import Nav from './navigationView.js';
+import navigationView from "./navigationView";
+import * as utility from "../js/utility.js"
 
 class WeatherView {
     #currentWeather = document.querySelector('#current-weather-box');
-    #alerts;
-    #errorMessage = `Unable to load your location...`;
-    #successMessage = `Location weather has been rendered!`;
-
-    //TODO ===== instead of conditional firstWeatherCall, we can just completely remove the weather card and recreate it, no need to update the content after building it
-
     _data;
-    // #firstWeatherCall = true; //? need 'static', should this be private?
-    // constructor() {
-    //     this._data = data;
-    //     this.#currentWeather.innerHTML = '';
-    // }
 
-
-    render(data) {
+    // rendering controller for weatherView
+    async render(data, permission) {
         try {
-            
-            this._loadStyles();
-            this._clear();
-            this._data = data;
-            
-            const markup = this._generateMarkup(this._data);
-            this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
-            this._tempBars();
-            this._windDirection();
-            if(this._data.at(-1).data.saved === true) {
-                document.querySelector('.c-location__save--icon').classList.add('is-saved');
+            this._loadStyles(); // render laod specific styling
+            this._clear(); // clear
+            this._data = data; // set data parameter to class variable
+
+            //build main nav container
+            await this.buildMainNavContainer(permission);
+
+            // if user location is blocked, 
+            if(permission === 'blocked') {
+                document.querySelector('.nav__main').classList.add('blocked');
+                this.#currentWeather.style.display = 'none';
             }
             
-            // this.#currentWeather.style.opacity = 1;
-            // this.#currentWeather.style.transition = 'all ease 300ms';
-            // this.#firstWeatherCall = false;
-            this.#currentWeather.style.display = 'flex';
-            this._weatherAlertToggle();
-            
-            // this.renderSuccess(message);
-            // setTimeout(() => {
-            //     const successEl = document.querySelector('.success')
-            //     console.log(successEl);
-            //     successEl.remove();
-            // }, 3000)
+            // if rendering location weather
+            if(permission === 'allowed') {
+                const weatherMarkup = await this._generateMarkup(this._data, permission);
+                this.#currentWeather.insertAdjacentHTML('afterbegin', weatherMarkup);
+
+                await this.buildWeatherNavContainer(permission);
+                    
+                this._tempBars(); // build color temperature bars
+                this._windDirection(); // build wind direction arrow
+
+                // if the latest(current weather) is saveed, fill the bookmark icon
+                if(this._data.at(-1)?.data.saved === true) {
+                    document.querySelector('.c-location__save--icon').classList.add('is-saved');
+                }
+                
+                this.#currentWeather.style.display = 'flex'; //prevents mobile view overflow
+                this._weatherAlertToggle();
+
+                setTimeout(() => {
+                    this.#currentWeather.scrollIntoView({behavior: 'smooth'})
+                }, 1000) 
+
+            }
+            document.querySelectorAll('.nav__toggle').forEach(n => n.classList.add(`${permission}`))
 
         } catch(err) {
             console.log('error rendering location forecast!!!', err);
             throw err;
-        }
-        
+        }   
     }
 
     _loadStyles() {
+
         this.#currentWeather.classList.toggle('show');
         this.#currentWeather.style.opacity = 0;
         this.#currentWeather.style.transition = 'opacity ease 500ms';
-        this.#currentWeather.scrollIntoView({behavior: 'smooth'})
         this.#currentWeather.style.opacity = 1;
-
     }
 
-    dismissMessage() {
-        const message = document.querySelector('.message');
-        if(!message) return;
-        message.style.transform = 'translateY(-8rem)';
-        message.style.transformOrigin = 'top';
-    }
-
-    renderMessage(message, quality) {
-        // this._clear();
-
-        const markup = `
-        <div class='message message__${quality}'>
-            <div class='message__header'>
-                <h3 class='message__header--type'>${message === 'err' ? 'err.message' : message}</h3>
-                <p class='message__message'></p>
-            </div>    
-            <a href='#' class='message__close'><span class='message__close'></span></a>
-            
-
-            </div>
-        `
-
-        document.querySelector('.l-main').insertAdjacentHTML('afterbegin', markup);
-        
-        const messageEl = document.querySelector('.message');
-        setTimeout(() => { messageEl.classList.toggle('show') }, 0);
-
-        document.querySelector('.message').addEventListener('click', (e) => {
-            console.log(e.target);
-            if(e.target.classList.contains('message__close')) {
-                document.querySelector('.message').classList.toggle('show');
-                // document.querySelector('.message').style.transform = 'translateY(-8rem)';
-                // document.querySelector('.message').style.transformOrigin = 'top';
-                setTimeout(() => document.querySelector('.message').remove(), 1000);
-
-
-
-            }
-        })
-    }
-
-    renderSuccess(message = this.#successMessage) {
-        const markup = `
-        <div class='success'>
-                <h3 class='success__type'>${message}</h3>
-            </div>
-        `
-        this._clear();
-        this.#currentWeather.insertAdjacentHTML('afterbegin', markup);
-
-    }
-
+    // clear the weatherView
     _clear() {
         this.#currentWeather.innerHTML = '';
+
+        // document.querySelectorAll('nav')?.forEach(n => n.innerHTML = '');
+        document.querySelectorAll('nav')?.forEach(n => n.remove());
+
     }
 
+    // weatherView event handler and subscriber
     addHandlerCurrent(handler) {       
         this.#currentWeather.addEventListener('click', (e) => {
+
+            // save a location event
             if(e.target.closest('.c-cw__location')) {
                 document.querySelector('.c-location__save--icon').classList.toggle('is-saved');
                 handler(this._data);
             };
 
-            if(e.target.closest('.search__link')) {
-                console.log('search link clicked');
-                document.querySelector('#search').classList.toggle('show');
-            }
-            if(e.target.closest('.saved__link')) {
-                console.log('saved link clicked');
-                document.querySelector('#saved').classList.toggle('show');
-                
-            }
-            if(e.target.closest('.info__link')) {
-                console.log('info link clicked');
-                document.querySelector('.info').classList.toggle('show');
-                
-            }
+            // link to weather alerts
             if(e.target.classList.contains('details__header--alerts')) {
-                
                 document.querySelector('#alerts').scrollIntoView({behavior: 'smooth'});
-
-                // const scrollable = document.documentElement.scrollHeight;
-                // const scrolled = window.scrollY;
-
-
-                // console.log(scrollable, scrolled);
-
             }
         });
-
-        
-        
-        
-        // const alertBox = document.querySelectorAll('.hourly__detail')
-        // // console.log(alertBox);
-
-        // alertBox?.addEventListener('click', (e) => {
-                
-        // })
-    // };
-
-    
-
-    //     otherEventHandlers() {
-    //         console.log(document.querySelectorAll('.alert-heading').innerText)
-        
     }
 
-    
-
+    // toggle save icon stylings
     toggleSaveIcon(id) {
-        console.log(this._data);
         const currentId = this._data.at(-1).data.id;
-        console.log(id, currentId)
-
         if(id !== currentId) return;   
-        
         const currentLocationSave = document.querySelector('#saveIcon');
         currentLocationSave.classList.toggle('saved');
     }
 
+    async buildMainNavContainer(permission) {
+        const mainNav = `
+            <nav id='nav' class='nav nav__main'>
+                ${await navigationView.render(permission)}
+            </nav>`;
 
-    //upon receipt of the api data we pass to the displayCurrent() which displays the desired weather data in the browser by creating a new element appending within the DOM
-    //in order to prevent duplicate elements from consecutive searches we set a flag variable to firstWeatherCall true so it will add once, else it will simply update the existing html displayed
+        document.querySelector('main').insertAdjacentHTML('beforeend', mainNav);
+    }
+
+    async buildWeatherNavContainer(permission) {
+        const weatherNav = `
+            <nav class='nav__current--large nav__weather'>
+                ${await navigationView.render(permission)}
+            </nav>`;
+
+        document.querySelector('.l-weather').insertAdjacentHTML('beforeend', weatherNav);
+    }
+
     //* view=====================================================================================
-    _generateMarkup(location) {
-        
-        const { alerts, current, daily, hourly } = location.at(-1).data;
-        const today = location.at(-1).data.daily.at(-1).temp;
-        console.log(today);
+    _generateMarkup(location, permission) {
+        const { alerts, current, daily, hourly, id, name, state, country } = location.at(-1)?.data;
+        const today = location.at(-1).data.daily[0].temp;
 
-        const todaysDate = new Date(daily[0].dt * 1000)
-        const date = todaysDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'});
-        
+        return `
+            <div class='l-weather'>
+                <section class='l-cw'>
+                    <div class='l-cw__container' data-id='${id}'>
+                        <section class='c-cw__location'>
+                            <header class='c-location'>
+                                <h3 id='city-display' class='c-location__header'>
+                                    <button class='c-location__header--link'>${name}</button>
+                                </h3>
+                                <h5 class='c-location__header--sub'>${(!state) ? '' : state + ', '} ${country}</h5>
+                                <p class='c-location__date'>${utility.getTodaysDate()}</p>
+                            </header>
 
+                            <svg id='saveIcon' class='c-location__save--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                        </section>
 
-
-            return `
-                
-                <div class='l-weather'>
-                    <section class='l-cw'>
-                        <div class='l-cw__container' data-id='${location.at(-1).data.id}'>
-                            <section class='c-cw__location'>
-                                <header class='c-location'>
-                                    <h3 id='city-display' class='c-location__header'>
-                                        <button class='c-location__header--link'>${location.at(-1).data.name}</button>
-                                    </h3>
-                                    <h5 class='c-location__header--sub'>${(!location.at(-1).data.state) ? '' : location.at(-1).data.state + ', '} ${location.at(-1).data.country}</h5>
-                                    <p class='c-location__date'>${date}</p>
-                                </header>
-
-                                <svg id='saveIcon' class='c-location__save--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
-                                    <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
-                                </svg>
-                            </section>
-
-                            
-                                <section class='c-card c-card--current'>
-                                    <header class=''>
-                                        <h3 class='c-card__header'>Right Now</h3>
-                                        <a href='#alerts' class='c-card__header c-card__cw-alerts c-card__cw-alerts--link ${alerts ? "" : "hide"}' data-alerts=${alerts?.length}>Weather Advisory</a>
-                                    </header>
-                                    <div class='c-card__content c-card__content--current '>
-                                        <div class='l-current l-current__weather'>
-                                            <p class='text__current--temp'>${current.temp.toFixed(0)}° F</p>    
-                                            <p class='text text__current'>${current.weather[0].description}</p>
-                                            <div class='l-current__feels-like'>
-                                                <p class='text current'>${today.max.toFixed(0)}°F / ${today.min.toFixed(0)}°F</p>
-                                                <p class='details__box--feels-like text current'>, feels like ${current.feels_like.toFixed(0)}° F</p>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class='l-current l-current__extras'>
-                                            <div class='l-current__content'>
-                                                <div class='l-current__content--icons'>
-                                                    <svg alt='wind direction and speed' class='details__box--wind-direction' data-wind-direction='${current.wind_deg}' height="25" width="25">
-                                                        <polygon points='12.5,5 20,20 12.5,16 5,20'>
-
-                                                    </svg>
-                                                    <p class='text text--extras'>${this._windCardinalDirection(current.wind_deg)}</p>
-                                                </div>
-                                                <p class='text text--extras'>${current.wind_speed.toFixed(0)} mph</p>
-                                            </div>
-                                            <div class='l-current__content'>
-                                                
-                                                <p class='text text--extras'>Precip</p>
-                                                <p class='text text--extras'>${(daily[0].pop * 100).toFixed(0)}%</p>
-                                            </div>
-                                            <div class='l-current__content'>
-                                                <p class='text text--extras'>UV Index</p>
-                                                <p class='text text--extras'>${this._uvIndexRating(current.uvi)}</p>
-                                            </div>
-                                            <div class='l-current__content' >
-                                                      
-                                                <p class='text text--extras'>Humidity</p>
-                                                <p class='text text--extras'>${(current.humidity).toFixed(0)}%</p>
-                                                
-                                            </div>
-                                        </div>
-                                        
-                                        
-                                            <img id='icon' src='https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png' data-img-src='https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png' alt='' class='l-current l-current__icon'>
-                                            
-                                    </div>    
-                                </section>
-                            
-                        </div>
-                    </section>
-                    
                         
-                    <section class='forecast'>
-                        <div class='c-card c-card--hourly' tabindex=0>
-                            <h3 class='c-card__header'>Hourly Forecast</h3>
-                            <div class='c-card__detail c-card__detail--hourly' >
-                                ${this._generateHourly(hourly)}
-                            </div>
-                        </div>     
-                        <div class='c-card c-card--weekly'>
-                            <h3 class='c-card__header'>Weekly Forecast</h3>
-                            <div class='c-card__detail c-card__detail--weekly'>
-                                ${this._generateWeekly(daily)}
-                            </div>
-                        </div>  
-                    </section>
-                    <section class='c-card c-card__map'>
-                        <div id='mapid' class='weather__map' ></div>
-                            
-                    </section>
-                    <section id='alerts' class='c-card c-card--alert ${alerts ? "alert" : "hide"}'>
-                        <h3 class='c-card__header c-card__cw-alerts c-card__cw-alerts--header'>Weather Alerts</h3>
-                        ${alerts ? this._generateWeatherAlert(alerts) : ''}
-                    </section>                        
+                            <section class='c-card c-card--current'>
+                                <header class=''>
+                                    <h3 class='c-card__header'>Right Now</h3>
+                                    <a href='#alerts' class='c-card__header c-card__cw-alerts c-card__cw-alerts--link ${alerts ? "" : "hide"}' data-alerts=${alerts?.length}>Weather Advisory</a>
+                                </header>
+                                <div class='c-card__content c-card__content--current '>
+                                    <div class='l-current l-current__weather'>
+                                        <p class='text__current--temp'>${current.temp.toFixed(0)}° F</p>    
+                                        <p class='text text__current'>${current.weather[0].description}</p>
+                                        <div class='l-current__feels-like'>
+                                            <p class='text current'>${today.max.toFixed(0)}°F / ${today.min.toFixed(0)}°F</p>
+                                            <p class='details__box--feels-like text current'>, feels like ${current.feels_like.toFixed(0)}° F</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class='l-current l-current__extras'>
+                                        <div class='l-current__content'>
+                                            <div class='l-current__content--icons'>
+                                                <svg alt='wind direction and speed' class='details__box--wind-direction' data-wind-direction='${current.wind_deg}' height="25" width="25">
+                                                    <polygon points='12.5,5 20,20 12.5,16 5,20'>
+
+                                                </svg>
+                                                <p class='text text--extras'>${this._windCardinalDirection(current.wind_deg)}</p>
+                                            </div>
+                                            <p class='text text--extras'>${current.wind_speed.toFixed(0)} mph</p>
+                                        </div>
+                                        <div class='l-current__content'>
+                                            
+                                            <p class='text text--extras'>Precip</p>
+                                            <p class='text text--extras'>${(daily[0].pop * 100).toFixed(0)}%</p>
+                                        </div>
+                                        <div class='l-current__content'>
+                                            <p class='text text--extras'>UV Index</p>
+                                            <p class='text text--extras'>${this._uvIndexRating(current.uvi)}</p>
+                                        </div>
+                                        <div class='l-current__content' >
+                                                    
+                                            <p class='text text--extras'>Humidity</p>
+                                            <p class='text text--extras'>${(current.humidity).toFixed(0)}%</p>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                        <img id='icon' src='https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png' data-img-src='https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png' alt='' class='l-current l-current__icon'>
+                                        
+                                </div>    
+                            </section>
+                        
+                    </div>
+                </section>
                 
-                    <section class="nav__large">
-                            <h3 class='date'>${date}</h3>
-                            <div class='nav__links'> 
-                                <a href='#' class='nav__link links info__link'>
-                                    <svg class='info__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/>
-                                        <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                                    </svg>
-                                </a>
-                                <a href='#' class='nav__link links search__link'>
-                                    <svg class='search__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
-                                        <path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                                    </svg>
-                                </a>
-                                <a href='#' class='nav__link links saved__link'>
-                                    <svg class='saved__link--icon' xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/>
-                                        <path d="M15 7v12.97l-4.21-1.81-.79-.34-.79.34L5 19.97V7h10m4-6H8.99C7.89 1 7 1.9 7 3h10c1.1 0 2 .9 2 2v13l2 1V3c0-1.1-.9-2-2-2zm-4 4H5c-1.1 0-2 .9-2 2v16l7-3 7 3V7c0-1.1-.9-2-2-2z"/>
-                                    </svg>
-                                </a>
-                            </div>
-                    </section>
-                </div>
-                `;
+                    
+                <section class='l-forecast-container'>
+                    <div class='c-card c-card--hourly' tabindex=0>
+                        <h3 class='c-card__header'>Hourly Forecast</h3>
+                        <div class='c-card__detail c-card__detail--hourly' >
+                            ${this._generateHourly(hourly)}
+                        </div>
+                    </div>     
+                    <div class='c-card c-card--weekly'>
+                        <h3 class='c-card__header'>Weekly Forecast</h3>
+                        <div class='c-card__detail c-card__detail--weekly'>
+                            ${this._generateWeekly(daily)}
+                        </div>
+                    </div>  
+                </section>
+                <section class='c-card c-card__map'>
+                    <h3 class='c-card__header'>Weather Map</h3>
+                    <div id='mapid' class='' ></div>
+                        
+                </section>
+                <section id='alerts' class='c-card c-card--alert ${alerts ? "alert" : "hide"}'>
+                    <h3 class='c-card__header c-card__cw-alerts c-card__cw-alerts--header'>Weather Alerts</h3>
+                    ${alerts ? this._generateWeatherAlert(alerts) : ''}
+                </section>                        
+
+                
+            </div>
+        `;
     };
 
-    // <p class='weather-icon--description'>${current.weather[0].description}</p>
-
+    // set UV index level
     _uvIndexRating(n) {
         const val = Number(n);
         let uvIndex;
@@ -350,11 +248,16 @@ class WeatherView {
         return uvIndex;
     };
 
+    _moveToCurrentWeather() {
+        this.#currentWeather.scrollIntoView({behavior: 'smooth'});
+    }
+
+    // build all weather alerts
     _generateWeatherAlert(alerts) {
         let alertHTML= ''; 
-        
-        alerts.map((alert, i) => {
 
+        alerts.map((alert, i) => {
+            console.log(alert);
             alertHTML += `
                 <div class='alert__box'>
                     <h3 class='alert__heading' data-alert-id=${i}>
@@ -364,9 +267,9 @@ class WeatherView {
                         <svg class='alert__heading--icon' xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 24 24" width="36px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
                     </h3>
                     <div class='alert__detail'>
-                        <p class='alert__detail--time text'><span class='time--heading'>Beginning:</span> ${this._getHourTime(alert.start)}<span class='time--heading'> | Ending:</span> ${this._getHourTime(alert.end)}</p>
+                        <p class='alert__detail--time text'><span class='time--heading'>Beginning:</span> ${utility.getHourTime(alert.start)}<span class='time--heading'> | Ending:</span> ${utility.getHourTime(alert.end)}</p>
 
-                        <p class='alert__detail--text text'>${this._alertDescription(alert.description)}</p>
+                        <p class='alert__detail--text text'>${this._weatherAlertDescription(alert.description)}</p>
                     </div>
                 </div>`
         })
@@ -374,23 +277,15 @@ class WeatherView {
         return alertHTML;
     };
 
+    // returns alert date and time period
+    
 
-    _getHourTime(n) {
-        const time = new Date(n * 1000);
-        const alertDate = time.toLocaleDateString('en-us', {weekday: 'long'});
-        const alertTime = time.toLocaleTimeString('en-us', {hour: 'numeric', hour: '2-digit', minute: '2-digit'});
-
-        return `${alertDate} ${alertTime}`;
-    }
-
-
+    // add event listener to each weather alert item, to toggle/expand details, also set item height based on scrollable height (height of text space)
     _weatherAlertToggle() {
         const alerts = document.querySelectorAll('.alert__heading');
         alerts.forEach((alert, i) => {
             alert.addEventListener('click', (e) => {
-                console.log(e.target);
                 if(e.target.closest('.alert__heading')) {
-                    
                     const alertDetail = alert.nextElementSibling;                
                     const icon = alert.querySelector('.alert__heading--icon');
     
@@ -412,24 +307,20 @@ class WeatherView {
         });
     };
 
-    _alertDescription(desc) {
+    // clean up weather alert description, remove * asterisks
+    _weatherAlertDescription(desc) {
         if(!desc) return '';
-        let alertDesc = '';
         return desc.replaceAll('* ', '\n');
-        // console.log(lines);
-
-        // lines.map(line => console.log(`${line}\n`))
-
     }
 
+    // rotate the wind direction arrow based on the degrees provided in the weather api call
     _windDirection() {
         const windEl = document.querySelector('.details__box--wind-direction');
         windEl.style.transform += `rotate(${windEl.dataset.windDirection}deg) scale(1)`; 
-        
     }
 
+    // retrieve wind direction based on degree range
     _windCardinalDirection(deg) {
-        
         let direction;
 
         switch(true) {
@@ -489,6 +380,9 @@ class WeatherView {
         return direction;
     }
 
+    // create the color temperature bars on the weekly forecast
+    // delayed start, using the data-low-temp and data-high-temp set the element bar to that percent of the div space
+    // then set background color based on the temperature as a percent of the color range
     _tempBars() {
         setTimeout(() => {
             document.querySelectorAll('.temp-bars--low').forEach(bar => {
@@ -503,37 +397,45 @@ class WeatherView {
         }, 1000);
     };
 
+    // build the hourly forecast card
     _generateHourly(hourly) {
         
-        const timeIndex = [1, 4, 7, 10, 13];      
+        const timeIndex = [1, 4, 7, 10, 13]; // display only these array time indexes (every 3 hours)  
         let hourlyHTML = '';
-        timeIndex.map((i) => hourly[i])        
-        .forEach(hour => {
-            const hourlyTime = new Date((hour.dt * 1000)).toLocaleTimeString('en-US', {hour: 'numeric'});
-            const hourlyTemp = hour.temp.toFixed(0);
-            const hourlyIcon = hour.weather[0].icon;
 
-             hourlyHTML += `
-                <div class='c-card__content c-card__content--hourly'>
-                    <p class='text'>${hourlyTime}</p> 
-                    <p class='text text--temp'>${hourlyTemp}°F</p>
-                    <img src='https://openweathermap.org/img/wn/${hourlyIcon}@2x.png' class='icon icon--hourly' alt=''>
-                </div>`
-        })
+        // create an array for the hourly indexes that are defined by timeIndex
+        // forEach in the new array, build the forecast card
+        timeIndex.map((i) => hourly[i])
+            .forEach(hour => {
+                const hourlyTime = new Date((hour.dt * 1000)).toLocaleTimeString('en-US', {hour: 'numeric'});
+                const hourlyTemp = hour.temp.toFixed(0);
+                const hourlyIcon = hour.weather[0].icon;
+
+                hourlyHTML += `
+                    <div class='c-card__content c-card__content--hourly'>
+                        <p class='text'>${hourlyTime}</p> 
+                        <p class='text text--temp'>${hourlyTemp}°F</p>
+                        <img src='https://openweathermap.org/img/wn/${hourlyIcon}@2x.png' class='icon icon--hourly' alt=''>
+                    </div>`
+            })
 
         return hourlyHTML;
     }
 
+    // build the weekly/daily forecast card
     _generateWeekly(daily) {
         let dailyHTML = '';
 
         daily.slice(1).forEach((day, i) => {
-            const dailyDay = new Date((day.dt * 1000)).toLocaleDateString('en-US', {weekday: 'long'});
+            const dailyDay = new Date((day.dt * 1000)).toLocaleDateString('en-US', {weekday: 'long'}); // get long day format
+            
+            // retrieve high/low, precipication %, and icon
             const lowTemps = day.temp.min.toFixed(0);
             const highTemps = day.temp.max.toFixed(0);
             const precip = (day.pop * 100).toFixed(0);
             const icon = day.weather[0].icon
 
+            // for each day, build this weather card and join together
             dailyHTML +=  `
                     <div class='c-card__content c-card__content--weekly'>
                         <div class='l-forecast-day l-forecast-day__day'>
@@ -555,6 +457,7 @@ class WeatherView {
                 `;
 
         })
+
         return dailyHTML;
 
     }
