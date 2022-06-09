@@ -42,6 +42,7 @@ let { OWM_APIKEY } = process.env;
     // takes the coordinates and a zoom level
     export const searchMap = async function(coords, zoom, ...marker) {
         // re-set coordinates variables as lat, lon
+        console.log(coords);
         const { latitude: lat, longitude: lon } = coords;
 
         // tile layer using openstreetmap
@@ -123,14 +124,19 @@ let { OWM_APIKEY } = process.env;
 
     // function to build weather amp at current weather location
     export const weatherMap = async function (coords, zoom = 9) {     
-        if(coords.locPermission === 'blocked') return;
+        console.log('map parameters: ', coords);
+        console.log('show me coords.location: ', coords.location);
+        
+        if(coords.geoLocation.locPermission === 'blocked') return;
+
         const mapid = document.querySelector('#mapid');
 
         mapid.innerHTML = "<div id='map' class='search__modal--map--map'></div>";
 
-        const { latitude: lat, longitude: lon } =  coords;
+        const { lat, lon } =  coords.location;
 
-        //for the tiler
+
+        // for the tiler
         let osmURL = await 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         let osmAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         let osmLayer = new L.tileLayer(osmURL, {attribution: osmAttribution,}

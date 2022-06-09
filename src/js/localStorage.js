@@ -1,5 +1,7 @@
 'use strict';
 
+import { state } from "./model";
+
 
 
 // get locations from local storage
@@ -26,25 +28,27 @@ export const getStoredLocations = function() {
 export const addStoredLocation = function(location) {
     
     try {
-        const saveLoc = location.at(-1).data;
+        console.log(location);
+        // const saveLoc = location.at(-1).data;
 
         const newLocObj = {
-            data: {
-                name: saveLoc.name,
-                state: saveLoc.state,
-                country: saveLoc.country,
-                lat: saveLoc.lat,
-                lon: saveLoc.lon,
-                id: saveLoc.id,
-                saved: true,
-                clicks: 1,
-                created: new Date()
-            }
+            name: location.location.name,
+            state: location.location.state,
+            country: location.location.country,
+            lat: location.location.lat,
+            lon: location.location.lon,
+            id: location.location.id,
+            saved: true,
+            clicks: 1,
+            created: new Date()
         };
+        console.log(newLocObj);
     
         let loc =  getStoredLocations();
         loc.push(newLocObj);
         localStorage.setItem('loc', JSON.stringify(loc));
+        location.bookmarks.push(newLocObj);
+        console.log(location)
     } catch(err) {
         console.log('unable to add location to storage', err)
         throw err;
@@ -61,7 +65,7 @@ export const removeStoredLocation = function(id) {
 
         //iterate through LS elements looking for a match by id, then remove the match
         loc.forEach((place, index) => {
-            if(place.data.id === id) {
+            if(place.id === id) {
                 loc.splice(index, 1)
             };
         });
@@ -80,9 +84,7 @@ export const incrementViewCount = function(id) {
         let loc = this.getStoredLocations();
 
         loc.forEach(place => {
-            if(Number(place.data.id) === Number(id)) {
-                ++place.data.clicks;
-            };
+            if(+place.id === +id) ++place.clicks;
         });
 
         localStorage.setItem('loc',JSON.stringify(loc))

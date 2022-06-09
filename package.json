@@ -23,7 +23,8 @@
   "dependencies": {
     "core-js": "^3.22.7",
     "leaflet": "^1.8.0",
-    "regenerator-runtime": "^0.13.9"
+    "regenerator-runtime": "^0.13.9",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.6.0",

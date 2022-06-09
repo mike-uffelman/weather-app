@@ -2,7 +2,9 @@
 
 // import config and keys
 import {FORECAST_URL, GEOCODE_REVERSE_URL, GEOCODE_DIRECT_URL} from './config.js';
+import { v4 as uuidv4 } from 'uuid';
 let { OWM_APIKEY } = process.env;
+
 
 
 // Location class builds a new location object
@@ -13,6 +15,13 @@ class Location {
     };
 };
 
+export let state = {
+    location: {},
+    query: {},
+    bookmarks: {},
+    geoLocation: {}
+
+}
 
 export let store = []; // array to store current session locations
 // export let searchResults = []; //TODO add search results
@@ -53,16 +62,16 @@ export const getCity = async function (loc) {
     }
 }
 
-//reverse geocode
 
 
 
 //* model logic ===================================================================
 //Get the forecast for the lat/lon provided
-export const getForecast = async function(coords) {
+export const getForecast = async function(locCoords) {
     try {
-        if(coords.locPermission === 'blocked') return;
-        const { latitude: lat, longitude: lon, saved = false, id } = coords;
+        console.log('getForecast parameters: ', locCoords);
+        if(locCoords.locPermission === 'blocked') return;
+        const { latitude: lat, longitude: lon, saved = false, id } = locCoords;
         // if(!check) return; // if a random location i.e. false, return //? NOT SURE IF REALLY NEEDED...
         if(!lat || !lon) return; // if lat or lon is undefined, return 
 
@@ -78,27 +87,18 @@ export const getForecast = async function(coords) {
         
         // extract json from reverse geocode response
         const locData = await loc.json()
-        // console.log('locData: ', locData);
 
-        // reassign reverse geocode
-        const locHeader = locData[0];
-
-        // assign forecast and reverse geocode to object to be instantiated with new Location
-        const locationObj = {
-            ...locHeader, 
+        state.location = {
+            ...locData[0], 
             ...forecastData,
-            saved
+            saved,
+            id: uuidv4(),
+            locPermission: 'allowed'
         }
-
-        // instantiate a new Location with the location object
-        const location = new Location(locationObj);
+        console.log(state);
 
         // if getForecast was called from the savedView, the id already exists so use that id
-        if(id) location.data.id = id;
-        // console.log('location data object: ', location);
-
-        //add forecast to current data store
-        store.push(location);
+        if(id) state.location.id = id;
 
     } catch(err) {
         console.error('error!', err.message, err.stack);
@@ -109,11 +109,19 @@ export const getForecast = async function(coords) {
 // function updates the 'saved' property for locations
 export const updateSaved = async function() {
     try {
-        store.at(-1).data.saved = !store.at(-1).data.saved;
+        console.log(state.location)
+
+        state.location.saved = !state.location.saved;
+        console.log(state.location)
 
     } catch(err) {
         console.log('unable to toggle saved property', err);
         throw err;
     }
 
+}
+
+export const getSearchInputs = function(data) {
+    state.query = data;
+    console.log('update state query: ', state)
 }
