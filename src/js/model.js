@@ -2,17 +2,10 @@
 
 // import config and keys
 import {FORECAST_URL, GEOCODE_REVERSE_URL, GEOCODE_DIRECT_URL} from './config.js';
+import { v4 as uuidv4 } from 'uuid';
 let { OWM_APIKEY } = process.env;
 
-
-// Location class builds a new location object
-class Location {
-    constructor(data) {
-        this.data = data; 
-        this.data.id = Date.now(); //create an easy unique id for favorited locations
-    };
-};
-
+export let state = {}
 
 export let store = []; // array to store current session locations
 // export let searchResults = []; //TODO add search results
@@ -22,8 +15,10 @@ export let store = []; // array to store current session locations
 // geocode
 export const getCity = async function (loc) {
     try {
-        const [city, ...region] = loc;
-        console.log(city);
+
+        const inputs = Object.values(loc);
+        const [city, ...region] = inputs;
+
         // if city is not defined, return
         if(!city) return;
 
@@ -41,7 +36,8 @@ export const getCity = async function (loc) {
         const geocodedDataObj = data[0];
         let coords = {
             latitude: geocodedDataObj.lat,
-            longitude: geocodedDataObj.lon, 
+            longitude: geocodedDataObj.lon,
+            locPermission: 'allowed' 
         }
 
         // get the location forecast based on the coordinates defined from the geocoding
@@ -53,16 +49,17 @@ export const getCity = async function (loc) {
     }
 }
 
-//reverse geocode
 
 
 
 //* model logic ===================================================================
 //Get the forecast for the lat/lon provided
-export const getForecast = async function(coords) {
+export const getForecast = async function(locCoords) {
     try {
-        if(coords.locPermission === 'blocked') return;
-        const { latitude: lat, longitude: lon, saved = false, id } = coords;
+        if(locCoords.locPermission === 'blocked') return;
+        state.location = {};
+
+        const { latitude: lat, longitude: lon, saved = false, id } = locCoords;
         // if(!check) return; // if a random location i.e. false, return //? NOT SURE IF REALLY NEEDED...
         if(!lat || !lon) return; // if lat or lon is undefined, return 
 
@@ -71,34 +68,23 @@ export const getForecast = async function(coords) {
 
         // extract json from forecast fetch response
         const forecastData = await res.json();
-        // console.log('forecast data: ', forecastData);
 
         // fetch reverse geocode data for name, state, country
         const loc = await fetch(`${GEOCODE_REVERSE_URL}?lat=${forecastData.lat}&lon=${forecastData.lon}&limit=10&appid=${OWM_APIKEY}`)
         
         // extract json from reverse geocode response
         const locData = await loc.json()
-        // console.log('locData: ', locData);
 
-        // reassign reverse geocode
-        const locHeader = locData[0];
-
-        // assign forecast and reverse geocode to object to be instantiated with new Location
-        const locationObj = {
-            ...locHeader, 
+        state.location = {
+            ...locData[0], 
             ...forecastData,
-            saved
+            saved,
+            id: uuidv4(),
+            locPermission: 'allowed'
         }
 
-        // instantiate a new Location with the location object
-        const location = new Location(locationObj);
-
         // if getForecast was called from the savedView, the id already exists so use that id
-        if(id) location.data.id = id;
-        // console.log('location data object: ', location);
-
-        //add forecast to current data store
-        store.push(location);
+        if(id) state.location.id = id;
 
     } catch(err) {
         console.error('error!', err.message, err.stack);
@@ -109,11 +95,22 @@ export const getForecast = async function(coords) {
 // function updates the 'saved' property for locations
 export const updateSaved = async function() {
     try {
-        store.at(-1).data.saved = !store.at(-1).data.saved;
-
+        state.location.saved = !state.location.saved;
     } catch(err) {
-        console.log('unable to toggle saved property', err);
+        console.error('unable to toggle saved property', err);
         throw err;
     }
 
+}
+
+export const getSearchInputs = function(data) {
+    state.query = data;
+}
+
+export const updateBookmarks = function(data) {
+    state.bookmarks = data;
+}
+
+export const clearGeoLocation = function() {
+    state.geoLocation = {};
 }

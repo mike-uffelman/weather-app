@@ -1,5 +1,8 @@
 'use strict';
 
+import * as maps from './mapView.js';
+
+
 // search view class
 class searchView {
     _parentElement = document.querySelector('#search');
@@ -130,7 +133,8 @@ class searchView {
             // if map radio selected
             if(mapRadio) {
                 searchObj.searchType = 'map'; // assign map to the searchType
-
+                searchObj.locParams.latitude = maps.eCoords.latitude;
+                searchObj.locParams.longitude = maps.eCoords.longitude;
                 // return the searchObj parameters to the search controller
                 return searchObj;
             }

@@ -12,7 +12,6 @@ class DisplaySaved {
     // render the saved locations view
     render(data, ...sort){
         this._clear(); // clear the saved locations container
-        console.log(data);
         this._data = data; // set data to _data private variable
 
         this.sortSavedView(this._data, sort); // sort the saved locations by the sort type
@@ -76,12 +75,11 @@ class DisplaySaved {
 
     // html markup for the locations saved
     _generateMarkupList(result) {
-        console.log(result);
         return `
-                <div class='saved__card' data-id='${result.data.id}'> 
+                <div class='saved__card' data-id='${result.id}'> 
                     <div class='saved__card--detail'>
                         <h2 id='city-favorite' class='saved__card--detail-header '>
-                            <button class='call-favorite'>${result.data.name}, ${!result.data.state ? '' : result.data.state}${!result.data.state ? '' : ', '} ${result.data.country}</button       >
+                            <button class='call-favorite'>${result.name}, ${!result.state ? '' : result.state}${!result.state ? '' : ', '} ${result.country}</button       >
                         </h2> 
                         <button class='saved__card--remove-favorite remove-favorite'>
                             <svg class='remove-fav' alt='Select to remove location from favorties' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -99,7 +97,6 @@ class DisplaySaved {
     // saved locations sort function, when the user selects a sort, this function removes all the items from the DOM, passes 
     // TODO refactor
     sortSaved(sort) {
-        // console.log(this._data, sort);
         const previousList = document.querySelectorAll('.saved__card')
         previousList.forEach(item => item.remove()); // remove each saved location from DOM
 
@@ -124,18 +121,18 @@ class DisplaySaved {
     addHandlerSaved(handler, removeSaved, sortSaved) {
 
         this._parentElement.addEventListener('click', (e) => {
-            // console.log(e.target);
             // if the remove saved button is clicked, call handler and pass id to controller, then remove the target from the DOM
             if(e.target.closest('.remove-favorite')) {
                 const div = e.target.closest('.saved__card');
                 const id = div.dataset.id;
+                
                 removeSaved(id);
                 div.remove();
             }
 
             // if user clicks on the location in the card, call the handler and pass id to the controller, then toggle the savedView to hide it
             if(e.target.classList.contains('call-favorite')) {
-                console.log('call favorite: ', e.target);
+
                 const id = e.target.closest('.saved__card').dataset.id;
                 handler(id);
                 if(this._parentElement.classList.contains('show')) {
@@ -159,7 +156,6 @@ class DisplaySaved {
         // event handler for keypress to open sort dropdown
         this._parentElement.addEventListener('keypress', (e) => {
             if(e.code === 'Space') {
-                console.log('keypress sort')
                 document.querySelector('.sort__box').style.transform = 'scale(1, 1)';
 
             }
@@ -185,15 +181,15 @@ class DisplaySaved {
         try {
             if(!sort) return;
             if(sort === 'A-Z') {
-                return this._data.sort((a, b) => (a.data.name > b.data.name) ? 1 : -1);
+                return this._data.sort((a, b) => (a.name > b.name) ? 1 : -1);
             };
     
             if(sort === 'RECENT') {
-                return this._data.sort((a, b) => (a.data.created < b.data.created) ? 1 : -1);
+                return this._data.sort((a, b) => (a.created < b.created) ? 1 : -1);
             };
     
             if(sort === 'VIEWS') {
-                return this._data.sort((a, b) => (a.data.clicks < b.data.clicks) ? 1 : -1);
+                return this._data.sort((a, b) => (a.clicks < b.clicks) ? 1 : -1);
             };
         } catch(err) {
             console.log(err);

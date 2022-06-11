@@ -1,40 +1,39 @@
 'use strict';
 
 import navigationView from "./navigationView";
-import * as utility from "../js/utility.js"
+import * as utility from "../js/utility.js";
 
 class WeatherView {
     #currentWeather = document.querySelector('#current-weather-box');
     _data;
 
     // rendering controller for weatherView
-    async render(data, permission) {
+    async render(data) {
         try {
             this._loadStyles(); // render laod specific styling
             this._clear(); // clear
             this._data = data; // set data parameter to class variable
-
             //build main nav container
-            await this.buildMainNavContainer(permission);
+            await this.buildMainNavContainer(this._data.geoLocation.locPermission);
 
             // if user location is blocked, 
-            if(permission === 'blocked') {
+            if(!this._data.location) {
                 document.querySelector('.nav__main').classList.add('blocked');
                 this.#currentWeather.style.display = 'none';
             }
             
             // if rendering location weather
-            if(permission === 'allowed') {
-                const weatherMarkup = await this._generateMarkup(this._data, permission);
+            if(this._data.location) {
+                const weatherMarkup = await this._generateMarkup(this._data);
                 this.#currentWeather.insertAdjacentHTML('afterbegin', weatherMarkup);
 
-                await this.buildWeatherNavContainer(permission);
+                await this.buildWeatherNavContainer(this._data.geoLocation.locPermission);
                     
                 this._tempBars(); // build color temperature bars
                 this._windDirection(); // build wind direction arrow
 
                 // if the latest(current weather) is saveed, fill the bookmark icon
-                if(this._data.at(-1)?.data.saved === true) {
+                if(this._data.location.saved === true) {
                     document.querySelector('.c-location__save--icon').classList.add('is-saved');
                 }
                 
@@ -46,10 +45,10 @@ class WeatherView {
                 }, 1000) 
 
             }
-            document.querySelectorAll('.nav__toggle').forEach(n => n.classList.add(`${permission}`))
+            document.querySelectorAll('.nav__toggle').forEach(n => n.classList.add(`${this._data.geoLocation.locPermission}`))
 
         } catch(err) {
-            console.log('error rendering location forecast!!!', err);
+            console.error('error rendering location forecast!!!', err);
             throw err;
         }   
     }
@@ -78,7 +77,9 @@ class WeatherView {
             // save a location event
             if(e.target.closest('.c-cw__location')) {
                 document.querySelector('.c-location__save--icon').classList.toggle('is-saved');
-                handler(this._data);
+                // handler(this._data);
+                handler();
+
             };
 
             // link to weather alerts
@@ -90,10 +91,11 @@ class WeatherView {
 
     // toggle save icon stylings
     toggleSaveIcon(id) {
-        const currentId = this._data.at(-1).data.id;
+        const currentId = this._data.location.id;
+        (id, this._data)
         if(id !== currentId) return;   
         const currentLocationSave = document.querySelector('#saveIcon');
-        currentLocationSave.classList.toggle('saved');
+        currentLocationSave.classList.toggle('is-saved');
     }
 
     async buildMainNavContainer(permission) {
@@ -115,9 +117,11 @@ class WeatherView {
     }
 
     //* view=====================================================================================
-    _generateMarkup(location, permission) {
-        const { alerts, current, daily, hourly, id, name, state, country } = location.at(-1)?.data;
-        const today = location.at(-1).data.daily[0].temp;
+    _generateMarkup(location) {
+        const { alerts, current, daily, hourly, id, name, state, country } = location.location;
+        
+        // const { alerts, current, daily, hourly, id, name, state, country } = location.at(-1)?.data;
+        const today = location.location.daily[0].temp;
 
         return `
             <div class='l-weather'>
@@ -222,7 +226,7 @@ class WeatherView {
 
     // set UV index level
     _uvIndexRating(n) {
-        const val = Number(n);
+        const val = +n;
         let uvIndex;
 
         switch(true) {
@@ -257,7 +261,6 @@ class WeatherView {
         let alertHTML= ''; 
 
         alerts.map((alert, i) => {
-            console.log(alert);
             alertHTML += `
                 <div class='alert__box'>
                     <h3 class='alert__heading' data-alert-id=${i}>
