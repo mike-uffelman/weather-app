@@ -42,7 +42,6 @@ let { OWM_APIKEY } = process.env;
     // takes the coordinates and a zoom level
     export const searchMap = async function(coords, zoom, ...marker) {
         // re-set coordinates variables as lat, lon
-        console.log(coords);
         const { latitude: lat, longitude: lon } = coords;
 
         // tile layer using openstreetmap
@@ -124,10 +123,7 @@ let { OWM_APIKEY } = process.env;
 
     // function to build weather amp at current weather location
     export const weatherMap = async function (coords, zoom = 9) {     
-        console.log('map parameters: ', coords);
-        console.log('show me coords.location: ', coords.location);
-        
-        if(coords.geoLocation.locPermission === 'blocked') return;
+        if(!coords.location) return;
 
         const mapid = document.querySelector('#mapid');
 
@@ -170,15 +166,7 @@ let { OWM_APIKEY } = process.env;
         // .addLayer(weatherLayer) //? keep this, displays rain on map => add back for production
         .setView(new L.LatLng(lat, lon), 6)
 
-
         // adds pin to weather 
         L.marker([lat, lon], {icon: myDivIcon})
             .addTo(map)
     }        
-    
-
-  
-    
-
-
-    

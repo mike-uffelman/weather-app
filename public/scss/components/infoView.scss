@@ -59,7 +59,28 @@
         flex: 1 1 auto;
         font-size: 1.2rem;
         color: $--black;
+        transition: all ease 500ms;
+
+
+        &:hover svg {
+            fill: $--accent;
+            transition: all ease 500ms;
+        }
+
+        &:hover .info__icon--save {
+            stroke: $--accent;
+            transition: all ease 500ms;
+            fill: transparent;
+        }
+        
     }
+
+    // &__text {
+
+    //     &:hover   {
+    //         background-color: blue;
+    //     }
+    // }
 
     &__icon {
         justify-self: center;
@@ -70,6 +91,8 @@
             fill: $--black;
             height: 2rem;
             transform: scale(1.25);
+            transition: all ease 500ms;
+
         }
 
         .info__icon--save {
@@ -77,6 +100,8 @@
             stroke-width: 1.75px;
             border: none;
             fill: transparent;
+            transition: all ease 500ms;
+
         }
     }
         

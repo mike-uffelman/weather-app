@@ -35,15 +35,14 @@ const controlAppStart = async function() {
         infoView.render();
         searchView.render();
 
+
         // get current (location allowed) or random location(location blocked)
         await geoLoc.getGeolocation();
 
         // retrieve current location forecast
-        // await model.getForecast(geoLoc.coords); 
         await model.getForecast(model.state.geoLocation); 
 
         // render current weather
-        // await weatherView.render(model.store, geoLoc.coords.locPermission);
         await weatherView.render(model.state);
 
         // render weather map to current location weather view
@@ -53,6 +52,7 @@ const controlAppStart = async function() {
         navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
 
         infoView.toggleInfo();
+        // model.clearGeoLocation();
 
     } catch(err) {
         console.error('app start error!!!', err);
@@ -64,12 +64,9 @@ const controlAppStart = async function() {
 // save toggle for current location
 const controlCurrentLocation = async function() {
     const { saved, id } = model.state.location
-    // console.log(saved, id);
-    // const { saved, id } = loc.at(-1).data; // retrieve properties from the latest location added to the current location array
 
     try {
         // if current location is not saved, update model to saved: true, refresh local storage, re-render saved view, and display a success message
-
         if(!saved) { 
             await model.updateSaved(); // update 'saved' property to true
             storage.addStoredLocation(model.state); // add location to local storage
@@ -96,7 +93,6 @@ const controlCurrentLocation = async function() {
 //* ========== Call a saved location controller ==========
 const controlCallSaved = async function(id) {
     try {
-        console.log(id)
         storage.incrementViewCount(id); // increment saved location view count for user sorting
         let coords;
 
@@ -107,9 +103,7 @@ const controlCallSaved = async function(id) {
         // when found, create a search param object for the model.getforecast
         // when forecast retrieved render the weatherview and the weather map
         loc.forEach(async (place) => {
-            console.log(place.id, id)
             if(place.id === id) {
-                console.log(place);
                 coords = { 
                     latitude: place.lat,
                     longitude: place.lon,
@@ -123,7 +117,7 @@ const controlCallSaved = async function(id) {
         await model.getForecast(coords);
         await weatherView.render(model.state)
 
-        maps.weatherMap(model.state.location);
+        maps.weatherMap(model.state);
         
         navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
     } catch(err) {
@@ -138,10 +132,13 @@ const controlCallSaved = async function(id) {
 const controlRemoveSaved = async function(id) {
     try {
         // removed saved location from local storage if it matches id of selected element
-        const loc = storage.removeStoredLocation(id); 
-        console.log(loc);
+        await storage.removeStoredLocation(id); 
+
+        const bookmarks = await storage.getStoredLocations()
+
+        model.updateBookmarks(bookmarks)
         // retrieve updated local storage and re-render savedView
-        await savedView.render(loc);
+        savedView.render(bookmarks);
         // if location being removed from saved is also displayed in current  weather, remove saved icon styling
         weatherView.toggleSaveIcon(id);
         // display message 
@@ -180,24 +177,28 @@ const controlLocationSearch = async function (e) {
     try {
         // retrieve search inputs from submit
         const params = searchView.getInputs();
-        model.getSearchInputs(searchView.getInputs());
-        //? move conditional and state assignment to a function inside of model
+        // const searchParams = {
+            // locParams: params.locParams,
+            // searchType: params.searchType
+        // }
+        await model.getSearchInputs(params);
+        // //? move conditional and state assignment to a function inside of model
         // if search is a text input location, call getCity
-        if(params.searchType === 'text') {
-            await model.getCity(Object.values(params.locParams));
+        if(model.state.query.searchType === 'text') {
+            await model.getCity(model.state.query.locParams);
         }
 
         // if search is from the map, getForecast with the map marker coordinates
-        if(params.searchType === 'map') {
-            // throw error if map coords not set
-            if(!maps.eCoords.hasOwnProperty('latitude') || !maps.eCoords.hasOwnProperty('longitude')) throw new Error('Please enter or select a location.', 'info');
-            
-            await model.getForecast(maps.eCoords);    
-        }
+        if(model.state.query.searchType === 'map') {
 
+            // throw error if map coords not set
+            if(!model.state.query.locParams.hasOwnProperty('latitude') || !model.state.query.locParams.hasOwnProperty('longitude')) throw new Error('Please enter or select a location.', 'info');
+            
+            await model.getForecast(model.state.query.locParams);    
+        }
         // render weatherView and map
-        await weatherView.render(model.state, permission = 'allowed');
-        maps.weatherMap(model.state.location);
+        await weatherView.render(model.state);
+        await maps.weatherMap(model.state);
         
         searchView.toggleSearch(); // hides searchView after submit
         searchView._clearForm(); // clear form details
@@ -205,7 +206,6 @@ const controlLocationSearch = async function (e) {
         message._autoClear(); // remove messages
 
         navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
-
     } catch(err) {
         message.renderMessage(err);
     }
@@ -226,13 +226,8 @@ const init = async function() {
 
     // global event listener for errors
     window.addEventListener('error', function(e) {
-        // console.log(e)
-        // console.log(e.error.stack);
         const message = e.error;
-        // console.log(message);
-
         e.preventDefault();
-        
         errorHandled(message, 'error');
     })
 }

@@ -12,7 +12,6 @@ class DisplaySaved {
     // render the saved locations view
     render(data, ...sort){
         this._clear(); // clear the saved locations container
-        // console.log(data);
         this._data = data; // set data to _data private variable
 
         this.sortSavedView(this._data, sort); // sort the saved locations by the sort type
@@ -76,7 +75,6 @@ class DisplaySaved {
 
     // html markup for the locations saved
     _generateMarkupList(result) {
-        // console.log(result);
         return `
                 <div class='saved__card' data-id='${result.id}'> 
                     <div class='saved__card--detail'>
@@ -99,7 +97,6 @@ class DisplaySaved {
     // saved locations sort function, when the user selects a sort, this function removes all the items from the DOM, passes 
     // TODO refactor
     sortSaved(sort) {
-        // console.log(this._data, sort);
         const previousList = document.querySelectorAll('.saved__card')
         previousList.forEach(item => item.remove()); // remove each saved location from DOM
 
@@ -124,21 +121,19 @@ class DisplaySaved {
     addHandlerSaved(handler, removeSaved, sortSaved) {
 
         this._parentElement.addEventListener('click', (e) => {
-            // console.log(e.target);
             // if the remove saved button is clicked, call handler and pass id to controller, then remove the target from the DOM
             if(e.target.closest('.remove-favorite')) {
                 const div = e.target.closest('.saved__card');
                 const id = div.dataset.id;
+                
                 removeSaved(id);
                 div.remove();
             }
 
             // if user clicks on the location in the card, call the handler and pass id to the controller, then toggle the savedView to hide it
-            if(e.target.closest('.call-favorite')) {
-                console.log('call favorite: ', e.target);
+            if(e.target.classList.contains('call-favorite')) {
 
                 const id = e.target.closest('.saved__card').dataset.id;
-                console.log('target id: ', id)
                 handler(id);
                 if(this._parentElement.classList.contains('show')) {
                     this._parentElement.classList.toggle('show');
@@ -161,7 +156,6 @@ class DisplaySaved {
         // event handler for keypress to open sort dropdown
         this._parentElement.addEventListener('keypress', (e) => {
             if(e.code === 'Space') {
-                console.log('keypress sort')
                 document.querySelector('.sort__box').style.transform = 'scale(1, 1)';
 
             }

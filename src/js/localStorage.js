@@ -1,9 +1,5 @@
 'use strict';
 
-import { state } from "./model";
-
-
-
 // get locations from local storage
 export const getStoredLocations = function() {
     try {
@@ -16,7 +12,7 @@ export const getStoredLocations = function() {
         }
         return loc;
     } catch(err) {
-        console.log('unable to retrieve locally stored locations', err);
+        console.error('unable to retrieve locally stored locations', err);
         throw err;
     }
     
@@ -28,9 +24,6 @@ export const getStoredLocations = function() {
 export const addStoredLocation = function(location) {
     
     try {
-        console.log(location);
-        // const saveLoc = location.at(-1).data;
-
         const newLocObj = {
             name: location.location.name,
             state: location.location.state,
@@ -42,15 +35,13 @@ export const addStoredLocation = function(location) {
             clicks: 1,
             created: new Date()
         };
-        console.log(newLocObj);
     
         let loc =  getStoredLocations();
         loc.push(newLocObj);
         localStorage.setItem('loc', JSON.stringify(loc));
         location.bookmarks.push(newLocObj);
-        console.log(location)
     } catch(err) {
-        console.log('unable to add location to storage', err)
+        console.error('unable to add location to storage', err)
         throw err;
     };
 };
@@ -74,7 +65,7 @@ export const removeStoredLocation = function(id) {
         localStorage.setItem('loc',JSON.stringify(loc))
 
     } catch(err) {
-        console.log('unable to remove location from storage', err);
+        console.error('unable to remove location from storage', err);
         throw err;
     };
 };
@@ -90,7 +81,7 @@ export const incrementViewCount = function(id) {
         localStorage.setItem('loc',JSON.stringify(loc))
 
     } catch(err) {
-        console.log('unable to increment location view count', err);
+        console.error('unable to increment location view count', err);
         throw err;
     };
     

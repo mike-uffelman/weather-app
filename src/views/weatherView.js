@@ -13,18 +13,17 @@ class WeatherView {
             this._loadStyles(); // render laod specific styling
             this._clear(); // clear
             this._data = data; // set data parameter to class variable
-            console.log(this._data);
             //build main nav container
             await this.buildMainNavContainer(this._data.geoLocation.locPermission);
 
             // if user location is blocked, 
-            if(this._data.geoLocation.locPermission === 'blocked') {
+            if(!this._data.location) {
                 document.querySelector('.nav__main').classList.add('blocked');
                 this.#currentWeather.style.display = 'none';
             }
             
             // if rendering location weather
-            if(this._data.geoLocation.locPermission === 'allowed') {
+            if(this._data.location) {
                 const weatherMarkup = await this._generateMarkup(this._data);
                 this.#currentWeather.insertAdjacentHTML('afterbegin', weatherMarkup);
 
@@ -49,7 +48,7 @@ class WeatherView {
             document.querySelectorAll('.nav__toggle').forEach(n => n.classList.add(`${this._data.geoLocation.locPermission}`))
 
         } catch(err) {
-            console.log('error rendering location forecast!!!', err);
+            console.error('error rendering location forecast!!!', err);
             throw err;
         }   
     }
@@ -92,10 +91,11 @@ class WeatherView {
 
     // toggle save icon stylings
     toggleSaveIcon(id) {
-        const currentId = this._data.id;
+        const currentId = this._data.location.id;
+        (id, this._data)
         if(id !== currentId) return;   
         const currentLocationSave = document.querySelector('#saveIcon');
-        currentLocationSave.classList.toggle('saved');
+        currentLocationSave.classList.toggle('is-saved');
     }
 
     async buildMainNavContainer(permission) {
@@ -118,7 +118,6 @@ class WeatherView {
 
     //* view=====================================================================================
     _generateMarkup(location) {
-        console.log('generate markup: ', location);
         const { alerts, current, daily, hourly, id, name, state, country } = location.location;
         
         // const { alerts, current, daily, hourly, id, name, state, country } = location.at(-1)?.data;
@@ -262,7 +261,6 @@ class WeatherView {
         let alertHTML= ''; 
 
         alerts.map((alert, i) => {
-            console.log(alert);
             alertHTML += `
                 <div class='alert__box'>
                     <h3 class='alert__heading' data-alert-id=${i}>
