@@ -75,7 +75,7 @@ export const incrementViewCount = function(id) {
         let loc = this.getStoredLocations();
 
         loc.forEach(place => {
-            if(+place.id === +id) ++place.clicks;
+            if(place.id === id) ++place.clicks;
         });
 
         localStorage.setItem('loc',JSON.stringify(loc))
