@@ -3,6 +3,7 @@
     align-self: center;
     justify-self: stretch;
     flex-direction: column;
+    box-shadow: none;
 
     @media only screen and (min-width: $bp-smallest) {
         justify-self: center;
@@ -16,13 +17,14 @@
         padding: 5rem;
         border-radius: 1rem;
         
+        
         &.show {
             position: absolute;
             z-index: 9999;
             overflow-x: hidden;
 
             display: flex;
-            min-height: 100%;
+            // min-height: 100%;
             min-width: 100%;
             padding: 0;
             margin-top: 0;
@@ -36,9 +38,7 @@
 
         position: absolute;
         z-index: 9999;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        // 
 
 
         display: flex;
@@ -48,11 +48,23 @@
         overflow-y: scroll;
         scrollbar-width: none;
         min-height: 15rem;
+        max-height: 45rem;
         max-width: 40rem;
 
         border-radius: $--box-radius;
         box-shadow: $--weather-box-shadow;
         background-color: $--white-alt;
+
+
+        @media only screen and (min-width: $bp-smallest) {
+            top: 0;
+        }
+
+        @media only screen and (min-width: $bp-medium) {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
     
     &__header {
