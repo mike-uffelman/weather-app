@@ -10,15 +10,18 @@ class WeatherView {
     // rendering controller for weatherView
     async render(data) {
         try {
+            // document.querySelector('.nav__main')?.remove();
             this._loadStyles(); // render laod specific styling
             this._clear(); // clear
             this._data = data; // set data parameter to class variable
             //build main nav container
-            await this.buildMainNavContainer(this._data.geoLocation.locPermission);
+            console.log('weatherView render data: ', this._data)
+            await this.buildMainNavContainer(this._data);
 
-            // if user location is blocked, 
+
+            // if user location is blocked, display data and nav menu in desktop if no location (blocked)
             if(!this._data.location) {
-                document.querySelector('.nav__main').classList.add('blocked');
+                document.querySelector('.nav__main').classList.add('blocked');  
                 this.#currentWeather.style.display = 'none';
             }
             
@@ -27,8 +30,10 @@ class WeatherView {
                 const weatherMarkup = await this._generateMarkup(this._data);
                 this.#currentWeather.insertAdjacentHTML('afterbegin', weatherMarkup);
 
-                await this.buildWeatherNavContainer(this._data.geoLocation.locPermission);
+                await this.buildWeatherNavContainer(this._data);
+                // document.querySelector('.nav__menu').classList.('blocked'); 
                     
+
                 this._tempBars(); // build color temperature bars
                 this._windDirection(); // build wind direction arrow
 
@@ -98,7 +103,10 @@ class WeatherView {
         currentLocationSave.classList.toggle('is-saved');
     }
 
-    async buildMainNavContainer(permission) {
+    async buildMainNavContainer(data) {
+        // if data.location exists and locpermission is defined, otherwise use data.geoLoc.locPermission - nullish coalescing
+        const permission = data.location?.locPermission ?? data.geoLocation.locPermission;
+        console.log('nav menu permission: ', permission);
         const mainNav = `
             <nav id='nav' class='nav nav__main'>
                 ${await navigationView.render(permission)}
@@ -107,7 +115,9 @@ class WeatherView {
         document.querySelector('main').insertAdjacentHTML('beforeend', mainNav);
     }
 
-    async buildWeatherNavContainer(permission) {
+    async buildWeatherNavContainer(data) {
+        const permission = data.geoLocation.locPermission;
+
         const weatherNav = `
             <nav class='nav__current--large nav__weather'>
                 ${await navigationView.render(permission)}
