@@ -8,6 +8,7 @@ let _searchInput; // search text box input
 let _textRadio; // text box radio
 let _mapRadio; // map radio
 
+
 // on render, build the markup and assign elements to the class variables
 export const render = function() {
     _clear();

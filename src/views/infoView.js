@@ -11,7 +11,7 @@ export const render = function(){
     const markup = _generateMarkup(); // build the markup 
     // _element = markup.querySelector('#info');
     _parentElement.insertAdjacentHTML('beforeend', markup); // add markup to DOM
-    toggleInfo(); // on render show info view
+    // toggleInfo(); // on render show info view
 }
 
 // function to clear parent element
@@ -77,6 +77,8 @@ const _generateMarkup = function() {
 
 export const toggleInfo = function() {
     _parentElement.classList.toggle('show');
+    _parentElement.scrollIntoView({behavior: 'smooth'})
+
 };
 
 // function toggles the info view show/hide

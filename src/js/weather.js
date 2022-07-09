@@ -50,7 +50,7 @@ const controlAppStart = async function() {
         // start navigation event handlers
         navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
 
-        infoView.toggleInfo();
+        // infoView.toggleInfo();
         // model.clearGeoLocation();
 
     } catch(err) {

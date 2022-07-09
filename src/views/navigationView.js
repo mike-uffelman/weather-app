@@ -8,6 +8,7 @@ let _saved = document.querySelector('#saved');
 let _info = document.querySelector('#info');
 
 export const render = function(permission) {
+    // clear();
     const navMarkup = _generateMarkup(permission);
     _navMenu = document.querySelectorAll('.nav__menu');
 
@@ -15,7 +16,10 @@ export const render = function(permission) {
 }
 
 const clear = function() {
-    document.querySelectorAll('nav')?.forEach(n => n.innerHTML = '');
+    // document.querySelectorAll('nav')?.forEach(n => n.innerHTML = '');
+    
+    document.querySelectorAll('nav')?.forEach(n => n.remove());
+
     document.querySelector('.nav__main').classList = 'nav nav__main'
 }
 
@@ -38,31 +42,25 @@ export const addHandlerNavigation = function(searchLink, savedLink, infoLink, cu
             // search 
             if(e.target.closest('.search__link')) {
                 searchLink();
-                _saved.classList.remove('show');
-                _info.classList.remove('show');
+                [_saved, _info].forEach(item => item.classList.remove('show'));
             };
 
             // saved locations
             if(e.target.closest('.saved__link')) {
                 savedLink();
-                _search.classList.remove('show');
-                _info.classList.remove('show');
+                [_search, info].forEach(item => item.classList.remove('show'));
             };
 
             // info/help button
             if(e.target.closest('.info__link')) {
                 infoLink();
-                _saved.classList.remove('show');
-                _search.classList.remove('show');
+                [_saved, _search].forEach(item => item.classList.remove('show'));
             };
 
             // current weather button
             if(e.target.closest('.weather__link')) {
                 currentWeatherLink();
-                _saved.classList.remove('show');
-                _info.classList.remove('show');
-                _search.classList.remove('show');
-
+                [_saved, _search, _info].forEach(item => item.classList.remove('show'));
             }
         });
     });
