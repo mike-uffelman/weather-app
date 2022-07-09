@@ -8,17 +8,16 @@ import 'regenerator-runtime/runtime';
 import * as model from './model.js';
 import * as geoLoc from './geoLocation.js';
 import * as storage from './localStorage.js';
-import * as layout from './layout.js';
 import * as search  from './search.js';
 
 // view module imports
 import * as maps from '../views/mapView.js';
-import weatherView from '../views/weatherView.js';
-import savedView from '../views/savedView.js';
-import searchView from '../views/searchView.js';
-import infoView from '../views/infoView.js';
-import message from '../views/errorView.js';
-import navigationView from '../views/navigationView.js';
+import * as weatherView from '../views/weatherView.js';
+import * as savedView from '../views/savedView.js';
+import * as searchView from '../views/searchView.js';
+import * as infoView from '../views/infoView.js';
+import * as message from '../views/messageView.js';
+import * as navigationView from '../views/navigationView.js';
 
  // parcel hot module for development
  if(module.hot) module.hot.accept();
@@ -51,7 +50,7 @@ const controlAppStart = async function() {
         // start navigation event handlers
         navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
 
-        infoView.toggleInfo();
+        // infoView.toggleInfo();
         // model.clearGeoLocation();
 
     } catch(err) {
