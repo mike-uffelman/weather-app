@@ -96,7 +96,6 @@ export const addHandlerCurrent = function(handler) {
 // toggle save icon stylings
 export const toggleSaveIcon = function(id) {
     const currentId = _data.location.id;
-    (id, _data)
     if(id !== currentId) return;   
     const currentLocationSave = document.querySelector('#saveIcon');
     currentLocationSave.classList.toggle('is-saved');
@@ -126,11 +125,11 @@ const buildWeatherNavContainer = async function(data) {
 }
 
 //* view=====================================================================================
-const _generateMarkup =  function(location) {
-    const { alerts, current, daily, hourly, id, name, state, country } = location.location;
+const _generateMarkup =  function(data) {
+    const { alerts, current, daily, hourly, id, name, state, country } = data.location;
     
-    // const { alerts, current, daily, hourly, id, name, state, country } = location.at(-1)?.data;
-    const today = location.location.daily[0].temp;
+    // const { alerts, current, daily, hourly, id, name, state, country } = data.at(-1)?.data;
+    const today = data.location.daily[0].temp;
 
     return `
         <div class='l-weather'>
