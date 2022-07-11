@@ -47,7 +47,6 @@ export const renderMessage = function(message, quality = 'error') {
         };
 
         document.querySelector('.message').addEventListener('click', (e) => {
-            console.log(e.target);
             if(e.target.closest('.btn--close')) {
                 _autoClear();
             }

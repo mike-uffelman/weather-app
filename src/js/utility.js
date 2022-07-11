@@ -12,3 +12,16 @@ export const getHourTime = function(timeInMS) {
 
     return `${alertDate} ${alertTime}`;
 }
+
+
+
+// manually delete local storage index
+        // function storageDeleteItem(locIndexStart) {
+        //     const loc = JSON.parse(localStorage.getItem('loc'));
+        //     console.log('LOCAL STORAGE; ', loc);
+        //     loc.splice(locIndexStart, 3);
+        //     localStorage.setItem('loc',JSON.stringify(loc))
+        // }
+        
+        // storageDeleteItem(0);
+

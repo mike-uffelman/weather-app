@@ -14,7 +14,6 @@ export const render = async function(data) {
         _clear(); // clear
         _data = data; // set data parameter to class variable
         //build main nav container
-        console.log('weatherView render data: ', _data)
         await buildMainNavContainer(_data);
 
 
@@ -104,7 +103,6 @@ export const toggleSaveIcon = function(id) {
 const buildMainNavContainer = async function(data) {
     // if data.location exists and locpermission is defined, otherwise use data.geoLoc.locPermission - nullish coalescing
     const permission = data.location?.locPermission ?? data.geoLocation.locPermission;
-    console.log('nav menu permission: ', permission);
     const mainNav = `
         <nav id='nav' class='nav nav__main'>
             ${await navigationView.render(permission)}

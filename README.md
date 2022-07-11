@@ -22,12 +22,6 @@
 </div>
 <br>
 
-## TL;DR 🤷‍♂️
-
-This is a weather app built to practice and showcase skills. It uses the OpenWeatherMap API to fetch the weather, Leaflet for mapping and Openstreetmap for the map tiling. Under the hood, it's a Model-View-Controller(MVC) architecture utilizing modules and parcel.js for the build package. [Demo the app here](https://main--cranky-booth-057572.netlify.app/).
-
-<br>
-
 <!-- TABLE OF CONTENTS -->
 
 ## Table of Contents
@@ -56,11 +50,13 @@ This is a weather app built to practice and showcase skills. It uses the OpenWea
 
 ## About The Project
 
-This is a weather app, the user provides a location and the app retrieves and displays the current weather, current weather map, hourly forecast, weekly forecast, and current weather alerts.
+This is a weather app project built to practice and showcase skills. It uses many packages including OpenWeather API, Leaflet, and OpenStreetMap. Under the hood, it's a Model-View-Controller(MVC) architecture utilizing modules and parcel.js to implement the build. [Demo the app here](https://main--cranky-booth-057572.netlify.app/).
+
+The user provides a location and the app retrieves and displays the current weather, current weather map, hourly forecast, weekly forecast, and current weather alerts.
 
 The user is able search for locations via text input (e.g. "london, gb" or "reno, nv, us" - state only required for USA) or by selecting a location on the map in the search form.
 
-The user can also bookmark a location for ease of lookup, which will be stored in the local storage of your browser.
+The user can also bookmark a location for ease of lookup, which will be stored in the local storage of the browser.
 
 <br><br>
 
@@ -68,13 +64,15 @@ The user can also bookmark a location for ease of lookup, which will be stored i
 
 <br>
 
-### Built With
+## Built With
 
-- JavaScript
-- [Open Weather Map](https://openweathermap.org/)
-- [Leaflet](https://leafletjs.com/) - for the mapping
-- [uuid](https://www.npmjs.com/package/uuid) - for unique location IDs
-- [Parcel.js](https://parceljs.org/)
+| Technology Stack                               | Description                               |
+| ---------------------------------------------- | ----------------------------------------- |
+| JavaScript                                     |                                           |
+| [OpenWeather API](https://openweathermap.org/) | Weather and geocoding                     |
+| [Leaflet](https://leafletjs.com/)              | open-source JavaScript maps               |
+| [uuid](https://www.npmjs.com/package/uuid)     | **U**niversally **U**nique **ID**entifier |
+| [Parcel.js](https://parceljs.org/)             | build tool                                |
 
 <p align="right">(<a href="#weather-app">back to top</a>)</p>
 
@@ -88,31 +86,37 @@ Open the [live demo here](https://main--cranky-booth-057572.netlify.app/).
 
 ## Background and Discussion
 
-This is a project I've been working on to refine my skills as a front end developer. Initially, the project scope was limited to forms and API calls using OpenWeatherMap. Over time the scope evolved and expaned to include a responsive dashboard layout, maps, search, bookmarks, and help functionality. Concepts incorporated included Model-View-Controller(MVC) architecture, state, SASS, Grid/Flexbox, reusable CSS components, ES6, modules, and more.
+This is a project I've been working on to refine my skills as a front end developer. Initially, the project scope was limited to forms and API calls using OpenWeatherMap. Over time the scope evolved and expanded to include a responsive dashboard layout, maps, search, bookmarks, and help functionality. Concepts incorporated included Model-View-Controller(MVC) architecture, mobile-first layout, SASS, reusable CSS components, state variable, ES6, modules, and error/action messaging to name a few.
 
+Throughout the development of this project, there were many challenges that arose, from layout headaches to broken functionality.
 There were many challenges throughout the development of this project. Some of which included
 
 Upon load the user can select to allow or block their current location, by allowing their browser location the app will fetch your current weather and render the weather page. A blocked location will allow the user search for or load a previously saved location to be fetched and rendered.
 
-Challenges============================
+### Challenges
+
+navigation position
+scope creep - as i learned new concepts and technologies it became very easy to include in the project and allow for the scope to grow as this was a practice project with unlimited scope and honestly a poor initial plan, the greatest lesson learned from this project was that planning is EVERYTHING.
 
 ## Architecture and Design
 
-- Architecture
+#### Architecture
 
-  - The application is built with a Model View Controller (MVC) architecture pattern to isolate and organize the flow control, logic, and view modules.
-  - Using a global state variable to control the application state. This variable stores the user's search query, geolocation (if enabled), current weather location results, and the bookmarked locations. Doing so keeps all the relevant data in one place that is easy to reference throughout the code.
-  - Publisher/Subscriber pattern
-  - Form Validation
+- The application is built with a Model View Controller (MVC) architecture pattern to isolate and organize the flow control, logic, and view modules.
+- Using a global state variable to control the application state. This variable stores the user's search query, geolocation (if enabled), current weather location results, and the bookmarked locations. Doing so keeps all the relevant data in one place that is easy to reference throughout the code.
+- Publisher/Subscriber pattern
+- Form Validation
 
 <br>
 
-- Design ===========in progress
+#### Design
 
-  - mobile with swipe navigation
-  - desktop and larger screens dashboard layout
+The layout of this app has been designed mobile first such that it works well on a mobile sized viewport and when the viewport size is detected larger (i.e. tablet or desktop) the layout will switch to a grid-like dashboard.
 
-    <br><br>
+- mobile with swipe navigation
+- desktop and larger screens dashboard layout
+
+  <br><br>
 
 <p align="right">(<a href="#weather-app">back to top</a>)</p>
 
@@ -132,15 +136,20 @@ This is the basic usage of the application:
 
 ### Search
 
-- To search, the user must select the search type radio button (i.e. location name or map location). Then provides the location name in the text input (e.g. "london, gb" or "reno, nv, us") or click and pin a location on the map.
+- To search, the user must select the search type radio button (i.e. location name or map location). Then provides the location name in the text input (e.g. "london, gb" or "reno, nv, us") or click and pin a location on the map (as seen in the screenshot).
 
   [![Password Generator ouput screenshot][form-screenshot]]('public/images/search-form.png')
 
 ### Bookmark a location
 
-- To bookmark a location the user must click the location name or bookmark icon in the current weather box. Click a bookmarked location will remove the location from the bookmarks.
+- To bookmark a location the user must click the location name or bookmark icon in the current weather box.
 
   [![Bookmark the location][bookmark-location]]('./images/bookmark-location.png')
+
+### Remove a bookmarked location
+
+- Clicking an already bookmarked location's header (title or bookmark icon) will remove the location from the bookmarks.
+- The use may also remove a bookmark by clicking the red icon to the right of a location in the bookmarked locations view.
 
 ### Load Bookmark
 
@@ -154,7 +163,7 @@ This is the basic usage of the application:
 
   [![Mobile-navigation][mobile-nav]]('public/images/mobile-nav.png')
 
-- In a larger screen view or desktop, the user can use the menu toggle which will display the navigation icons.
+- On a larger viewport or desktop, the user can use the menu toggle which will display the navigation icons.
 
   [![Desktop-navigation][desktop-nav]]('public/images/desktop-nav.png')
 
@@ -192,10 +201,10 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#weather-app">back to top</a>)</p>
 
-[issues-shield]: https://img.shields.io/github/issues/mike-uffelman/password-generator.svg?labelcolor=green
-[issues-url]: https://github.com/mike-uffelman/password-generator/issues
-[license-shield]: https://img.shields.io/github/license/mike-uffelman/password-generator.svg
-[license-url]: https://github.com/mike-uffelman/password-generator/blob/master/LICENSE.txt
+[issues-shield]: https://img.shields.io/github/issues/mike-uffelman/weather-app.svg?labelcolor=green
+[issues-url]: https://github.com/mike-uffelman/weather-app/issues
+[license-shield]: https://img.shields.io/github/license/mike-uffelman/weather-app.svg
+[license-url]: https://github.com/mike-uffelman/weather-app/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/LinkedIn-profile-blue
 [linkedin-url]: https://www.linkedin.com/in/michael-uffelman-34289521/
 [product-screenshot]: public/images/weather-showcase.png
@@ -204,7 +213,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [github-url]: https://github.com/mike-uffelman
 [github-shield]: https://img.shields.io/badge/GitHub-profle-orange
 [project-shield]: https://img.shields.io/badge/GitHub-repo-gray?color=#6cc644
-[project-repo]: https://github.com/mike-uffelman/password-generator
+[project-repo]: https://github.com/mike-uffelman/weather-app
 [shield-search]: images/check_password.svg
 [copy-icon]: images/copy2.svg
 [info-icon]: images/info.svg

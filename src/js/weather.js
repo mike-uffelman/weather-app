@@ -19,10 +19,13 @@ import * as infoView from '../views/infoView.js';
 import * as message from '../views/messageView.js';
 import * as navigationView from '../views/navigationView.js';
 
- // parcel hot module for development
- if(module.hot) module.hot.accept();
+// parcel hot module for development
+if(module.hot) module.hot.accept();
+
 // not needed - just a console notification that we're in the development branch - based on the npm script (i.e. start or build(production))
 if(process.env.NODE_ENV === 'development') console.log('Happy developing!');
+
+// ----------------------------------------------------------------------------------------
 
 //* ========== app start controller ==========
 const controlAppStart = async function() {
@@ -33,7 +36,6 @@ const controlAppStart = async function() {
         savedView.render(savedLocs);
         infoView.render();
         searchView.render();
-
 
         // get current (location allowed) or random location(location blocked)
         await geoLoc.getGeolocation();
@@ -148,17 +150,17 @@ const controlRemoveSaved = async function(id) {
         message.renderMessage('Unable to remove saved location!')
     }
 }
-
+ 
 //* ========== Remove search map overlay ==========
 const enableSearchMap = () => maps.searchMap(model.state.geoLocation, 2);
 
-// toggle navigation items
+//* ========== toggle navigation items ==========
 const searchLink = () => searchView.toggleSearch();
 const savedLink = () => savedView.moveToSaved();
 const infoLink = () => infoView.toggleInfo();
 const currentWeatherLink = () => weatherView._moveToCurrentWeather();
     
-// sort savedView locations
+//* ========== sort savedView locations ==========
 const sortSaved = async function(sort) {
     // retrieve saved from local storage
     // const getSaved = await storage.getStoredLocations();
@@ -168,10 +170,10 @@ const sortSaved = async function(sort) {
     savedView.render(sortedData, sort)
 }
 
-// global error/message handler
+//* ========== global error/message handler ==========
 const errorHandled = (message, type) => message.renderMessage(message, type)
 
-// search controller
+//* ========== search controller ==========
 const controlLocationSearch = async function (e) {
     try {
         // retrieve search inputs from submit
@@ -210,7 +212,7 @@ const controlLocationSearch = async function (e) {
     }
 }
 
-// app load controller
+//* ========== app load controller ==========
 const init = async function() {
     await controlAppStart(); // initial application load/render
 
@@ -221,7 +223,6 @@ const init = async function() {
     maps.addHandlerMapClick(enableSearchMap);
     search.addHandlerSearchForm(controlLocationSearch);
     infoView.addHandlerInfo();
-    // navigationView.addHandlerNavigation(searchLink, savedLink, infoLink, currentWeatherLink);
 
     // global event listener for errors
     window.addEventListener('error', function(e) {
@@ -233,16 +234,3 @@ const init = async function() {
 
 // execute app
 init();
-
-
-
-// manually delete local storage index
-        // function storageDeleteItem(locIndexStart) {
-        //     const loc = JSON.parse(localStorage.getItem('loc'));
-        //     console.log('LOCAL STORAGE; ', loc);
-        //     loc.splice(locIndexStart, 3);
-        //     localStorage.setItem('loc',JSON.stringify(loc))
-        // }
-        
-        // storageDeleteItem(0);
-
