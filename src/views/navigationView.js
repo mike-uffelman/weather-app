@@ -10,7 +10,7 @@ let _info = document.querySelector('#info');
 export const render = function(permission) {
     // clear();
     const navMarkup = _generateMarkup(permission);
-    _navMenu = document.querySelectorAll('.nav__menu');
+    // _navMenu = document.querySelectorAll('.nav__menu');
 
     return navMarkup
 }
