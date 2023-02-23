@@ -15,8 +15,6 @@ export const render = async function(data, ...sort){
 
     await sortSavedView(); // sort the saved locations by the sort type, on intial render - don't sort, just use order from local storage
 
-    console.log("after sort: ", _data)
-
     // assign markup variable and insert to HTML
     const markup = _generateMarkup();
     _parentElement.insertAdjacentHTML('afterbegin', markup);

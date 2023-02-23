@@ -169,7 +169,6 @@ const sortSaved = async function(sort) {
     // const sortedData = await savedView.sortSavedView(model.state.bookmarks, sort);
     
     // re-render savedview based on the newly sorted data array
-    console.log(sort)
     savedView.render(model.state.bookmarks, sort)
 }
 
