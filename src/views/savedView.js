@@ -7,12 +7,15 @@ let _parentElement = document.querySelector('#saved');
 
 
 // render the saved locations view
-export const render = function(data, ...sort){
+export const render = async function(data, ...sort){
     _clear(); // clear the saved locations container
-    _data = data; // set data to _data private variable
 
-    sortSavedView(_data, sort); // sort the saved locations by the sort type
-    sort ? _sort = sort : undefined; // if sort is defined set _sort, otherwise undefined
+    _data = data; // set data to _data private variable
+    sort ? _sort = sort[0] : undefined; // if sort is defined set _sort, otherwise undefined
+
+    await sortSavedView(); // sort the saved locations by the sort type, on intial render - don't sort, just use order from local storage
+
+    console.log("after sort: ", _data)
 
     // assign markup variable and insert to HTML
     const markup = _generateMarkup();
@@ -20,9 +23,9 @@ export const render = function(data, ...sort){
     
     // if sort is not defined, then return; i.e. if this is the initial page load the saved sort of the savedView is the default (chronological)
     // if sort is defined then call sortSaved passing in the sort type
-    if(!sort) return; 
+    // if(!sort) return; 
 
-    sortSaved(sort); // if sort is defined sort the Saved and return, //TODO refactor this
+    // sortSaved(sort); // if sort is defined sort the Saved and return
 }
 
 // clear savedView html for re-rendering
@@ -174,20 +177,22 @@ const updateSortHeading = function() {
 }
 
 // sort the saved location data array depending on the sort selection, return the newly sorted array
-export const sortSavedView = function(data, sort) {
+export const sortSavedView = function() {
     try {
-        if(!sort) return;
-        if(sort === 'A-Z') {
+        if(!_sort) return; // on initial render, don't sort, just use the saved location order as saved
+
+        if(_sort === 'A-Z') {
             return _data.sort((a, b) => (a.name > b.name) ? 1 : -1);
         };
 
-        if(sort === 'RECENT') {
+        if(_sort === 'RECENT') {
             return _data.sort((a, b) => (a.created < b.created) ? 1 : -1);
         };
 
-        if(sort === 'VIEWS') {
+        if(_sort === 'VIEWS') {
             return _data.sort((a, b) => (a.clicks < b.clicks) ? 1 : -1);
         };
+
     } catch(err) {
         console.log(err);
         throw new Error('unable to sort...', err);

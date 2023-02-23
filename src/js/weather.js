@@ -164,10 +164,13 @@ const currentWeatherLink = () => weatherView._moveToCurrentWeather();
 const sortSaved = async function(sort) {
     // retrieve saved from local storage
     // const getSaved = await storage.getStoredLocations();
+    
     // sorts the data array based on sort type
-    const sortedData = await savedView.sortSavedView(model.state.bookmarks, sort);
+    // const sortedData = await savedView.sortSavedView(model.state.bookmarks, sort);
+    
     // re-render savedview based on the newly sorted data array
-    savedView.render(sortedData, sort)
+    console.log(sort)
+    savedView.render(model.state.bookmarks, sort)
 }
 
 //* ========== global error/message handler ==========
