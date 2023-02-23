@@ -28,7 +28,7 @@
 
 <details>
   <summary>Weather App</summary>
-  <ol>
+  <ul>
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
@@ -43,14 +43,14 @@
     <li><a href="#considerations">Considerations</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-  </ol>
+  </ul>
 </details>
 <br>
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
 
-This is a weather app project built to practice and showcase skills. It uses many packages including OpenWeather API, Leaflet, and OpenStreetMap. Under the hood, it's a Model-View-Controller(MVC) architecture utilizing modules and parcel.js to implement the build. [Demo the app here](https://main--cranky-booth-057572.netlify.app/).
+This is a weather app project built to practice and showcase skills learned. It uses many packages including OpenWeather API, Leaflet, and OpenStreetMap. Under the hood, it's a Model-View-Controller(MVC) architecture utilizing modules and parcel.js to implement the build. [Demo the app here](https://main--cranky-booth-057572.netlify.app/).
 
 The user provides a location and the app retrieves and displays the current weather, current weather map, hourly forecast, weekly forecast, and current weather alerts.
 
@@ -73,6 +73,7 @@ The user can also bookmark a location for ease of lookup, which will be stored i
 | [Leaflet](https://leafletjs.com/)              | open-source JavaScript maps               |
 | [uuid](https://www.npmjs.com/package/uuid)     | **U**niversally **U**nique **ID**entifier |
 | [Parcel.js](https://parceljs.org/)             | build tool                                |
+| [Sass](https://sass-lang.com/)                 | stylesheet and style compiler             |
 
 <p align="right">(<a href="#weather-app">back to top</a>)</p>
 
@@ -89,7 +90,7 @@ Open the [live demo here](https://main--cranky-booth-057572.netlify.app/).
 This is a project I've been working on to refine my skills as a front end developer. Initially, the project scope was limited to forms and API calls using OpenWeatherMap. Over time the scope evolved and expanded to include a responsive dashboard layout, maps, search, bookmarks, and help functionality. Concepts incorporated included Model-View-Controller(MVC) architecture, mobile-first layout, SASS, reusable CSS components, state variable, ES6, modules, and error/action messaging to name a few.
 
 Throughout the development of this project, there were many challenges that arose, from layout headaches to broken functionality.
-There were many challenges throughout the development of this project. Some of which included
+There were many challenges throughout the development of this project. Some of which included??????????????????????????????
 
 Upon load the user can select to allow or block their current location, by allowing their browser location the app will fetch your current weather and render the weather page. A blocked location will allow the user search for or load a previously saved location to be fetched and rendered.
 
@@ -175,6 +176,8 @@ Additional features may include:
 
 - light/dark mode toggle
 - ability for the user to drag and/or hide certain weather elements such as the map, hourly, and weekly displays
+- ability for the user to create a custom name for a location, e.g. 'Home', 'Work', etc.
+- ability for the user to pin favorite locations to the top of saved locations component
 
 Known items to refactor:
 
