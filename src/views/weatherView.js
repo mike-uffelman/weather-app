@@ -8,6 +8,7 @@ let _data;
 
 // rendering controller for weatherView
 export const render = async function(data) {
+    // console.log(data)
     try {
         // document.querySelector('.nav__main')?.remove();
         _loadStyles(); // render laod specific styling

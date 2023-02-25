@@ -88,7 +88,7 @@ export const addHandlerSearch = function() {
 // retrieves the form inputs on submit, event for the submit is in search.js however to prevent having an event listener in searchView and mapView
 export const getInputs = function() {
         const form = document.querySelector('form');
-        const cityRadio = form.elements.textRadio.checked;
+        const textInputRadio = form.elements.textRadio.checked;
         const mapRadio = form.elements.mapRadio.checked;
 
         // the search params object passed returned to the controller
@@ -98,11 +98,11 @@ export const getInputs = function() {
         };
 
         // if neither radio are selected throw error notifying the user to select a search type
-        if(!cityRadio && !mapRadio) throw new Error('Please select a search type');
+        if(!textInputRadio && !mapRadio) throw new Error('Please select a search type');
 
 
         // if searching by text input
-        if(cityRadio) {
+        if(textInputRadio) {
             
             // split the location text into an array and trim excess spaces
             const city = form.elements.city.value.split(',').map(place => place.trim());
@@ -111,6 +111,7 @@ export const getInputs = function() {
             if(city[0] === '' || city.length === 1) throw new Error('Unable to find location, please include city, state(US only), and country');
 
             
+            // if city[0] is not blank and length greater than 1
             searchObj.searchType = 'text'; // assign the search type in our params
             searchObj.locParams.city = city[0]; // assign the first index to city
             

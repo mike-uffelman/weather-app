@@ -180,11 +180,14 @@ const controlLocationSearch = async function (e) {
     try {
         // retrieve search inputs from submit
         const params = searchView.getInputs();
+        // console.log(params)
         // const searchParams = {
             // locParams: params.locParams,
             // searchType: params.searchType
         // }
-        await model.getSearchInputs(params);
+        
+        // sets the state.query property
+        await model.setStateQuery(params);
         // //? move conditional and state assignment to a function inside of model
         // if search is a text input location, call getCity
         if(model.state.query.searchType === 'text') {

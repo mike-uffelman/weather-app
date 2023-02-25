@@ -12,12 +12,11 @@ export let store = []; // array to store current session locations
 
 
 //Get the city data, including lat/lon
-// geocode
+// geocode, direct from location name
 export const getCity = async function (loc) {
     try {
 
-        const inputs = Object.values(loc);
-        const [city, ...region] = inputs;
+        const [city, ...region] = Object.values(loc);
 
         // if city is not defined, return
         if(!city) return;
@@ -111,7 +110,7 @@ export const updateSaved = async function() {
 
 }
 
-export const getSearchInputs = function(data) {
+export const setStateQuery = function(data) {
     state.query = data;
 }
 

@@ -90,13 +90,16 @@ Open the [live demo here](https://main--cranky-booth-057572.netlify.app/).
 This is a project I've been working on to refine my skills as a front end developer. Initially, the project scope was limited to forms and API calls using OpenWeatherMap. Over time the scope evolved and expanded to include a responsive dashboard layout, maps, search, bookmarks, and help functionality. Concepts incorporated included Model-View-Controller(MVC) architecture, mobile-first layout, SASS, reusable CSS components, state variable, ES6, modules, and error/action messaging to name a few.
 
 Throughout the development of this project, there were many challenges that arose, from layout headaches to broken functionality.
-There were many challenges throughout the development of this project. Some of which included??????????????????????????????
+There were many challenges throughout the development of this project. Some of which included
 
 Upon load the user can select to allow or block their current location, by allowing their browser location the app will fetch your current weather and render the weather page. A blocked location will allow the user search for or load a previously saved location to be fetched and rendered.
 
 ### Challenges
 
-navigation position
+nav menu position
+
+Refactoring common styles into components, modularizing scss, using class prefixing
+
 scope creep - as i learned new concepts and technologies it became very easy to include in the project and allow for the scope to grow as this was a practice project with unlimited scope and honestly a poor initial plan, the greatest lesson learned from this project was that planning is EVERYTHING.
 
 ## Architecture and Design

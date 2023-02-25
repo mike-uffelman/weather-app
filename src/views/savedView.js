@@ -19,6 +19,7 @@ export const render = async function(data, ...sort){
     const markup = _generateMarkup();
     _parentElement.insertAdjacentHTML('afterbegin', markup);
     
+    _sort && updateSortHeading(_sort);
     // if sort is not defined, then return; i.e. if this is the initial page load the saved sort of the savedView is the default (chronological)
     // if sort is defined then call sortSaved passing in the sort type
     // if(!sort) return; 
@@ -91,22 +92,6 @@ const _generateMarkupList = function(result) {
         `;
 }
 
-
-// saved locations sort function, when the user selects a sort, this function removes all the items from the DOM, passes 
-// TODO refactor
-const sortSaved = function(sort) {
-    const previousList = document.querySelectorAll('.saved__card')
-    previousList.forEach(item => item.remove()); // remove each saved location from DOM
-
-    const sortedLocationList = _data.map(_generateMarkupList).join(''); // each saved location in the new sorted _data will be added to the markup and joined together 
-
-    // renders the newly sorted and built saved locations list
-    document.querySelector('.saved__box').insertAdjacentHTML('beforeend', sortedLocationList);
-
-    // set the sort type header in the saved view dropdown
-    updateSortHeading(sort);
-}
-
 // remove DOM element if the id paramter matches the 
 export const removeEl = function(id) {
     const saved = document.querySelectorAll('.saved__card');
@@ -121,11 +106,10 @@ export const addHandlerSaved = function(handler, removeSaved, sortSaved) {
     _parentElement.addEventListener('click', (e) => {
         // if the remove saved button is clicked, call handler and pass id to controller, then remove the target from the DOM
         if(e.target.closest('.remove-favorite')) {
-            const div = e.target.closest('.saved__card');
-            const id = div.dataset.id;
+            const locationCard = e.target.closest('.saved__card');
             
-            removeSaved(id);
-            div.remove();
+            removeSaved(locationCard.dataset.id);
+            locationCard.remove();
         }
 
         // if user clicks on the location in the card, call the handler and pass id to the controller, then toggle the savedView to hide it
