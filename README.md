@@ -50,13 +50,21 @@
 
 ## About The Project
 
-This is a weather app project built to practice and showcase skills learned. It uses many packages including OpenWeather API, Leaflet, and OpenStreetMap. Under the hood, it's a Model-View-Controller(MVC) architecture utilizing modules and parcel.js to implement the build. [Demo the app here](https://main--cranky-booth-057572.netlify.app/).
+This is a weather app project built primarily using vanilla JavaScript, it also utilizes many packages and resources for specialized features including OpenWeather API for weather data, Leaflet for maps, and OpenStreetMap for map tiling.
 
-The user provides a location and the app retrieves and displays the current weather, current weather map, hourly forecast, weekly forecast, and current weather alerts.
+Under the hood, it's a Model-View-Controller(MVC) architecture utilizing modules and parcel.js to implement the build. [Demo the app here](https://main--cranky-booth-057572.netlify.app/).
 
-The user is able search for locations via text input (e.g. "london, gb" or "reno, nv, us" - state only required for USA) or by selecting a location on the map in the search form.
+The app styling was built using Sass as a preprocessor to CSS to take advantage of the mixins, nesting, and other features.
 
-The user can also bookmark a location for ease of lookup, which will be stored in the local storage of the browser.
+### Basic Usage
+
+- The user provides a location and the app retrieves and displays the current weather, a current weather map, hourly forecasts, weekly forecasts, and current weather alerts.
+
+- The user is able search for locations via text input of city, state(only for USA), country code (e.g. "london, gb" or "reno, nv, us") or by selecting a location on the map in the search form.
+
+- The user can also bookmark a location for ease of lookup, which will be stored in the local storage of the browser.
+
+- The user may resize the viewport and view the app in a mobile or desktop/dashboard layout.
 
 <br><br>
 
@@ -81,7 +89,25 @@ The user can also bookmark a location for ease of lookup, which will be stored i
 
 ## Getting Started
 
-Open the [live demo here](https://main--cranky-booth-057572.netlify.app/).
+Open the [live demo here](https://main--cranky-booth-057572.netlify.app/), or clone the repository, (node and npm are required).
+
+Install npm packages
+
+```
+npm install
+```
+
+Start Server
+
+```
+npm start
+```
+
+Navigate to localhost
+
+```
+localhost:8080
+```
 
 <p align="right">(<a href="#weather-app">back to top</a>)</p>
 
@@ -89,18 +115,30 @@ Open the [live demo here](https://main--cranky-booth-057572.netlify.app/).
 
 This is a project I've been working on to refine my skills as a front end developer. Initially, the project scope was limited to forms and API calls using OpenWeatherMap. Over time the scope evolved and expanded to include a responsive dashboard layout, maps, search, bookmarks, and help functionality. Concepts incorporated included Model-View-Controller(MVC) architecture, mobile-first layout, SASS, reusable CSS components, state variable, ES6, modules, and error/action messaging to name a few.
 
-Throughout the development of this project, there were many challenges that arose, from layout headaches to broken functionality.
-There were many challenges throughout the development of this project. Some of which included
-
 Upon load the user can select to allow or block their current location, by allowing their browser location the app will fetch your current weather and render the weather page. A blocked location will allow the user search for or load a previously saved location to be fetched and rendered.
 
 ### Challenges
 
-nav menu position
+Throughout the development of this project, there were many challenges that arose, from layout headaches to broken functionality.
 
-Refactoring common styles into components, modularizing scss, using class prefixing
+- <details>
+  <summary>Navigation & Menu Positioning</summary>
+    <ul>The application is built with a Model View Controller (MVC) architecture pattern to isolate and organize the flow control, logic, and view modules.</ul>
+  </details>
+- <details>
+    <summary>Refactoring and Creating CSS components</summary>
+      <ul>Refactoring common styles into components, modularizing scss, using class prefixing. This proved to be a pretty difficult challenge, recognizing repeated CSS, and determining the property names and structures to ensure the ability reuse classes took some time to figure out. There is still some refactoring that could be achieved, but the main components have been refactored.</ul>
+  </details>
 
-scope creep - as i learned new concepts and technologies it became very easy to include in the project and allow for the scope to grow as this was a practice project with unlimited scope and honestly a poor initial plan, the greatest lesson learned from this project was that planning is EVERYTHING.
+- <details>
+    <summary>Scope Creep</summary>
+      <ul>A very important lesson learned while building this project was that planning is the most important step, and should be done early in the build (ideally before you begin). Since this is a practice project, it was very easy to expand the scope of the project on the fly as I learned new concepts and technologies. This resulted in excessive scope creep on the original intention of the project, and likely resulted in a messier final (for now) application. In summary, I learned that a truely well developed application is planned and limited in scope to ensure features are executed correctly.</ul>
+  </details>
+
+- <details>
+    <summary>More...</summary>
+    <p></p>
+  </details>
 
 ## Architecture and Design
 
@@ -108,7 +146,8 @@ scope creep - as i learned new concepts and technologies it became very easy to 
 
 - The application is built with a Model View Controller (MVC) architecture pattern to isolate and organize the flow control, logic, and view modules.
 - Using a global state variable to control the application state. This variable stores the user's search query, geolocation (if enabled), current weather location results, and the bookmarked locations. Doing so keeps all the relevant data in one place that is easy to reference throughout the code.
-- Publisher/Subscriber pattern
+  - Note: After learning React, upon a revisit to this application, I realized that much of the design and execution of the application could have been done more efficiently in React as many similar concepts are used, i.e. components and state.
+- Publisher/Subscriber Patterns -
 - Form Validation
 
 <br>

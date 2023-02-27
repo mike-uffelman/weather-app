@@ -1,8 +1,6 @@
 'use strict';
 
-// class variables
-let _data;
-let _sort;
+// variables
 let _parentElement = document.querySelector('#info');
 
 // rendering instructions

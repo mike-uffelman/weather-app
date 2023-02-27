@@ -27,6 +27,7 @@ if(process.env.NODE_ENV === 'development') console.log('Happy developing!');
 
 // ----------------------------------------------------------------------------------------
 
+
 //* ========== app start controller ==========
 const controlAppStart = async function() {
     try {
@@ -61,9 +62,12 @@ const controlAppStart = async function() {
     }
 }
 
+
+
 //* ========== Current weather page controller ==========
 // save toggle for current location
 const controlCurrentLocation = async function() {
+
     const { saved, id } = model.state.location
 
     try {
@@ -180,12 +184,7 @@ const controlLocationSearch = async function (e) {
     try {
         // retrieve search inputs from submit
         const params = searchView.getInputs();
-        // console.log(params)
-        // const searchParams = {
-            // locParams: params.locParams,
-            // searchType: params.searchType
-        // }
-        
+         
         // sets the state.query property
         await model.setStateQuery(params);
         // //? move conditional and state assignment to a function inside of model

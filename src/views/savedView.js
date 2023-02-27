@@ -18,13 +18,9 @@ export const render = async function(data, ...sort){
     // assign markup variable and insert to HTML
     const markup = _generateMarkup();
     _parentElement.insertAdjacentHTML('afterbegin', markup);
-    
-    _sort && updateSortHeading(_sort);
-    // if sort is not defined, then return; i.e. if this is the initial page load the saved sort of the savedView is the default (chronological)
-    // if sort is defined then call sortSaved passing in the sort type
-    // if(!sort) return; 
 
-    // sortSaved(sort); // if sort is defined sort the Saved and return
+    // if sort is not defined (falsey), then return; if this is the initial page load the saved sort of the savedView falsey and therefore the default order of saved location in database (local storage)
+    _sort && updateSortHeading(_sort);
 }
 
 // clear savedView html for re-rendering
@@ -153,7 +149,7 @@ export const moveToSaved = function() {
 
 // set the sort type header in saved view
 const updateSortHeading = function() {
-    if(_sort.length === 0) return;
+    if(!_sort) return;
     const sortHeading = document.querySelector('.saved__header--icons .sort__header--heading');
     sortHeading.innerText = _sort;
 }

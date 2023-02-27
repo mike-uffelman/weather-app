@@ -62,12 +62,6 @@ export const getForecast = async function(locCoords) {
         // if(!check) return; // if a random location i.e. false, return //? NOT SURE IF REALLY NEEDED...
         if(!lat || !lon) return; // if lat or lon is undefined, return 
 
-        // const res = await fetch(`${FORECAST_URL}?lat=${lat}&lon=${lon}&units=imperial&appid=${OWM_APIKEY}`)
-
-        // const forecastData = await res.json();
-
-        // console.log(forecastData)
-        // ---------------old version before api update-------------------------
         // fetch forecast data for coordinates
         const res = await fetch(`${FORECAST_URL}?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely&appid=${OWM_APIKEY}`)
 

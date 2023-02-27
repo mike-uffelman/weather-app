@@ -10,6 +10,7 @@ let _data;
 export const render = async function(data) {
     // console.log(data)
     try {
+
         // document.querySelector('.nav__main')?.remove();
         _loadStyles(); // render laod specific styling
         _clear(); // clear
@@ -67,30 +68,36 @@ const _loadStyles = function() {
 
 // clear the weatherView
 const _clear = function() {
-    _currentWeather.innerHTML = '';
+    _currentWeather.innerHTML = null;
 
     // document.querySelectorAll('nav')?.forEach(n => n.innerHTML = '');
     document.querySelectorAll('nav')?.forEach(n => n.remove());
 
 }
 
+// export const removeHandlerCurrent = function() {
+//     _currentWeather.removeEventListener('click', () => weatherEvents());
+// }
+
+const weatherEvents = (e, handler) => {
+
+    // save a location event
+    if(e.target.closest('.c-cw__location')) {
+        document.querySelector('.c-location__save--icon').classList.toggle('is-saved');
+        // handler(_data);
+        handler();
+
+    };
+
+    // link to weather alerts
+    if(e.target.classList.contains('details__header--alerts')) {
+        document.querySelector('#alerts').scrollIntoView({behavior: 'smooth'});
+    }
+}
+
 // weatherView event handler and subscriber
 export const addHandlerCurrent = function(handler) {       
-    _currentWeather.addEventListener('click', (e) => {
-
-        // save a location event
-        if(e.target.closest('.c-cw__location')) {
-            document.querySelector('.c-location__save--icon').classList.toggle('is-saved');
-            // handler(_data);
-            handler();
-
-        };
-
-        // link to weather alerts
-        if(e.target.classList.contains('details__header--alerts')) {
-            document.querySelector('#alerts').scrollIntoView({behavior: 'smooth'});
-        }
-    });
+    _currentWeather.addEventListener('click', (e) => weatherEvents(e, handler));
 }
 
 // toggle save icon stylings
