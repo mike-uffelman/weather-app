@@ -11,9 +11,10 @@
     column-gap: 3rem;
 
     height: 100vh;
-    width: 100%;
-    scroll-snap-coordinate: 0 0;
-    scroll-snap-type: x mandatory;
+    // width: 100%;
+    // scroll-snap-coordinate: 0 0; // mdn says obsolete
+    scroll-snap-stop: always; // prevents swiping more than one screen per swipe
+    scroll-snap-type: x mandatory; // snaps to next view when swiped by >50% width
 
     will-change: auto;
 
@@ -37,7 +38,7 @@
 
     &__page {
         scroll-snap-align: center;
-        min-width: 27.5rem;
+        // min-width: 27.5rem;
         // height: auto;
         border-radius: $--box-radius;
         box-shadow: $--weather-box-shadow;

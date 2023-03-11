@@ -59,7 +59,7 @@ export const getForecast = async function(locCoords) {
         state.location = {};
 
         const { latitude: lat, longitude: lon, saved = false, id } = locCoords;
-        // if(!check) return; // if a random location i.e. false, return //? NOT SURE IF REALLY NEEDED...
+
         if(!lat || !lon) return; // if lat or lon is undefined, return 
 
         // fetch forecast data for coordinates
@@ -71,11 +71,9 @@ export const getForecast = async function(locCoords) {
         // fetch reverse geocode data for name, state, country
         const loc = await fetch(`${GEOCODE_REVERSE_URL}?lat=${forecastData.lat}&lon=${forecastData.lon}&limit=10&appid=${OWM_APIKEY}`)
         
-
-        //-----------------------------------------------------------------------
-
         // extract json from reverse geocode response
         const locData = await loc.json()
+
         state.location = {
             ...locData[0], 
             ...forecastData,

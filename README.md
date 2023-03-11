@@ -9,9 +9,10 @@
 <div align="center">
 
 <h3 align="center">weather-app</h3>
-<br>
   <p align="center">
     A responsive weather dashboard and mobile app.
+    <br>
+    Vanilla JS, Leaflet, OpenWeatherMap, OpenStreetMap, MVC, Sass
     <br />
     <a href="https://main--cranky-booth-057572.netlify.app/">View Demo</a>
     ·
@@ -19,6 +20,11 @@
     ·
     <a href="https://github.com/mike-uffelman/weather-app/issues">Request Feature</a>
   </p>
+<br>
+
+[![weather showcase][product-screenshot]]('./images/weather-showcase.png')
+<br>
+
 </div>
 <br>
 
@@ -50,15 +56,19 @@
 
 ## About The Project
 
-This is a weather app project built primarily using vanilla JavaScript, it also utilizes many packages and resources for specialized features including OpenWeather API for weather data, Leaflet for maps, and OpenStreetMap for map tiling.
+This is a weather application built to provide the user with many useful datapoints, including the user's location for weather lookup, current, hourly, and weekly forecast, a weather map, weather alerts, location search (via name or map), and location bookmarking.
+
+The application was built primarily using vanilla JavaScript, it also utilizes many packages and resources for specialized features including OpenWeather API for weather data, Leaflet for maps, and OpenStreetMap for map tiling.
 
 Under the hood, it's a Model-View-Controller(MVC) architecture utilizing modules and parcel.js to implement the build. [Demo the app here](https://main--cranky-booth-057572.netlify.app/).
 
-The app styling was built using Sass as a preprocessor to CSS to take advantage of the mixins, nesting, and other features.
+The app styling was built using Sass to take advantage of the mixins, nesting, and other features.
+
+This project was originally designed to practice building forms and using an api. However, as I learned new technologies and concepts the application evolved into a more of a 'capstone' type of project to encompass much of what I had learned up to that point. The application functionality is feature rich for the user. Some features includes,
 
 ### Basic Usage
 
-- The user provides a location and the app retrieves and displays the current weather, a current weather map, hourly forecasts, weekly forecasts, and current weather alerts.
+- The user provides a location (either via search or browser location) and the app retrieves and displays the current weather, a current weather map, hourly forecasts, weekly forecasts, and current weather alerts.
 
 - The user is able search for locations via text input of city, state(only for USA), country code (e.g. "london, gb" or "reno, nv, us") or by selecting a location on the map in the search form.
 
@@ -67,8 +77,6 @@ The app styling was built using Sass as a preprocessor to CSS to take advantage 
 - The user may resize the viewport and view the app in a mobile or desktop/dashboard layout.
 
 <br><br>
-
-[![weather showcase][product-screenshot]]('./images/weather-showcase.png')
 
 <br>
 
@@ -115,40 +123,45 @@ localhost:8080
 
 This is a project I've been working on to refine my skills as a front end developer. Initially, the project scope was limited to forms and API calls using OpenWeatherMap. Over time the scope evolved and expanded to include a responsive dashboard layout, maps, search, bookmarks, and help functionality. Concepts incorporated included Model-View-Controller(MVC) architecture, mobile-first layout, SASS, reusable CSS components, state variable, ES6, modules, and error/action messaging to name a few.
 
+???
+should this go here...
 Upon load the user can select to allow or block their current location, by allowing their browser location the app will fetch your current weather and render the weather page. A blocked location will allow the user search for or load a previously saved location to be fetched and rendered.
 
 ### Challenges
 
 Throughout the development of this project, there were many challenges that arose, from layout headaches to broken functionality.
 
-- <details>
+<details>
   <summary>Navigation & Menu Positioning</summary>
-    <ul>The application is built with a Model View Controller (MVC) architecture pattern to isolate and organize the flow control, logic, and view modules.</ul>
-  </details>
-- <details>
-    <summary>Refactoring and Creating CSS components</summary>
-      <ul>Refactoring common styles into components, modularizing scss, using class prefixing. This proved to be a pretty difficult challenge, recognizing repeated CSS, and determining the property names and structures to ensure the ability reuse classes took some time to figure out. There is still some refactoring that could be achieved, but the main components have been refactored.</ul>
+    <ul>Building a responsive navigation and menu proved challenging as the layout design had navigation inside and outside the rendered weather component, depending on if the weather had been rendered or not.</ul> 
+    <ul>For example, if the user blocks their location, the app will load and render the menu at the bottom (in mobile view) or in the lower right corner (in dashboard view). When the user selects a location and the weather loads, the navigation menu will hide in dashboard view and appear in the component itself.</ul>
+    <ul>In order to achieve this, the menu had to be rendered twice and hidden depending on the screen size using media queries. Using CSS grid properties it was not possible to render the menu once and display it inside the component as all grid children have to be inside the parent (which would not have been loaded).</ul>
+</details>
+<details>
+  <summary>Refactoring and Creating CSS components</summary>
+  <ul>Refactoring common styles into components, modularizing scss, and using BEM class naming convention and class prefixing.</ul>
+  <ul>This proved to be a pretty difficult challenge, as there was previously a lot of repeated code that needed to be reduced down to classes that could be reused. Recognizing repeated CSS, and determining the property names and structures to ensure the ability reuse classes took some time to figure out. Class naming followed the BEM naming methodology and where appropriate layout classes were prefixed with 'l-' or 'c-' for layout or component classes. There is still some refactoring that could be achieved, but the main components have been refactored.</ul>
+</details>
+
+<details>
+  <summary>Scope Creep</summary>
+  <ul>A very important lesson learned while building this project was that planning is the most important step, and should be done early in the build (ideally before you begin coding anything). Since this is a practice project, it was very easy to expand the scope of the project on the fly as I learned new concepts and technologies. This resulted in excessive scope creep on the original intention of the project, and likely resulted in a messier final (for now) application. In summary, I learned that a truely well developed application is planned and limited in scope to ensure features are executed correctly.</ul>
   </details>
 
-- <details>
-    <summary>Scope Creep</summary>
-      <ul>A very important lesson learned while building this project was that planning is the most important step, and should be done early in the build (ideally before you begin). Since this is a practice project, it was very easy to expand the scope of the project on the fly as I learned new concepts and technologies. This resulted in excessive scope creep on the original intention of the project, and likely resulted in a messier final (for now) application. In summary, I learned that a truely well developed application is planned and limited in scope to ensure features are executed correctly.</ul>
-  </details>
-
-- <details>
-    <summary>More...</summary>
-    <p></p>
-  </details>
+<details>
+  <summary>More...</summary>
+  <p></p>
+</details>
 
 ## Architecture and Design
 
 #### Architecture
 
 - The application is built with a Model View Controller (MVC) architecture pattern to isolate and organize the flow control, logic, and view modules.
-- Using a global state variable to control the application state. This variable stores the user's search query, geolocation (if enabled), current weather location results, and the bookmarked locations. Doing so keeps all the relevant data in one place that is easy to reference throughout the code.
-  - Note: After learning React, upon a revisit to this application, I realized that much of the design and execution of the application could have been done more efficiently in React as many similar concepts are used, i.e. components and state.
-- Publisher/Subscriber Patterns -
-- Form Validation
+- Using a global state variable to control the application state. This variable stores the user's search query, geolocation (if enabled), current weather location results, and the bookmarked locations. Doing so keeps all the relevant data in one place that is easy to reference and pass as needed throughout the code.
+  - NOTE: After learning React, upon a revisit to this application, I realized that much of the design and execution of the application could have been done more efficiently in React as many similar concepts are used, i.e. components and state.
+- Publisher/Subscriber Patterns - Publisher-Subscriber patterns were used to execute event listeners on execution of the application. This allowed for the event handlers to reside inside the view modules. Where necessary the handler would execute a call back in the controller to run a desired task. For example, on app load, the saved view event handler is called and sets up the event handlers for actions in the saved view, i.e. calling a saved location, removing a saved location, or sorting the saved locations.
+- Form Validation...
 
 <br>
 
@@ -249,7 +262,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [issues-shield]: https://img.shields.io/github/issues/mike-uffelman/weather-app.svg?labelcolor=green
 [issues-url]: https://github.com/mike-uffelman/weather-app/issues
 [license-shield]: https://img.shields.io/github/license/mike-uffelman/weather-app.svg
-[license-url]: https://github.com/mike-uffelman/weather-app/blob/master/LICENSE.txt
+[license-url]: https://github.com/mike-uffelman/weather-app/blob/main/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/LinkedIn-profile-blue
 [linkedin-url]: https://www.linkedin.com/in/michael-uffelman-34289521/
 [product-screenshot]: public/images/weather-showcase.png

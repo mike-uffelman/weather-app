@@ -34,10 +34,10 @@ const controlAppStart = async function() {
         // render saved, search, info views/modals
         const savedLocs = await storage.getStoredLocations();
         model.state.bookmarks = savedLocs;
-        savedView.render(savedLocs);
+        savedView.render(model.state.bookmarks);
         infoView.render();
         searchView.render();
-
+        
         // get current (location allowed) or random location(location blocked)
         await geoLoc.getGeolocation();
 
