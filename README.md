@@ -35,18 +35,13 @@
 <details>
   <summary>Weather App</summary>
   <ul>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
+    <li><a href="#about-the-project">About The Project</a></li>
     <li><a href="#getting-started">Getting Started</a></li>
     <li><a href="#background-and-discussion">Background & Discussion</a></li>
     <li><a href="#architecture-and-design">Architecture & Design</a></li>
+    <li><a href="#challenges">Challenges</a></li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#going-forward">Going Forward</a></li>
-    <li><a href="#considerations">Considerations</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -56,31 +51,29 @@
 
 ## About The Project
 
-This is a weather application built to provide the user with many useful datapoints, including the user's location for weather lookup, current, hourly, and weekly forecast, a weather map, weather alerts, location search (via name or map), and location bookmarking.
+This is a weather application built to provide the user with many useful datapoints, including the current, hourly, and weekly weather forecasts, a weather map, weather alerts, location search (via name or map), and location bookmarking.
 
 The application was built primarily using vanilla JavaScript, it also utilizes many packages and resources for specialized features including OpenWeather API for weather data, Leaflet for maps, and OpenStreetMap for map tiling.
 
-Under the hood, it's a Model-View-Controller(MVC) architecture utilizing modules and parcel.js to implement the build. [Demo the app here](https://main--cranky-booth-057572.netlify.app/).
+Under the hood, it's a Model-View-Controller(MVC) architecture and utilizes parcel.js to implement the build package.
 
 The app styling was built using Sass to take advantage of the mixins, nesting, and other features.
 
-This project was originally designed to practice building forms and using an api. However, as I learned new technologies and concepts the application evolved into a more of a 'capstone' type of project to encompass much of what I had learned up to that point. The application functionality is feature rich for the user. Some features includes,
+[Demo the app here](https://main--cranky-booth-057572.netlify.app/).
 
 ### Basic Usage
 
 - The user provides a location (either via search or browser location) and the app retrieves and displays the current weather, a current weather map, hourly forecasts, weekly forecasts, and current weather alerts.
 
-- The user is able search for locations via text input of city, state(only for USA), country code (e.g. "london, gb" or "reno, nv, us") or by selecting a location on the map in the search form.
+- The user is able search for locations via text input of city, state (only for USA), country code (e.g. "london, gb" or "reno, nv, us") or by selecting a location on the map in the search form.
 
 - The user can also bookmark a location for ease of lookup, which will be stored in the local storage of the browser.
 
 - The user may resize the viewport and view the app in a mobile or desktop/dashboard layout.
 
-<br><br>
-
 <br>
 
-## Built With
+### Built With
 
 | Technology Stack                               | Description                               |
 | ---------------------------------------------- | ----------------------------------------- |
@@ -123,17 +116,35 @@ localhost:8080
 
 This is a project I've been working on to refine my skills as a front end developer. Initially, the project scope was limited to forms and API calls using OpenWeatherMap. Over time the scope evolved and expanded to include a responsive dashboard layout, maps, search, bookmarks, and help functionality. Concepts incorporated included Model-View-Controller(MVC) architecture, mobile-first layout, SASS, reusable CSS components, state variable, ES6, modules, and error/action messaging to name a few.
 
-???
-should this go here...
-Upon load the user can select to allow or block their current location, by allowing their browser location the app will fetch your current weather and render the weather page. A blocked location will allow the user search for or load a previously saved location to be fetched and rendered.
+<p align="right">(<a href="#weather-app">back to top</a>)</p>
 
-### Challenges
+## Architecture and Design
+
+### Architecture
+
+- The application is built with a Model View Controller (MVC) architecture pattern to isolate and organize the flow control, logic, and view modules.
+- Using a global state variable to control the application state. This variable stores the user's search query, geolocation (if enabled), current weather location results, and the bookmarked locations. Doing so keeps all the relevant data in one place that is easy to reference and pass as needed throughout the code.
+  - NOTE: After learning React, upon a revisit to this application, I realized that much of the design and execution of the application could have been done more efficiently in React as many similar concepts are used, i.e. components and state.
+- Publisher/Subscriber Patterns - The publisher-subscriber pattern is utilized to call event listeners in the views on execution of the application. This allows for the event handlers to reside inside the views and when necessary the handler would execute a callback in the controller to run a desired task. For example, on app load, the saved view event handler is called and sets up the event handlers for actions in the saved view, i.e. calling a saved location, removing a saved location, or sorting the saved locations.
+
+<br>
+
+### Design
+
+The layout of this app has been designed mobile first such that it works well on a mobile sized viewport and when the viewport size is detected larger (i.e. tablet or desktop) the layout will switch to a grid-like dashboard.
+
+- mobile with swipe navigation
+- desktop and larger screens dashboard layout
+
+<p align="right">(<a href="#weather-app">back to top</a>)</p>
+
+## Challenges
 
 Throughout the development of this project, there were many challenges that arose, from layout headaches to broken functionality.
 
 <details>
   <summary>Navigation & Menu Positioning</summary>
-    <ul>Building a responsive navigation and menu proved challenging as the layout design had navigation inside and outside the rendered weather component, depending on if the weather had been rendered or not.</ul> 
+    <ul>Building a responsive navigation and menu proved challenging as the layout design had navigation inside and outside the rendered weather component, depending on if the weather had been rendered or not.</ul>
     <ul>For example, if the user blocks their location, the app will load and render the menu at the bottom (in mobile view) or in the lower right corner (in dashboard view). When the user selects a location and the weather loads, the navigation menu will hide in dashboard view and appear in the component itself.</ul>
     <ul>In order to achieve this, the menu had to be rendered twice and hidden depending on the screen size using media queries. Using CSS grid properties it was not possible to render the menu once and display it inside the component as all grid children have to be inside the parent (which would not have been loaded).</ul>
 </details>
@@ -148,31 +159,7 @@ Throughout the development of this project, there were many challenges that aros
   <ul>A very important lesson learned while building this project was that planning is the most important step, and should be done early in the build (ideally before you begin coding anything). Since this is a practice project, it was very easy to expand the scope of the project on the fly as I learned new concepts and technologies. This resulted in excessive scope creep on the original intention of the project, and likely resulted in a messier final (for now) application. In summary, I learned that a truely well developed application is planned and limited in scope to ensure features are executed correctly.</ul>
   </details>
 
-<details>
-  <summary>More...</summary>
-  <p></p>
-</details>
-
-## Architecture and Design
-
-#### Architecture
-
-- The application is built with a Model View Controller (MVC) architecture pattern to isolate and organize the flow control, logic, and view modules.
-- Using a global state variable to control the application state. This variable stores the user's search query, geolocation (if enabled), current weather location results, and the bookmarked locations. Doing so keeps all the relevant data in one place that is easy to reference and pass as needed throughout the code.
-  - NOTE: After learning React, upon a revisit to this application, I realized that much of the design and execution of the application could have been done more efficiently in React as many similar concepts are used, i.e. components and state.
-- Publisher/Subscriber Patterns - Publisher-Subscriber patterns were used to execute event listeners on execution of the application. This allowed for the event handlers to reside inside the view modules. Where necessary the handler would execute a call back in the controller to run a desired task. For example, on app load, the saved view event handler is called and sets up the event handlers for actions in the saved view, i.e. calling a saved location, removing a saved location, or sorting the saved locations.
-- Form Validation...
-
 <br>
-
-#### Design
-
-The layout of this app has been designed mobile first such that it works well on a mobile sized viewport and when the viewport size is detected larger (i.e. tablet or desktop) the layout will switch to a grid-like dashboard.
-
-- mobile with swipe navigation
-- desktop and larger screens dashboard layout
-
-  <br><br>
 
 <p align="right">(<a href="#weather-app">back to top</a>)</p>
 
@@ -184,23 +171,23 @@ This is the basic usage of the application:
 
 ### App Start
 
-- On load, the user will be prompted to allow or block their location.
+On load, the user will be prompted to allow or block their location.
 
-  - If allowed, the application will automatically retrieve and display the weather.
-  - If blocked, the application will allow the user to search for a location or open a previously saved location from their favorites.
-    <br>
+- If allowed, the application will automatically retrieve and display the weather.
+- If blocked, the application will allow the user to search for a location or open a previously saved location from their favorites.
+  <br>
 
 ### Search
 
-- To search, the user must select the search type radio button (i.e. location name or map location). Then provides the location name in the text input (e.g. "london, gb" or "reno, nv, us") or click and pin a location on the map (as seen in the screenshot).
+To search, the user must select the search type radio button (i.e. location name or map location). Then provides the location name in the text input (e.g. "london, gb" or "reno, nv, us") or click and pin a location on the map (as seen in the screenshot).
 
-  [![Password Generator ouput screenshot][form-screenshot]]('public/images/search-form.png')
+[![Password Generator ouput screenshot][form-screenshot]]('public/images/search-form.png')
 
 ### Bookmark a location
 
-- To bookmark a location the user must click the location name or bookmark icon in the current weather box.
+To bookmark a location the user must click the location name or bookmark icon in the current weather box.
 
-  [![Bookmark the location][bookmark-location]]('./images/bookmark-location.png')
+[![Bookmark the location][bookmark-location]]('./images/bookmark-location.png')
 
 ### Remove a bookmarked location
 
@@ -209,19 +196,19 @@ This is the basic usage of the application:
 
 ### Load Bookmark
 
-- To load a bookmark, the user must select the desired location (if previously bookmarked).
+To load a bookmark, the user must select the desired location (if previously bookmarked).
 
-  [![Bookmarks screenshot][bookmarks-screenshot]]('public/images/bookmark-location.png')
+[![Bookmarks screenshot][bookmarks-screenshot]]('public/images/bookmark-location.png')
 
 ### Navigation
 
-- In the mobile view, the user may swipe left and right to navigate to the search and bookmarked locations views or select the menu toggle on the bottom and use the icons displayed.
+In the mobile view, the user may swipe left and right to navigate to the search and bookmarked locations views or select the menu toggle on the bottom and use the icons displayed.
 
-  [![Mobile-navigation][mobile-nav]]('public/images/mobile-nav.png')
+[![Mobile-navigation][mobile-nav]]('public/images/mobile-nav.png')
 
-- On a larger viewport or desktop, the user can use the menu toggle which will display the navigation icons.
+On a larger viewport or desktop, the user can use the menu toggle which will display the navigation icons.
 
-  [![Desktop-navigation][desktop-nav]]('public/images/desktop-nav.png')
+[![Desktop-navigation][desktop-nav]]('public/images/desktop-nav.png')
 
 <p align="right">(<a href="#weather-app">back to top</a>)</p>
 
