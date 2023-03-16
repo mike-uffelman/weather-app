@@ -95,6 +95,15 @@ const controlCurrentLocation = async function() {
     }
 }
 
+const currentWeatherDetails = function () {
+    try {
+        console.log('%c, showing current weather details!!!', 'color: magenta')
+    } catch (err) {
+        console.error('Unable to load more details.', err);
+        message.renderMessage(err, 'error');
+    }
+}
+
 //* ========== Call a saved location controller ==========
 const controlCallSaved = async function(id) {
     try {
@@ -177,7 +186,7 @@ const sortSaved = async function(sort) {
 }
 
 //* ========== global error/message handler ==========
-const errorHandled = (message, type) => message.renderMessage(message, type)
+const errorHandled = (messageText, type) => message.renderMessage(messageText, type)
 
 //* ========== search controller ==========
 const controlLocationSearch = async function (e) {
@@ -223,16 +232,16 @@ const init = async function() {
     // event handler publishers
     searchView.addHandlerSearch();
     savedView.addHandlerSaved(controlCallSaved, controlRemoveSaved, sortSaved);
-    weatherView.addHandlerCurrent(controlCurrentLocation);
+    weatherView.addHandlerCurrent(controlCurrentLocation, currentWeatherDetails);
     maps.addHandlerMapClick(enableSearchMap);
     search.addHandlerSearchForm(controlLocationSearch);
     infoView.addHandlerInfo();
 
     // global event listener for errors
     window.addEventListener('error', function(e) {
-        const message = e.error;
+        const messageText = e.error;
         e.preventDefault();
-        errorHandled(message, 'error');
+        errorHandled(messageText, 'error');
     })
 }
 

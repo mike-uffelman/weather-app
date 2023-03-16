@@ -15,6 +15,7 @@ export const render = async function(data) {
         _loadStyles(); // render laod specific styling
         _clear(); // clear
         _data = data; // set data parameter to class variable
+        console.log(_data)
         //build main nav container
         await buildMainNavContainer(_data);
 
@@ -79,8 +80,7 @@ const _clear = function() {
 //     _currentWeather.removeEventListener('click', () => weatherEvents());
 // }
 
-const weatherEvents = (e, handler) => {
-
+const weatherEvents = (e, handler, showDetails) => {
     // save a location event
     if(e.target.closest('.c-cw__location')) {
         document.querySelector('.c-location__save--icon').classList.toggle('is-saved');
@@ -93,11 +93,20 @@ const weatherEvents = (e, handler) => {
     if(e.target.classList.contains('details__header--alerts')) {
         document.querySelector('#alerts').scrollIntoView({behavior: 'smooth'});
     }
+
+    if(e.target.closest('.l-current__extras')) {
+        console.log('extras clicked', e.target)
+        const showMore = document.querySelector('.l-current__extras');
+        showMore.classList.toggle('showMore')
+        showDetails();
+    }
+
+    
 }
 
 // weatherView event handler and subscriber
-export const addHandlerCurrent = function(handler) {       
-    _currentWeather.addEventListener('click', (e) => weatherEvents(e, handler));
+export const addHandlerCurrent = function(handler, showDetails) {       
+    _currentWeather.addEventListener('click', (e) => weatherEvents(e, handler, showDetails));
 }
 
 // toggle save icon stylings
@@ -106,6 +115,46 @@ export const toggleSaveIcon = function(id) {
     if(id !== currentId) return;   
     const currentLocationSave = document.querySelector('#saveIcon');
     currentLocationSave.classList.toggle('is-saved');
+}
+
+const _buildWeatherExtras = function(current, daily) {
+
+    return `
+        <div class='l-current__extras--more'>
+            <h3 class='l-current__extras--header text text__current'>More</h3>
+            <span class="material-symbols-outlined l-current__extras--icon">
+                arrow_forward_ios
+            </span>
+        </div>
+        <div class='l-current l-current__extras--detail'>
+            <div class='l-current__content'>
+                <div class='l-current__content--icons'>
+                    <svg alt='wind direction and speed' class='details__box--wind-direction' data-wind-direction='${current.wind_deg}' height="25" width="25">
+                        <polygon points='12.5,5 20,20 12.5,16 5,20'>
+                    </svg>
+                    <p class='text text--extras'>${_windCardinalDirection(current.wind_deg)}</p>
+                </div>
+                <p class='text text--extras'>${current.wind_speed.toFixed(0)} mph</p>
+            </div>
+            <div class='l-current__content'>
+                
+                <p class='text text--extras'>Precip</p>
+                <p class='text text--extras'>${(daily[0].pop * 100).toFixed(0)}%</p>
+            </div>
+            <div class='l-current__content'>
+                <p class='text text--extras'>UV Index</p>
+                <p class='text text--extras'>${_uvIndexRating(current.uvi)}</p>
+            </div>
+            <div class='l-current__content' >
+                        
+                <p class='text text--extras'>Humidity</p>
+                <p class='text text--extras'>${(current.humidity).toFixed(0)}%</p>
+                
+            </div>
+        </div>
+    `
+
+    
 }
 
 const buildMainNavContainer = async function(data) {
@@ -170,34 +219,10 @@ const _generateMarkup =  function(data) {
                                         <p class='details__box--feels-like text current'>, feels like ${current.feels_like.toFixed(0)}° F</p>
                                     </div>
                                 </div>
-                                
-                                <div class='l-current l-current__extras'>
-                                    <div class='l-current__content'>
-                                        <div class='l-current__content--icons'>
-                                            <svg alt='wind direction and speed' class='details__box--wind-direction' data-wind-direction='${current.wind_deg}' height="25" width="25">
-                                                <polygon points='12.5,5 20,20 12.5,16 5,20'>
-
-                                            </svg>
-                                            <p class='text text--extras'>${_windCardinalDirection(current.wind_deg)}</p>
-                                        </div>
-                                        <p class='text text--extras'>${current.wind_speed.toFixed(0)} mph</p>
-                                    </div>
-                                    <div class='l-current__content'>
-                                        
-                                        <p class='text text--extras'>Precip</p>
-                                        <p class='text text--extras'>${(daily[0].pop * 100).toFixed(0)}%</p>
-                                    </div>
-                                    <div class='l-current__content'>
-                                        <p class='text text--extras'>UV Index</p>
-                                        <p class='text text--extras'>${_uvIndexRating(current.uvi)}</p>
-                                    </div>
-                                    <div class='l-current__content' >
-                                                
-                                        <p class='text text--extras'>Humidity</p>
-                                        <p class='text text--extras'>${(current.humidity).toFixed(0)}%</p>
-                                        
-                                    </div>
+                                <div class='l-current__extras'>
+                                    ${_buildWeatherExtras(current, daily)}
                                 </div>
+                                
                                 
                                 
                                     <img id='icon' src='https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png' data-img-src='https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png' alt='' class='l-current l-current__icon'>

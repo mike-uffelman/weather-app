@@ -39,6 +39,8 @@ body {
 
         @media only screen and (min-width: $bp-medium) {
             font-size: 1.4rem;
+
+            
         }
     }
 
@@ -103,7 +105,6 @@ body {
     }
 }
 
-//TODO Typography - move =================================
 .icon {
     filter: opacity(.75) drop-shadow(.5rem .5rem .5rem gray) contrast(2);
     transition: all ease 300ms;

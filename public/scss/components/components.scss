@@ -9,7 +9,7 @@
     overflow-x: hidden; //prevents y scroll on search and saved pages
     scrollbar-width: none;
     padding: 1rem;
-    width: 100%;
+    // width: 100%;
 
     animation-name: fadeIn;
     animation-duration: 4000ms;
@@ -425,6 +425,7 @@
     flex: 1 1;
     overflow: hidden;
     width: 100%;
+    // max-width: 38rem;
 
     box-shadow: $--weather-box-shadow;
     border-radius: $--box-radius;
@@ -674,7 +675,7 @@
             grid-template-columns: 1fr .5fr;
             grid-template-rows: auto auto;
             width: 100%;
-            overflow: hidden;
+            // overflow: hidden;
         }
 
         &--hourly {
@@ -713,6 +714,7 @@
 
 .l-current {
     position: relative;
+    z-index: 9999;
     padding: 0 1rem;
     
     &__content {
@@ -734,20 +736,114 @@
         grid-column: 1 / 3;
         grid-row: 1 / 1;
         display: flex;
-        flex: 1 1;
+        flex: 2 1;
+        // height: 8rem;
         flex-direction: column;
         justify-content: center;
         align-self: flex-start;
+
+        @media only screen and (min-width: $bp-medium) {
+            // flex: 4 1;
+            height: 12rem;
+        }
     }
 
     &__extras {
-        grid-column: 1 / 3;
-        grid-row: 2 / 3;
-        width: 100%;
-        height: 5rem;
+        display: grid;
+        grid-template-columns: 100% 100%;
+        grid-template-rows: 1fr;
+        position: absolute;
+        
+
+        // flex: 1;
+        z-index: 999;
+        background-color: transparent;
+        
+        // position: absolute;
+        // right: -100%;
+        bottom: 1rem;
+        width: 200%;
+        height: 4rem;
         display: flex;
-        padding: 0;
+        // opacity: 0;
+        // padding: 1rem;
+        transition: all ease 300ms;
+        // transform: translateX(10rem);
+        // border: 1px solid red;
+
+        @media only screen and (min-width: $bp-medium) {
+            height: 5rem;
+        }
+
+        &--header {
+            // padding: .5rem;
+            align-self: flex-end;
+            // font-weight: 600;
+            margin-bottom: .5rem;
+            text-transform: uppercase;
+            color: $--black-light;
+            margin-top: 0; // remove margin from text__current
+        }
+
+        &--icon {
+            align-self: flex-end;
+            margin-bottom: .25rem;
+            transform: scale(.75);
+        }
+
+        &--detail {
+
+            position: relative;
+            // grid-column: 2 / 2;
+            // grid-row: 1 / 1;
+
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        
+
+        &.showMore {
+            opacity: 1;
+            // z-index: 9999;
+            // height: 5rem;
+            transform: translateX(-50%);
+
+            transition: all ease 300ms;
+
+        }
+
+        &--more {
+            grid-column: 1 / 1;
+            position: relative;
+            
+            display: flex;
+            justify-content: flex-end;
+            flex-direction: row;
+            // justify-content: space-between;
+            align-self: flex-start;
+            width: 100%;
+            height: 5rem;
+            // padding: 0 1rem;
+
+            font-size: 1.4rem;
+
+            transition: all ease 300ms;
+    
+            &.hide {
+                // display: none;
+                z-index: 0;
+            }
+            
+        }
     }
+
+    
+
 
     &__feels-like {
         display: flex;
@@ -765,22 +861,25 @@
     }
 
     &__icon {
-        grid-column: 2 / 3;
-        grid-row: 1 / 3;
+        z-index: 0;
+        // grid-column: 2 / 3;
+        // grid-row: 1 / 3;
         position: absolute;
         animation-name: icon;
         animation-duration: 3s;
+        top: 3rem;
         right: 2rem;
 
         filter: drop-shadow(.5rem .5rem 1rem black) ;
-        width: 100%;
-        position: relative;
+        // width: 100%;
+        // position: relative;
+        // opacity: 0.75;
         transform: scale(2);
         transition: all ease 300ms;
 
         @media only screen and (min-width: $bp-smallest) {
             right: 2rem;
-            transform: scale(2);
+            // transform: scale(2);
             transition: all ease 500ms;
         }
 
@@ -795,7 +894,7 @@
 
         @media only screen and (min-width: $bp-medium-large) {
             right: 3rem;
-            transform: scale(2.25);
+            // transform: scale(3);
             transition: all ease 500ms;
         }
     }
