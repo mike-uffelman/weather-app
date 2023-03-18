@@ -138,16 +138,16 @@ const _buildWeatherExtras = function(current, daily) {
             </div>
             <div class='l-current__content'>
                 
-                <p class='text text--extras'>Precip</p>
-                <p class='text text--extras'>${(daily[0].pop * 100).toFixed(0)}%</p>
+                <p class='text text--extras'>Precip </p>
+                <p class='text text--extras'> ${(daily[0].pop * 100).toFixed(0)}%</p>
             </div>
             <div class='l-current__content'>
-                <p class='text text--extras'>UV Index</p>
+                <p class='text text--extras'>UV Index </p>
                 <p class='text text--extras'>${_uvIndexRating(current.uvi)}</p>
             </div>
             <div class='l-current__content' >
                         
-                <p class='text text--extras'>Humidity</p>
+                <p class='text text--extras'>Humidity </p>
                 <p class='text text--extras'>${(current.humidity).toFixed(0)}%</p>
                 
             </div>
@@ -219,7 +219,7 @@ const _generateMarkup =  function(data) {
                                         <p class='details__box--feels-like text current'>, feels like ${current.feels_like.toFixed(0)}° F</p>
                                     </div>
                                 </div>
-                                <div class='l-current__extras'>
+                                <div class='l-current l-current__extras'>
                                     ${_buildWeatherExtras(current, daily)}
                                 </div>
                                 
