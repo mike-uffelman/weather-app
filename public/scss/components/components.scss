@@ -9,7 +9,6 @@
     overflow-x: hidden; //prevents y scroll on search and saved pages
     scrollbar-width: none;
     padding: 1rem;
-    // width: 100%;
 
     animation-name: fadeIn;
     animation-duration: 4000ms;
@@ -339,7 +338,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            // justify-content: space-between;
+
             height: 100%;
 
             font-size: inherit;
@@ -429,10 +428,9 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    // flex: 1 ;
+
     overflow: hidden;
     width: 100%;
-    // max-width: 38rem;
 
     box-shadow: $--weather-box-shadow;
     border-radius: $--box-radius;
@@ -462,14 +460,10 @@
     
             display: flex; 
             flex: 1 0;
-            // min-height: 100%;
+
             min-width: 100%;
             opacity: 1;
             overflow: hidden;
-    
-            // border-radius: $--box-radius;
-            // box-shadow: $--weather-box-shadow;
-
         }
         
         #map {
@@ -528,12 +522,10 @@
         &--modals {
             font-size: 1.6rem;
             font-weight: 400;
-            // padding: 1rem;
             align-self: center;
 
             @media only screen and (min-width: $bp-medium) {
                 font-size: 2rem;
-                // padding: .5rem 0
             }
         }
 
@@ -648,7 +640,7 @@
         display: flex;
         flex: 1 1 100%;
         width: 100%;
-        // height: 100%;
+
         font-size: 1rem;
         background-color: $--white-alt;
 
@@ -659,11 +651,6 @@
             justify-content: space-between;
             width: 100%;
             position: relative;
-            
-            // &:focus {
-            //     scrollbar-width: 1rem;
-            //     border: 1px solid magenta;
-            // }
         }
 
         &--weekly { //layout
@@ -680,17 +667,15 @@
 
         &--current {
             flex: 1 1;
-            border: none;
-            background-color: $--white-alt;
-            // display: grid;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            // grid-template-columns: 1fr .5fr;
-            // grid-template-rows: repeat(4, 1fr);
+            display: grid;
+            grid-template-columns: 1fr .5fr;
+            grid-template-rows: repeat(2, 1fr);
+
             width: 100%;
             height: 100%;
-            // overflow: hidden;
+
+            border: none;
+            background-color: $--white-alt;
         }
 
         &--hourly {
@@ -706,7 +691,7 @@
             flex: 2 1 auto;
 
             display: grid;
-            grid-template-columns: 3fr 2fr 3fr;
+            grid-template-columns: 3fr 1fr 2fr;
             grid-template-rows: 1fr;
 
             border-left: none;
@@ -715,6 +700,10 @@
                 font-size: 1.25rem;
 
                 transition: all ease 300ms;
+            }
+
+            @media only screen and (min-width: $bp-small) {
+                grid-template-columns: 3fr 1fr 3fr;
             }
 
             @media only screen and (min-width: $bp-medium) {
@@ -731,20 +720,19 @@
     position: relative;
     z-index: 9999;
     padding: 0 1rem;
-    display: flex;
-    flex-direction: column;
+    display: grid;
     
     &__content {
         display: flex;
-        flex-direction: row;
-        // flex: 1 1 100%;
+        flex-direction: column;
+        flex: 1 1 100%;
         align-items: center;
-        // height: 100%;
-        // padding: 1rem;
-        // margin: 0;
 
         justify-content: center;
-        // border: 1px solid $--accent;
+
+        @media only screen and (min-width: $bp-medium) {
+            padding: 0;
+        }
         
         &--icons {
             display: flex;
@@ -754,61 +742,32 @@
     }
 
     &__weather {
-        // grid-column: 1 / 3;
-        // grid-row: 1 / 4;
-        // display: flex;
-        // flex: 3 1;
-        // height: 8rem;
-        flex-direction: column;
-        // justify-content: center;
-        // align-self: flex-start;
+        grid-column: 1 / 3;
+        grid-row: 1 / 4;
 
         @media only screen and (min-width: $bp-medium) {
             flex: 1 1;
-            // height: 12rem;
-            justify-content: space-between;
         }
     }
 
     &__extras {
         grid-column: 1 / 3;
         grid-row: 4 / 5;
-        // display: grid;
-        // grid-template-columns: 100% 100%;
-        // grid-template-rows: 1fr;
         position: relative;
-        // display: flex;
-        // flex-direction: row;
-        // justify-content: space-between;
 
-        // flex: 1;
         z-index: 999;
-        // background-color: tan;
-        margin-top: 1rem;
-        // flex: 1 1;
-        // bottom: 0;
-        // width: 200%;
+        margin-top: .5rem;
         height: 3rem;
-        // display: flex;
-        // opacity: 0;
-        // padding: 1rem;
 
         transition: all ease 500ms;
-        // transform: translateX(10rem);
-        // border: 1px solid green;
 
         @media only screen and (min-width: $bp-medium) {
-            // height: 5rem;
-            // flex: 1 1;
             margin-top: 0;
         }
 
         &--header {
-            // padding: .5rem;
             align-self: flex-end;
-            // font-weight: 600;
             margin-bottom: .5rem;
-            text-transform: uppercase;
             color: $--black-light;
             margin-top: 0; // remove margin from text__current
         }
@@ -828,16 +787,10 @@
             flex-direction: row;
             justify-content: space-between;
 
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
-            
-            // top: 0;
             width: 100%;
             height: 100%;
             padding: 0;
             margin: 0;
-            // border: 1px solid green;
             
             transform: translateX(100%);
 
@@ -845,28 +798,21 @@
 
         &.showMore {
             opacity: 1;
-            // z-index: 9999;
             height: 6rem;
-            transform: translateX(-100%);
 
+            transform: translateX(-100%);
             transition: all ease 300ms;
 
         }
 
         &--more {
-            // grid-column: 1 / 1;
-            // position: absolute;
-            
             display: flex;
             justify-content: flex-end;
             flex-direction: row;
-            // justify-content: space-between;
             align-self: flex-end;
-            // width: 100%;
+
             height: 100%;
-            // padding: 0 1rem;
-
-
+            
             transition: all ease 300ms;
     
             &.hide {
@@ -895,14 +841,12 @@
         }
 
         @media only screen and (min-width: $bp-medium) {
-            margin-bottom: 2rem;
+            // margin-bottom: 2rem;
         }
     }
 
     &__icon {
         z-index: 0;
-        // grid-column: 2 / 3;
-        // grid-row: 1 / 3;
         position: absolute;
         animation-name: icon;
         animation-duration: 3s;
@@ -910,15 +854,11 @@
         right: 2rem;
 
         filter: drop-shadow(.5rem .5rem 1rem black) ;
-        // width: 100%;
-        // position: relative;
-        // opacity: 0.75;
         transform: scale(2);
         transition: all ease 300ms;
 
         @media only screen and (min-width: $bp-smallest) {
             right: 2rem;
-            // transform: scale(2);
             transition: all ease 500ms;
         }
 
@@ -933,7 +873,6 @@
 
         @media only screen and (min-width: $bp-medium-large) {
             right: 3rem;
-            // transform: scale(3);
             transition: all ease 500ms;
         }
     }
@@ -973,8 +912,14 @@
         align-self: center; //centering vertically
 
         display: flex;
-        justify-content: flex-start;
+        align-items: center;
         flex-wrap: nowrap;
+
+        height: 100%;        
+
+        @media only screen and (min-width: $bp-small) {
+
+        }
     }
 
     &__temperature {
@@ -984,6 +929,10 @@
         display: flex;
         justify-content: space-between;
         align-self: center;
+
+        @media only screen and (min-width: $bp-small) {
+            
+        }
     }
 }
 
@@ -991,14 +940,23 @@
 .temp-bars {
     position: relative;
 
-    display: flex;
+    display: none;
     justify-content: center;
     flex-direction: column;
     margin: 0 .25rem;
     width: 100%;
     border-top-right-radius: .5rem;
     border-bottom-right-radius: .5rem;
-    // height: 100%;
+
+    &--small {
+        @media only screen and (min-width: $bp-smallest) {
+            display: none;
+        }
+    }
+
+    @media only screen and (min-width: $bp-smallest) {
+        display: flex;
+    }
 
     &--low {
         height: .5rem;

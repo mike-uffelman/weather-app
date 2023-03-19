@@ -15,7 +15,6 @@ export const render = async function(data) {
         _loadStyles(); // render laod specific styling
         _clear(); // clear
         _data = data; // set data parameter to class variable
-        console.log(_data)
         //build main nav container
         await buildMainNavContainer(_data);
 
@@ -80,7 +79,7 @@ const _clear = function() {
 //     _currentWeather.removeEventListener('click', () => weatherEvents());
 // }
 
-const weatherEvents = (e, handler, showDetails) => {
+const weatherEvents = (e, handler) => {
     // save a location event
     if(e.target.closest('.c-cw__location')) {
         document.querySelector('.c-location__save--icon').classList.toggle('is-saved');
@@ -95,10 +94,8 @@ const weatherEvents = (e, handler, showDetails) => {
     }
 
     if(e.target.closest('.l-current__extras')) {
-        console.log('extras clicked', e.target)
         const showMore = document.querySelector('.l-current__extras');
         showMore.classList.toggle('showMore')
-        showDetails();
     }
 
     
@@ -129,9 +126,11 @@ const _buildWeatherExtras = function(current, daily) {
         <div class='l-current l-current__extras--detail'>
             <div class='l-current__content'>
                 <div class='l-current__content--icons'>
+                    
                     <svg alt='wind direction and speed' class='details__box--wind-direction' data-wind-direction='${current.wind_deg}' height="25" width="25">
-                        <polygon points='12.5,5 20,20 12.5,16 5,20'>
+                                                <polygon points='12.5,5 20,20 12.5,16 5,20'>
                     </svg>
+                    
                     <p class='text text--extras'>${_windCardinalDirection(current.wind_deg)}</p>
                 </div>
                 <p class='text text--extras'>${current.wind_speed.toFixed(0)} mph</p>
@@ -215,8 +214,8 @@ const _generateMarkup =  function(data) {
                                     <p class='text__current--temp'>${current.temp.toFixed(0)}° F</p>    
                                     <p class='text text__current'>${current.weather[0].description}</p>
                                     <div class='l-current__feels-like'>
-                                        <p class='text current'>${today.max.toFixed(0)}°F / ${today.min.toFixed(0)}°F</p>
-                                        <p class='details__box--feels-like text current'>, feels like ${current.feels_like.toFixed(0)}° F</p>
+                                        <p class='text__current'>${today.max.toFixed(0)}°F / ${today.min.toFixed(0)}°F</p>
+                                        <p class='details__box--feels-like text__current'>, feels like ${current.feels_like.toFixed(0)}° F</p>
                                     </div>
                                 </div>
                                 <div class='l-current l-current__extras'>
@@ -485,10 +484,12 @@ const _generateWeekly = function(daily) {
                         <p class='text text--weekly l-forecast-day__day--text'>${dailyDay}</p>
                     </div> 
                     <div id='precip' class='l-forecast-day l-forecast-day__precip'>
-                        <p class='text text--weekly'>💧 ${precip}%</p>
+                        <p class='text text--weekly'>💧 </p>
+                        <span class=' text--weekly precip-percent'> ${precip}%</span>
                     </div>
                     <div class='l-forecast-day l-forecast-day__temperature'>
                         <p class='text text--weekly'>${lowTemps}°F</p>
+                        <span class='text text--weekly temp-bars--small'>/</span>
                         <div class='temp-bars'>
                             <div class='temp-bars temp-bars--low' data-low-temp='${lowTemps}' data-bar='${i}'></div>
                             <div class='temp-bars temp-bars--high' data-high-temp='${highTemps}' data-bar='${i}'></div>

@@ -95,14 +95,6 @@ const controlCurrentLocation = async function() {
     }
 }
 
-const currentWeatherDetails = function () {
-    try {
-        console.log('%c, showing current weather details!!!', 'color: magenta')
-    } catch (err) {
-        console.error('Unable to load more details.', err);
-        message.renderMessage(err, 'error');
-    }
-}
 
 //* ========== Call a saved location controller ==========
 const controlCallSaved = async function(id) {
@@ -232,7 +224,7 @@ const init = async function() {
     // event handler publishers
     searchView.addHandlerSearch();
     savedView.addHandlerSaved(controlCallSaved, controlRemoveSaved, sortSaved);
-    weatherView.addHandlerCurrent(controlCurrentLocation, currentWeatherDetails);
+    weatherView.addHandlerCurrent(controlCurrentLocation);
     maps.addHandlerMapClick(enableSearchMap);
     search.addHandlerSearchForm(controlLocationSearch);
     infoView.addHandlerInfo();
