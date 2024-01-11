@@ -14,7 +14,7 @@
     <br>
     Vanilla JS, Leaflet, OpenWeatherMap, OpenStreetMap, MVC, Sass
     <br />
-    <a href="https://main--cranky-booth-057572.netlify.app/">View Demo</a>
+    <a href="https://weather-app-dev-mu.netlify.app/">View Demo</a>
     ·
     <a href="https://github.com/mike-uffelman/weather-app/issues">Report Bug</a>
     ·
@@ -59,7 +59,7 @@ Under the hood, it's a Model-View-Controller(MVC) architecture and utilizes parc
 
 The app styling was built using Sass to take advantage of the mixins, nesting, and other features.
 
-[Demo the app here](https://main--cranky-booth-057572.netlify.app/).
+[Demo the app here](https://weather-app-dev-mu.netlify.app/).
 
 ### Basic Usage
 
@@ -90,7 +90,7 @@ The app styling was built using Sass to take advantage of the mixins, nesting, a
 
 ## Getting Started
 
-Open the [live demo here](https://main--cranky-booth-057572.netlify.app/), or clone the repository, (node and npm are required).
+Open the [live demo here](https://weather-app-dev-mu.netlify.app/), or clone the repository, (node and npm are required).
 
 Install npm packages
 
