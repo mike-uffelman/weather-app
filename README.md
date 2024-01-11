@@ -224,7 +224,7 @@ Additional features may include:
 Known items to refactor:
 
 - the styling source code can be refactored and cleaned up
-- the sort saved location logic is a bit clunky and difficult to
+- the sort saved location logic is a bit clunky and difficult to follow
 
 <p align="right">(<a href="#weather-app">back to top</a>)</p>
 
