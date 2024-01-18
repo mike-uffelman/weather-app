@@ -1,8 +1,9 @@
 'use strict';
 
 // import config and keys
-import {FORECAST_URL, GEOCODE_REVERSE_URL, GEOCODE_DIRECT_URL} from './config.js';
+import {FORECAST_URL, GEOCODE_REVERSE_URL, GEOCODE_DIRECT_URL, PROXY_SERVER_URL} from './config.js';
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 let { OWM_APIKEY } = process.env;
 
 export let state = {}
@@ -11,11 +12,36 @@ export let store = []; // array to store current session locations
 // export let searchResults = []; //TODO add search results
 
 
+// export const callServer = async(loc) => {
+//     const [city, ...region] = Object.values(loc);
+    
+//     console.log('call server loc: ', loc)
+//     const options = {
+//         method: 'GET',
+//         url: PROXY_SERVER_URL,
+//         // headers: {
+//             // query: 'test query string'
+
+//         // },
+//         params: {
+//             query: `${city}${region.map(place => ','+place).join('')}`,
+
+            
+//         }
+//     }
+
+//     console.log(await axios.request(options))
+
+//     // axios.request(options)
+//     //     .then(res => console.log('response here', res))
+//     //     .catch(err => console.error(err));
+
+// }
+
 //Get the city data, including lat/lon
 // geocode, direct from location name
 export const getCity = async function (loc) {
     try {
-
         const [city, ...region] = Object.values(loc);
 
         // if city is not defined, return
@@ -23,10 +49,37 @@ export const getCity = async function (loc) {
 
         // fetch the geocode information from the params provided
         // region is optional so we map over and join together any region values that were passed in
-        const res = await fetch(`${GEOCODE_DIRECT_URL}?q=${city}${region.map(place => ','+place).join('')}&limit=5&appid=${OWM_APIKEY}`)
+        // const res = await fetch(`${GEOCODE_DIRECT_URL}?q=${city}${region.map(place => ','+place).join('')}&limit=5&appid=${OWM_APIKEY}`)
+
+
+
+        //! build the url string before sending to proxy server, then proxy server will append api key to the string
+        // const response = await axios.request({
+        //     method: "GET",
+        //     url: PROXY_SERVER_URL,
+        //     apiURLString: `urlstringheree`
+        // })
+
+        const options = {
+            method: 'GET',
+            url: PROXY_SERVER_URL,
+            // headers: {
+                // query: 'test query string'
+    
+            // },
+            params: {
+                query: `${city}${region.map(place => ','+place).join('')}`,
+                
+            }
+        }
+    
+        const response = await axios.request(options)
+        const data = response.data
+        // console.log(response)
+        //!----------------
 
         // extract json response and assign to data variable
-        const data = await res.json();
+        // const data = await res.json();
 
         // if the geocode returned zero locations throw an error
         if(data.length === 0) throw new Error('Unable to find this location, please make sure it is entered correctly.')

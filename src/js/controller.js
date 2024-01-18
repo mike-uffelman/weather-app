@@ -9,6 +9,8 @@ import * as model from './model.js';
 import * as geoLoc from './geoLocation.js';
 import * as storage from './localStorage.js';
 import * as search  from './search.js';
+import axios from 'axios';
+import { PROXY_SERVER_URL } from './config.js';
 
 // view module imports
 import * as maps from '../views/mapView.js';
@@ -24,9 +26,41 @@ if(module.hot) module.hot.accept();
 
 // not needed - just a console notification that we're in the development branch - based on the npm script (i.e. start or build(production))
 if(process.env.NODE_ENV === 'development') console.log('Happy developing!');
-
 // ----------------------------------------------------------------------------------------
 
+const callServer = async() => {
+    const loc = {
+        city: 'reno',
+        state: 'nv',
+        country: 'us'
+    }
+        const [city, ...region] = Object.values(loc);
+        
+    //     console.log('call server loc: ', loc)
+        const options = {
+            method: 'GET',
+            url: PROXY_SERVER_URL,
+            // headers: {
+                // query: 'test query string'
+    
+            // },
+            params: {
+                query: `${city}${region.map(place => ','+place).join('')}`,
+                
+            }
+        }
+    
+        const response = await axios.request(options)
+
+        console.log('response: ', response)
+
+        const data = response.data
+    
+    //     // axios.request(options)
+    //     //     .then(res => console.log('response here', res))
+    //     //     .catch(err => console.error(err));
+    
+    }
 
 //* ========== app start controller ==========
 const controlAppStart = async function() {
@@ -192,6 +226,7 @@ const controlLocationSearch = async function (e) {
         // if search is a text input location, call getCity
         if(model.state.query.searchType === 'text') {
             await model.getCity(model.state.query.locParams);
+            // await model.callServer(model.state.query.locParams)
         }
 
         // if search is from the map, getForecast with the map marker coordinates
@@ -235,6 +270,8 @@ const init = async function() {
         e.preventDefault();
         errorHandled(messageText, 'error');
     })
+
+    // callServer();
 }
 
 // execute app
