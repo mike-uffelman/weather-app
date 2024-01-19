@@ -25,3 +25,19 @@ export const getHourTime = function(timeInMS) {
         
         // storageDeleteItem(0);
 
+export const buildNewOptions = (opt) => {
+    let newOpts = {}
+
+    newOpts.url = opt.apiURL;
+    newOpts.methods = 'get';
+    
+    newOpts.params = Object.entries(opt)
+        .filter(item => item[0] !== 'apiURL')
+        .reduce((acc, curr) => {
+            acc[curr[0]] = curr[1]
+            return acc;
+        }, {})
+    newOpts.params.appid = process.env.OWM_APIKEY
+    console.log(newOpts)
+    return newOpts;
+}
