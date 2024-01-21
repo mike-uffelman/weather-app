@@ -29,7 +29,13 @@ app.get('/', async (req, res) => {
         return newOpts;
     }
 
+    axios.getUri(buildNewOptions(req.query))
+    console.log('axios request ++++++++++++++++', req.query)
+
     await axios.request(buildNewOptions(req.query))
-        .then(data => res.send(data.data))
+        .then(data => {
+            console.log(data.data)
+            res.send(data.data)
+        })
         .catch(err => console.log(err))
 })

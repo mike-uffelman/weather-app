@@ -2,12 +2,18 @@
 
 
 let { OWM_APIKEY } = process.env;
+import { PROXY_SERVER_URL } from "../js/config.js";
+import axios from 'axios';
 
 // module variables
 export let map;
 export let searchMapObj;
 export let mapClick;
 export let eCoords = {};
+// let mapTileRequestOptions = {
+//     method: 'get',
+//     url: PROXY_SERVER_URL
+// }
 
 
 // event handler for the map overlay
@@ -131,7 +137,7 @@ export const weatherMap = async function (coords, zoom = 9) {
 
 
     // for the tiler
-    let osmURL = await 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    let osmURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     let osmAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     let osmLayer = new L.tileLayer(osmURL, {attribution: osmAttribution,}
     );
@@ -145,19 +151,60 @@ export const weatherMap = async function (coords, zoom = 9) {
             </div>`
     })
 
+
+    //? =========================================================================
+    //? this code block enables precipitation layers, however it exposes api key in network, below is an attempt to pass the request through the proxy server to hide api, but ran into issues, so it is disabled for now...
+    // const layerName = 'precipitation_new'
+    // const weatherUrl = `https://tile.openweathermap.org/map/${layerName}/{z}/{x}/{y}.png?appid=${OWM_APIKEY}`
+    // let weatherLayer = new L.tileLayer(weatherUrl)
+
+    {//? ==========================================================================
+    // attempts to run preciptation request through proxy, mapped over osmLayer tiles to get z,x,y
+    // another idea is to use a 'tileload' event for the osmLayer to wait for those tile to load before attempting to request the precip layers...
     
-    // weather layer setup==================
-    const layerName = 'precipitation_new'
-    const weatherUrl = await `https://tile.openweathermap.org/map/${layerName}/{z}/{x}/{y}.png?appid=${OWM_APIKEY}`
+    // osmLayer.addEventListener('tileload', async function(e) {
 
-    let weatherLayer = new L.tileLayer(weatherUrl)
-    // ======================================
+    // --------- this block is an attempt to pass through proxy server, seems the return object doesn't align with what leaflet wants...
+    // let mapTileRequestOptions = {
+    //             method: 'get',
+    //             url: PROXY_SERVER_URL,
+    //             params: {
+    //                 apiURL: `https://tile.openweathermap.org/map/${layerName}/{z}/{x}/{y}.png`
+    //             }
+    //         }
+            
+    // const weatherUrlResponse = await axios.request(mapTileRequestOptions)
+    // let weatherLayer = new L.tileLayer(weatherUrlResponse)
 
+    // Object.values(osmLayer._tiles).map(async item => {
+    //     console.log(item)
+    //     const layerName = 'precipitation_new'
+    //     const weatherUrl = `https://tile.openweathermap.org/map/${layerName}/${item.coords.z}/${item.coords.x}/${item.coords.y}.png?appid=${OWM_APIKEY}`
+    
+    //     let mapTileRequestOptions = {
+    //         method: 'get',
+    //         url: PROXY_SERVER_URL,
+    //         params: {
+    //             apiURL: `https://tile.openweathermap.org/map/${layerName}/${item.coords.z}/${item.coords.x}/${item.coords.y}.png`
+    //         }
+    //     }
 
-    // build map ===========================
+    //     const weatherUrlResponse = await axios.request(mapTileRequestOptions)
+    //     console.log(weatherUrlResponse)
+
+    //     weatherLayer = new L.tileLayer(weatherUrlResponse)
+    //     console.log('weatherLayer', weatherLayer)
+
+    // map.addLayer(weatherLayer)
+
+    //? ==========================================================================
+    }
+
+    
+
     map = new L.Map('map', {
-        zoomControl: true
-        // layers: [osmLayer, weatherLayer] //add back for weather layer 
+        zoomControl: true,
+        layers: [osmLayer] //add back for weather layer 
 
     })
     .addLayer(osmLayer)
@@ -168,3 +215,4 @@ export const weatherMap = async function (coords, zoom = 9) {
     L.marker([lat, lon], {icon: myDivIcon})
         .addTo(map)
 }        
+
