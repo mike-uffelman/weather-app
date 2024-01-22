@@ -8,7 +8,9 @@
     "watch:sass": "sass public/scss/main.scss public/css/style.css -w",
     "start": "parcel",
     "build": "parcel build",
-    "start:backend": "nodemon server.js"
+    "start:backend": "nodemon server.js",
+    "netlify": "netlify",
+    "dev": "parcel"
   },
   "repository": {
     "type": "git",
@@ -33,6 +35,7 @@
   "devDependencies": {
     "@parcel/transformer-sass": "^2.8.3",
     "buffer": "^6.0.3",
+    "netlify-cli": "^17.15.1",
     "parcel": "^2.8.3",
     "process": "^0.11.10",
     "regenerator-runtime": "^0.13.11"

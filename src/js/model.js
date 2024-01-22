@@ -1,7 +1,7 @@
 'use strict';
 
 // import config and keys
-import {FORECAST_URL, GEOCODE_REVERSE_URL, GEOCODE_DIRECT_URL, PROXY_SERVER_URL} from './config.js';
+import {FORECAST_URL, GEOCODE_REVERSE_URL, GEOCODE_DIRECT_URL, PROXY_SERVER_URL, NETLIFY_DEV_SERVER} from './config.js';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
@@ -23,7 +23,7 @@ export const getCity = async function (loc) {
         // region is optional so we map over and join together any region values that were passed in
         const directGeocodeRequestOptions = {
             method: 'get',
-            url: PROXY_SERVER_URL,
+            url: NETLIFY_DEV_SERVER,
             params: {
                 apiURL: GEOCODE_DIRECT_URL,
                 q: `${city}${region.map(place => ','+place).join('')}`,
@@ -72,7 +72,7 @@ export const getForecast = async function(locCoords) {
         // fetch forecast data for coordinates
         const forecastRequestOptions = {
             method: 'get',
-            url: PROXY_SERVER_URL,
+            url: NETLIFY_DEV_SERVER,
             params: {
                 apiURL: FORECAST_URL,
                 lat,
@@ -86,7 +86,7 @@ export const getForecast = async function(locCoords) {
 
         const reverseGeocodeRequestOptions = {
             method: 'get',
-            url: PROXY_SERVER_URL,
+            url: NETLIFY_DEV_SERVER,
             params: {
                 apiURL: GEOCODE_REVERSE_URL,
                 lat: forecastData.data.lat,

@@ -90,6 +90,9 @@ const controlAppStart = async function() {
         // infoView.toggleInfo();
         // model.clearGeoLocation();
 
+        // await fetch('../../.netlify/functions/fetch-weather?name="mike"')
+        // .then(response => console.log(response.json()))
+
     } catch(err) {
         console.error('app start error!!!', err);
         message.renderMessage(err, 'error');
@@ -271,7 +274,7 @@ const init = async function() {
         errorHandled(messageText, 'error');
     })
 
-    // callServer();
+    
 }
 
 // execute app
