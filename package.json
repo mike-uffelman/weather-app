@@ -8,7 +8,6 @@
     "watch:sass": "sass public/scss/main.scss public/css/style.css -w",
     "start": "parcel",
     "build": "parcel build",
-    "start:backend": "nodemon server.js",
     "netlify": "netlify",
     "dev": "parcel"
   },
@@ -27,9 +26,7 @@
     "axios": "^1.6.5",
     "core-js": "^3.29.1",
     "cors": "^2.8.5",
-    "express": "^4.18.2",
     "leaflet": "^1.9.3",
-    "nodemon": "^3.0.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

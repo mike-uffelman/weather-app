@@ -1,8 +1,6 @@
 'use strict';
 
 
-let { OWM_APIKEY } = process.env;
-import { PROXY_SERVER_URL } from "../js/config.js";
 import axios from 'axios';
 
 // module variables
@@ -10,10 +8,7 @@ export let map;
 export let searchMapObj;
 export let mapClick;
 export let eCoords = {};
-// let mapTileRequestOptions = {
-//     method: 'get',
-//     url: PROXY_SERVER_URL
-// }
+
 
 
 // event handler for the map overlay

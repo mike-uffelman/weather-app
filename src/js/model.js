@@ -1,7 +1,7 @@
 'use strict';
 
 // import config and keys
-import {FORECAST_URL, GEOCODE_REVERSE_URL, GEOCODE_DIRECT_URL, PROXY_SERVER_URL, NETLIFY_DEV_SERVER} from './config.js';
+import {FORECAST_URL, GEOCODE_REVERSE_URL, GEOCODE_DIRECT_URL, NETLIFY_DEV_SERVER} from './config.js';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
